@@ -1,6 +1,5 @@
-package entities.baseObject.LeaderCard;
+package entities.baseObject.baseCards.HeroCard;
 
-import entities.baseObject.baseCards.HeroCard.UnitClass;
 import entities.baseObject.Properties.haveClass;
 
 public class LeaderCard implements haveClass {

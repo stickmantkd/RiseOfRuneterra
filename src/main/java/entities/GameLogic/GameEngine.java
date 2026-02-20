@@ -1,6 +1,6 @@
 package entities.GameLogic;
 
-import entities.baseObject.LeaderCard.LeaderCard;
+import entities.baseObject.baseCards.HeroCard.LeaderCard;
 import entities.baseObject.Objective;
 import entities.baseObject.Player;
 import entities.baseObject.baseCard;
@@ -8,7 +8,6 @@ import entities.baseObject.baseCards.HeroCard.HeroCard;
 import entities.baseObject.baseCards.HeroCard.UnitClass;
 import entities.objective.BaronNashor;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 

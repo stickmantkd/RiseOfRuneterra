@@ -2,7 +2,7 @@ package entities.baseObject;
 
 import entities.baseObject.baseCards.HeroCard.UnitClass;
 import entities.baseObject.baseCards.HeroCard.HeroCard;
-import entities.baseObject.LeaderCard.LeaderCard;
+import entities.baseObject.baseCards.HeroCard.LeaderCard;
 
 import java.util.ArrayList;
 
