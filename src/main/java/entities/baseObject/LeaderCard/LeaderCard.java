@@ -1,18 +1,19 @@
-package entities.baseObject.baseCards.LeaderCard;
+package entities.baseObject.LeaderCard;
 
 import entities.baseObject.baseCards.HeroCard.UnitClass;
-import entities.baseObject.baseCards.Properties.haveClass;
-import entities.baseObject.baseEntity;
+import entities.baseObject.Properties.haveClass;
 
-public class LeaderCard extends baseEntity implements haveClass {
+public class LeaderCard implements haveClass {
     //Fields
+    private String name;
+    private String flavorText;
     private UnitClass leaderClass;
     private String abilityDescription;
-    private Specialties specialties;
 
     //constructors
     public LeaderCard(String name, String flavorText, UnitClass heroClass){
-        super(name,flavorText);
+        setName(name);
+        setFlavorText(flavorText);
         setUnitClass(heroClass);
     }
 
@@ -20,6 +21,21 @@ public class LeaderCard extends baseEntity implements haveClass {
 
 
     //getters and setters
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFlavorText() {
+        return flavorText;
+    }
+    public void setFlavorText(String flavorText) {
+        this.flavorText = flavorText;
+    }
+
     @Override
     public UnitClass getUnitClass() {
         return leaderClass;
@@ -34,12 +50,5 @@ public class LeaderCard extends baseEntity implements haveClass {
     }
     public void setAbilityDescription(String abilityDescription) {
         this.abilityDescription = abilityDescription;
-    }
-
-    public Specialties getSpecialties() {
-        return specialties;
-    }
-    public void setSpecialties(Specialties specialties) {
-        this.specialties = specialties;
     }
 }

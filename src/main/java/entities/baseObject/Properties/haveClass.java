@@ -1,4 +1,4 @@
-package entities.baseObject.baseCards.Properties;
+package entities.baseObject.Properties;
 
 import entities.baseObject.baseCards.HeroCard.UnitClass;
 

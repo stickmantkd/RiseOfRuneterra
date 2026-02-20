@@ -18,7 +18,7 @@ public class Minion extends HeroCard {
 
 
     @Override
-    public void useAbility(Player[] PlayerList) throws IOException {
-        GameUtils.Destroy(PlayerList);
+    public void useAbility(){
+
     }
 }

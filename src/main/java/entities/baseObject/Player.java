@@ -2,7 +2,9 @@ package entities.baseObject;
 
 import entities.baseObject.baseCards.HeroCard.UnitClass;
 import entities.baseObject.baseCards.HeroCard.HeroCard;
-import entities.baseObject.baseCards.LeaderCard.LeaderCard;
+import entities.baseObject.LeaderCard.LeaderCard;
+
+import java.util.ArrayList;
 
 public class Player{
     //Fields
@@ -12,6 +14,7 @@ public class Player{
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
     private int ownedObjective;
+    private ArrayList<baseCard> cardsInHand;
 
     //Constructors
     public Player(String name){
@@ -19,6 +22,9 @@ public class Player{
         setActionPoint(3);
         HeroCard[] initialOwnedHero = new HeroCard[5];
         setOwnedHero(initialOwnedHero);
+        setOwnedObjective(0);
+        ArrayList<baseCard> initialHand = new ArrayList<>();
+        setCardsInHand(initialHand);
     }
 
     //Functions
@@ -27,7 +33,7 @@ public class Player{
         return name;
     }
 
-    public boolean checkWinning(){
+    public boolean isWinning(){
         return checkOwnedAllClass() || checkOwnedThreeObjective();
     }
     public boolean checkOwnedAllClass(){
@@ -41,6 +47,10 @@ public class Player{
     }
     public boolean checkOwnedThreeObjective(){
         return ownedObjective >= 3;
+    }
+
+    public void refillActionPoint() {
+        setActionPoint(maxActionPoint);
     }
 
 
@@ -83,8 +93,14 @@ public class Player{
     public int getOwnedObjective() {
         return ownedObjective;
     }
-
     public void setOwnedObjective(int ownedObjective) {
         this.ownedObjective = ownedObjective;
+    }
+
+    public ArrayList<baseCard> getCardsInHand() {
+        return cardsInHand;
+    }
+    public void setCardsInHand(ArrayList<baseCard> cardsInHand) {
+        this.cardsInHand = cardsInHand;
     }
 }

@@ -1,7 +1,9 @@
 package entities.baseObject;
 
-public abstract class Objective extends baseEntity {
+public abstract class Objective{
     //fields
+    private String name;
+    private String flavorText;
     private String requirementDescription;
     private int minTargetRoll;
     private int maxTargetRoll;
@@ -10,7 +12,8 @@ public abstract class Objective extends baseEntity {
 
     //constructors
     public Objective() {
-        super("Tyrant of the Mountain", "Slay the tyrant to claim the prize");
+        setName("Dummy Objective");
+        setFlavorText("I am Strong!!!");
         setMinTargetRoll(6);
         setMaxTargetRoll(12);
     }
@@ -20,7 +23,8 @@ public abstract class Objective extends baseEntity {
             String flavorText,
             int minTargetRoll,
             int maxTargetRoll) {
-        super(name, flavorText);
+        setName(name);
+        setFlavorText(flavorText);
         setMinTargetRoll(minTargetRoll);
         setMaxTargetRoll(maxTargetRoll);
     }
@@ -31,6 +35,21 @@ public abstract class Objective extends baseEntity {
     public abstract void grantPunishment(Player player);
 
     //getters n setters
+
+    public String getFlavorText() {
+        return flavorText;
+    }
+    public void setFlavorText(String flavorText) {
+        this.flavorText = flavorText;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getRequirementDescription() {
         return requirementDescription;
     }

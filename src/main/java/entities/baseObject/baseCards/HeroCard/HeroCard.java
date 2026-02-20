@@ -1,12 +1,10 @@
 package entities.baseObject.baseCards.HeroCard;
 
-import entities.baseObject.baseCards.Properties.haveClass;
+import entities.baseObject.Properties.haveClass;
 import entities.baseObject.Player;
-import entities.baseObject.baseEntity;
+import entities.baseObject.baseCard;
 
-import java.io.IOException;
-
-public abstract class HeroCard extends baseEntity implements haveClass {
+public abstract class HeroCard extends baseCard implements haveClass {
     //Fields
     private UnitClass heroClass;
     private String abilityDescription;
@@ -23,7 +21,12 @@ public abstract class HeroCard extends baseEntity implements haveClass {
     }
 
     //Functions
-    public abstract void useAbility(Player[] PlayerList) throws IOException;
+    @Override
+    public void playCard(Player player) {
+        //To be implemented
+    }
+
+    public abstract void useAbility();
 
     //getters n setters
     public void setAbilityDescription(String description){

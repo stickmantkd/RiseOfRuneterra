@@ -1,19 +1,27 @@
 package entities.baseObject;
 
-public class baseEntity {
+public abstract class baseCard {
     //fields
     private String name;
     private String flavorText;
 
     //constructor
-    public baseEntity(){
+    public baseCard(){
         setName("Dummy");
         setFlavorText("Ello, Ello...");
     }
 
-    public baseEntity(String name, String flavorText){
+    public baseCard(String name, String flavorText){
         setName(name);
         setFlavorText(flavorText);
+    }
+
+    //function
+    public abstract void playCard(Player player);
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     //getters n setters
