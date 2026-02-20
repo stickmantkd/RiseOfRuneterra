@@ -1,6 +1,6 @@
 package entities.GameLogic;
 
-import entities.baseObject.baseCards.HeroCard.LeaderCard;
+import entities.baseObject.LeaderCard;
 import entities.baseObject.Objective;
 import entities.baseObject.Player;
 import entities.baseObject.baseCard;
