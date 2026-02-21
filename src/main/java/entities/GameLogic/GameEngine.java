@@ -69,7 +69,7 @@ public class GameEngine {
                 System.out.println("3 : Try to complete the objective");
                 switch (getChoice()) {
                     case (1) -> {
-                        //Implement DrawRandomCard();
+                        currentPlayer.DrawRandomCard();
                     }
                     case (2) -> {
                         int selectedCardNumber = selectCardsInHand(currentPlayer);
