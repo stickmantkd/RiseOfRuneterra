@@ -3,6 +3,8 @@ package entities.objective;
 import entities.baseObject.Objective;
 import entities.baseObject.Player;
 
+import static entities.GameLogic.GameEngine.SacrificeHero;
+
 public class BaronNashor extends Objective {
     //constructors
     public BaronNashor() {
@@ -16,10 +18,6 @@ public class BaronNashor extends Objective {
 
     //functions
     @Override
-    public void requirement(Player player) {
-        //require 2 Heroes
-    }
-    @Override
     public void grantPrize(Player player) {
         player.setOwnedObjective(player.getOwnedObjective()+1);
 
@@ -28,6 +26,6 @@ public class BaronNashor extends Objective {
     }
     @Override
     public void grantPunishment(Player player) {
-        //player sacrifice 2 Heroes
+        SacrificeHero(player,2);
     }
 }

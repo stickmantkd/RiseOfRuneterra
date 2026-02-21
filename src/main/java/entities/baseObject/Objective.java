@@ -1,5 +1,7 @@
 package entities.baseObject;
 
+import static entities.GameLogic.DiceUtils.getRoll;
+
 public abstract class Objective{
     //fields
     private String name;
@@ -30,9 +32,25 @@ public abstract class Objective{
     }
 
     //functions
-    public abstract void requirement(Player player);
     public abstract void grantPrize(Player player);
     public abstract void grantPunishment(Player player);
+
+    public boolean canTry(Player player){
+        //To be implemented
+        return true;
+    }
+
+    public void tryToComplete(Player player){
+        if(!canTry(player)) {
+            System.out.println("Your owned Heroes don't math the requirement");
+        }
+        int roll = getRoll();
+        if(roll >= minTargetRoll && roll <= maxTargetRoll){
+            grantPrize(player);
+        }else {
+            grantPunishment(player);
+        }
+    }
 
     //getters n setters
 

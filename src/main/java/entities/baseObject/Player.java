@@ -14,8 +14,8 @@ public class Player{
     private String name;
     private int actionPoint;
     private int maxActionPoint;
-    private LeaderCard ownedLeader;
     private int ownedObjective;
+    private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
     private ArrayList<baseCard> cardsInHand;
 
@@ -24,6 +24,7 @@ public class Player{
         setMaxActionPoint(3);
         setActionPoint(3);
         setOwnedObjective(0);
+        initializeOwnedLeader();
         initializeOwnedHero();
         initializeCardsInHand();
     }
@@ -38,6 +39,16 @@ public class Player{
         cardsInHand.add(GenerateRandomCard());
     }
 
+    public boolean boardIsEmpty() {
+        for(HeroCard hero : ownedHero){
+            if(hero != null) return false;
+        }
+        return true;
+    }
+
+    public void refillActionPoint() {
+        setActionPoint(maxActionPoint);
+    }
 
     //Setups
     private void initializeOwnedLeader(){
@@ -55,11 +66,9 @@ public class Player{
         }
     }
 
-    public void refillActionPoint() {
-        setActionPoint(maxActionPoint);
-    }
 
-    //get by Index
+
+    //Index Operation
     public baseCard getCardInHand(int index){
         index--; // since array index start with 0
         baseCard selectedCard = cardsInHand.get(index);
@@ -70,6 +79,12 @@ public class Player{
     public HeroCard getHeroCard(int index) {
         index--; // since array index start with 0
         return ownedHero[index];
+    }
+
+    public boolean removeHeroCard(int index) {
+        if(ownedHero[index] == null) return false;
+        ownedHero[index] = null;
+        return true;
     }
 
     //CheckWinning
