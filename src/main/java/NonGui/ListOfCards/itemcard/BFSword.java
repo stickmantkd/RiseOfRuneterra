@@ -1,6 +1,6 @@
-package entities.Cards.itemcard;
+package NonGui.ListOfCards.itemcard;
 
-import entities.baseObject.Cards.ItemCard;
+import NonGui.BaseEntity.Cards.ItemCard;
 
 public class BFSword extends ItemCard {
     public BFSword(){

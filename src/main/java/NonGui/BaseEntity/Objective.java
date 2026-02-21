@@ -1,6 +1,6 @@
-package entities.baseObject;
+package NonGui.BaseEntity;
 
-import static entities.GameLogic.DiceUtils.getRoll;
+import static NonGui.GameUtils.DiceUtils.getRoll;
 
 public abstract class Objective{
     //fields

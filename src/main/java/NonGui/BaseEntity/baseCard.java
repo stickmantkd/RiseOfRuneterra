@@ -1,4 +1,4 @@
-package entities.baseObject;
+package NonGui.BaseEntity;
 
 public class baseCard {
     //fields

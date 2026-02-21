@@ -1,6 +1,6 @@
-package entities.baseObject.Cards;
+package NonGui.BaseEntity.Cards;
 
-import entities.baseObject.baseCard;
+import NonGui.BaseEntity.baseCard;
 
 public class MagicCard extends baseCard {
     public MagicCard(String name, String flavorText){

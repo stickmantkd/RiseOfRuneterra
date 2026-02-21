@@ -1,13 +1,13 @@
-package entities.baseObject;
+package NonGui.BaseEntity;
 
-import entities.baseObject.Cards.HeroCard.UnitClass;
-import entities.baseObject.Cards.HeroCard.HeroCard;
-import entities.baseObject.Cards.ItemCard;
-import entities.baseObject.Cards.MagicCard;
+import NonGui.BaseEntity.Cards.HeroCard.UnitClass;
+import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Cards.ItemCard;
+import NonGui.BaseEntity.Cards.MagicCard;
 
 import java.util.ArrayList;
 
-import static entities.GameLogic.GameUtils.*;
+import static NonGui.GameUtils.GenerationsUtils.*;
 
 public class Player{
     //Fields

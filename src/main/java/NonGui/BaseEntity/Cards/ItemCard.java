@@ -1,6 +1,6 @@
-package entities.baseObject.Cards;
+package NonGui.BaseEntity.Cards;
 
-import entities.baseObject.baseCard;
+import NonGui.BaseEntity.baseCard;
 
 public class ItemCard extends baseCard {
     public ItemCard(String name, String flavorText){

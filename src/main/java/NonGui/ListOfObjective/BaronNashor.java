@@ -1,9 +1,9 @@
-package entities.objective;
+package NonGui.ListOfObjective;
 
-import entities.baseObject.Objective;
-import entities.baseObject.Player;
+import NonGui.BaseEntity.Objective;
+import NonGui.BaseEntity.Player;
 
-import static entities.GameLogic.GameEngine.SacrificeHero;
+import static NonGui.GameUtils.GameplayUtils.SacrificeHero;
 
 public class BaronNashor extends Objective {
     //constructors

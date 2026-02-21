@@ -1,4 +1,4 @@
-package entities.GameLogic;
+package NonGui.GameUtils;
 
 import java.util.Random;
 

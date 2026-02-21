@@ -1,7 +1,7 @@
-package entities.baseObject.Cards.HeroCard;
+package NonGui.BaseEntity.Cards.HeroCard;
 
-import entities.baseObject.Properties.haveClass;
-import entities.baseObject.baseCard;
+import NonGui.BaseEntity.Properties.haveClass;
+import NonGui.BaseEntity.baseCard;
 
 public abstract class HeroCard extends baseCard implements haveClass {
     //Fields

@@ -1,23 +1,21 @@
-package entities.GameLogic;
+package NonGui.GameLogic;
 
-import entities.baseObject.LeaderCard;
-import entities.baseObject.Objective;
-import entities.baseObject.Player;
-import entities.baseObject.baseCard;
-import entities.baseObject.Cards.HeroCard.HeroCard;
-import entities.baseObject.Cards.HeroCard.UnitClass;
-import entities.baseObject.Cards.ItemCard;
-import entities.baseObject.Cards.MagicCard;
-import entities.objective.BaronNashor;
+import NonGui.BaseEntity.Objective;
+import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.baseCard;
+import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Cards.ItemCard;
+import NonGui.BaseEntity.Cards.MagicCard;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GameEngine {
-    private static Scanner keyBoard;
+import static NonGui.GameLogic.GameChoice.*;
+import static NonGui.GameLogic.GameSetup.*;
 
-    public static Player[] players = new Player[4];
-    public static Objective[] objectives;
+public class GameEngine {
+    static Scanner keyBoard;
+    static Player[] players = new Player[4];
+    static Objective[] objectives;
 
     public static void main(String[] args) {
         System.out.println("Launching Rise of Runeterra...");
@@ -110,115 +108,5 @@ public class GameEngine {
                 PlayerNumber = (PlayerNumber + 1)%4;
             }
         }
-    }
-
-    //Setups
-    private static void initializePlayer(){
-        for(int i = 0; i < 4; ++i){
-            System.out.println("Enter player" + i + "'s name.");
-            String playerName = keyBoard.nextLine();
-            players[i] = new Player(playerName);
-        }
-    }
-
-    private static void initializeObjective(){
-        //To be implemented
-        objectives = new BaronNashor[3];
-    }
-
-    //get Choices
-    private static int getChoice() {
-        System.out.print(">> ");
-        String input = keyBoard.nextLine();
-        try{
-            return Integer.parseInt(input);
-        }catch(NumberFormatException e){
-            return -1;
-        }
-    }
-
-
-    private static int selectCardsInHand(Player player){
-        System.out.println("Select Card number");
-        int CardNumber = 0;
-        for(baseCard card : player.getCardsInHand()){
-            CardNumber++;
-            System.out.println(CardNumber + " : " + card);
-        }
-
-        int choice = getChoice();
-        if(choice < 1 || choice > CardNumber){
-            System.out.println("Invalid card number");
-            choice = selectHeroCard(player);
-        }
-
-        return choice;
-    }
-
-    private static int selectObjective(){
-        System.out.println("Select Objective number");
-        int ObjectiveNumber = 0;
-        for(Objective objective : objectives){
-            ObjectiveNumber++;
-            System.out.println(ObjectiveNumber + " : " + objective);
-        }
-
-        int choice = getChoice();
-        if(choice < 1 || choice > ObjectiveNumber){
-            System.out.println("Invalid card number");
-            choice = selectObjective();
-        }
-
-        return choice;
-    }
-
-    private static int selectPlayer(Player[] players){
-        System.out.println("Select Player number");
-        int PlayerNumber = 1;
-        for(Player player : players){
-            PlayerNumber++;
-            System.out.println(PlayerNumber + " : "+ player.toString());
-        }
-
-        int choice = getChoice();
-        if(choice < 1 || choice > PlayerNumber){
-            System.out.println("Invalid card number");
-            choice = selectPlayer(players);
-        }
-
-        return choice;
-    }
-
-    private static int selectHeroCard(Player Player){
-        HeroCard[] HeroCards = Player.getOwnedHero();
-        System.out.println("Select Hero card number");
-        int HeroCardNumber = 1;
-        for(HeroCard hero : HeroCards){
-            if(hero == null) continue;
-            System.out.println(HeroCardNumber + " : "+ hero);
-            HeroCardNumber++;
-        }
-
-        return getChoice();
-    }
-
-    //Gameplay
-    public static void SacrificeHero(Player player, int number){
-        for(int i = 0; i < number; ++i){
-            int selectedHero = selectHeroCard(player);
-            if(player.boardIsEmpty()){
-                break;
-            }
-            else if(!player.removeHeroCard(selectedHero)){
-                System.out.println("Please selected NOT NULL hero");
-                --i;
-            }
-        }
-    }
-
-
-    //Presets
-    private static void RandomObjective(Objective[] objectiveList) {
-        //To be implemented
     }
 }
