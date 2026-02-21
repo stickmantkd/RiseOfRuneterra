@@ -99,9 +99,9 @@ public class GameEngine {
                     }
                 }
                 System.out.println("=============================");
-                playerList[playerNumber].setActionPoint(playerList[playerNumber].getActionPoint() - 1);
+                currentPlayer.setActionPoint(currentPlayer.getActionPoint() - 1);
             }
-            if(playerList[playerNumber].isWinning()){
+            if(currentPlayer.isWinning()){
                 System.out.println("Player" + (playerNumber+1) + " Wins");
                 System.out.println("Good Game Go Next");
                 System.out.println("=============================");
@@ -109,8 +109,8 @@ public class GameEngine {
                 isGameActive = false;
             }
 
-            if(playerList[playerNumber].getActionPoint() == 0){
-                playerList[playerNumber].refillActionPoint();
+            if(currentPlayer.getActionPoint() == 0){
+                currentPlayer.refillActionPoint();
                 playerNumber = (playerNumber + 1)%4;
             }
         }
