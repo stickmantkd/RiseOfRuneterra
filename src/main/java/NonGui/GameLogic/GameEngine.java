@@ -55,7 +55,7 @@ public class GameEngine {
         while(isGameActive) {
             Player currentPlayer = players[PlayerNumber];
             while(currentPlayer.getActionPoint() > 0){
-                System.out.println("It's Player" + (PlayerNumber+1) + "'s turn");
+                System.out.println("It's " + currentPlayer + "'s turn");
                 System.out.println("=============================");
                 System.out.println("Action Point left: " + currentPlayer.getActionPoint());
                 System.out.println("Choose your action");
@@ -95,7 +95,7 @@ public class GameEngine {
                 currentPlayer.setActionPoint(currentPlayer.getActionPoint() - 1);
             }
             if(currentPlayer.isWinning()){
-                System.out.println("Player" + (PlayerNumber+1) + " Wins");
+                System.out.println(currentPlayer + " Wins");
                 System.out.println("Good Game Go Next");
                 System.out.println("=============================");
 

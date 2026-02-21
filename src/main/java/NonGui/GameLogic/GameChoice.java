@@ -18,7 +18,6 @@ public class GameChoice {
         }
     }
 
-
     public static int selectCardsInHand(Player player){
         System.out.println("Select Card number");
         int CardNumber = 0;
@@ -29,8 +28,8 @@ public class GameChoice {
 
         int choice = getChoice();
         if(choice < 1 || choice > CardNumber){
-            System.out.println("Invalid card number");
-            choice = selectHeroCard(player);
+            System.out.println("Invalid Card number");
+            choice = selectCardsInHand(player);
         }
 
         return choice;
@@ -46,7 +45,7 @@ public class GameChoice {
 
         int choice = getChoice();
         if(choice < 1 || choice > ObjectiveNumber){
-            System.out.println("Invalid card number");
+            System.out.println("Invalid Objective number");
             choice = selectObjective();
         }
 
@@ -55,7 +54,7 @@ public class GameChoice {
 
     public static int selectPlayer(Player[] players){
         System.out.println("Select Player number");
-        int PlayerNumber = 1;
+        int PlayerNumber = 0;
         for(Player player : players){
             PlayerNumber++;
             System.out.println(PlayerNumber + " : "+ player.toString());
@@ -63,23 +62,29 @@ public class GameChoice {
 
         int choice = getChoice();
         if(choice < 1 || choice > PlayerNumber){
-            System.out.println("Invalid card number");
+            System.out.println("Invalid Player number");
             choice = selectPlayer(players);
         }
 
         return choice;
     }
 
-    public static int selectHeroCard(Player Player){
-        HeroCard[] heroCards = Player.getOwnedHero();
+    public static int selectHeroCard(Player player){
+        HeroCard[] heroCards =player.getOwnedHero();
         System.out.println("Select Hero card number");
-        int HeroCardNumber = 1;
+        int HeroCardNumber = 0;
         for(HeroCard hero : heroCards){
+            HeroCardNumber++;
             if(hero == null) continue;
             System.out.println(HeroCardNumber + " : "+ hero);
-            HeroCardNumber++;
         }
 
-        return getChoice();
+        int choice = getChoice();
+        if(choice < 1 || choice > HeroCardNumber){
+            System.out.println("Invalid Hero number");
+            choice = selectHeroCard(player);
+        }
+
+        return choice;
     }
 }

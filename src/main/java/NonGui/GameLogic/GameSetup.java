@@ -8,7 +8,7 @@ import static NonGui.GameLogic.GameEngine.*;
 public class GameSetup {
     static void initializePlayer(){
         for(int i = 0; i < 4; ++i){
-            System.out.println("Enter player" + i + "'s name.");
+            System.out.println("Enter player" + (i+1) + "'s name.");
             String playerName = keyBoard.nextLine();
             players[i] = new Player(playerName);
         }

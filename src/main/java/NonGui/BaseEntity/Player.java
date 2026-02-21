@@ -21,6 +21,7 @@ public class Player{
 
     //Constructors
     public Player(String name){
+        setName(name);
         setMaxActionPoint(3);
         setActionPoint(3);
         setOwnedObjective(0);
