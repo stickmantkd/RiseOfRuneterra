@@ -1,6 +1,6 @@
 package entities.baseObject;
 
-public abstract class baseCard {
+public class baseCard {
     //fields
     private String name;
     private String flavorText;
@@ -17,7 +17,6 @@ public abstract class baseCard {
     }
 
     //function
-    public abstract void playCard(Player player);
 
     @Override
     public String toString() {
