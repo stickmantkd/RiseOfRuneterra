@@ -1,7 +1,6 @@
-package entities.baseObject.baseCards.HeroCard;
+package entities.baseObject.Cards.HeroCard;
 
 import entities.baseObject.Properties.haveClass;
-import entities.baseObject.Player;
 import entities.baseObject.baseCard;
 
 public abstract class HeroCard extends baseCard implements haveClass {
@@ -18,12 +17,6 @@ public abstract class HeroCard extends baseCard implements haveClass {
     public HeroCard(String name, String flavorText, UnitClass heroClass){
         super(name,flavorText);
         setUnitClass(heroClass);
-    }
-
-    //Functions
-    @Override
-    public void playCard(Player player) {
-        //To be implemented
     }
 
     public abstract void useAbility();

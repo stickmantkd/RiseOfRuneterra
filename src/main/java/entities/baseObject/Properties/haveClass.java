@@ -1,6 +1,6 @@
 package entities.baseObject.Properties;
 
-import entities.baseObject.baseCards.HeroCard.UnitClass;
+import entities.baseObject.Cards.HeroCard.UnitClass;
 
 public interface haveClass {
     public UnitClass getUnitClass();

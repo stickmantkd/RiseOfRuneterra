@@ -4,8 +4,10 @@ import entities.baseObject.LeaderCard;
 import entities.baseObject.Objective;
 import entities.baseObject.Player;
 import entities.baseObject.baseCard;
-import entities.baseObject.baseCards.HeroCard.HeroCard;
-import entities.baseObject.baseCards.HeroCard.UnitClass;
+import entities.baseObject.Cards.HeroCard.HeroCard;
+import entities.baseObject.Cards.HeroCard.UnitClass;
+import entities.baseObject.Cards.ItemCard;
+import entities.baseObject.Cards.MagicCard;
 import entities.objective.BaronNashor;
 
 import java.util.ArrayList;
@@ -56,10 +58,11 @@ public class GameEngine {
 
         int playerNumber = 0;
         while(isGameActive) {
-            while(playerList[playerNumber].getActionPoint() > 0){
-                System.out.println("It's Player" + (int) (playerNumber+1) + "'s turn");
+            Player currentPlayer = playerList[playerNumber];
+            while(currentPlayer.getActionPoint() > 0){
+                System.out.println("It's Player" + (playerNumber+1) + "'s turn");
                 System.out.println("=============================");
-                System.out.println("Action Point left: " + playerList[playerNumber].getActionPoint());
+                System.out.println("Action Point left: " + currentPlayer.getActionPoint());
                 System.out.println("Choose your action");
                 System.out.println("1 : Draw a card");
                 System.out.println("2 : Play a card");
@@ -69,13 +72,23 @@ public class GameEngine {
                         //Implement DrawRandomCard();
                     }
                     case (2) -> {
-                        ArrayList<baseCard> Hands = playerList[playerNumber].getCardsInHand();
-                        int selectedCardNumber = selectCardsInHand(playerList[playerNumber]);
-                        //-implement getCardsInHand(selectedCardNumber); in Player
-                        //baseCard SelectedCard = PlayerList[playerNumber].getCardsInHand(selectedCardNumber);
+                        int selectedCardNumber = selectCardsInHand(currentPlayer);
+                        baseCard selectedCard = currentPlayer.getCardInHand(selectedCardNumber);
 
-                        //-implement playCard(SelectedCard) in HeroCard,MagicCard,ItemCard
-                        //SelectedCard.playCard();
+                        switch (selectedCard){
+                            case HeroCard heroCard -> {
+                                currentPlayer.playHero(heroCard);
+                            }
+                            case MagicCard magicCard -> {
+                                currentPlayer.playMagic(magicCard);
+                            }
+                            case ItemCard itemCard -> {
+                                int selectedHeroNumber = selectHeroCard(currentPlayer);
+                                HeroCard selectedHero = currentPlayer.getHeroCard(selectedHeroNumber);
+                                currentPlayer.playItem(itemCard, selectedHero);
+                            }
+                            default -> throw new IllegalStateException("Unexpected value: " + selectedCard);
+                        }
                     }
                     case (3) -> {
                         //now it only cose 1 action Point
@@ -89,7 +102,7 @@ public class GameEngine {
                 playerList[playerNumber].setActionPoint(playerList[playerNumber].getActionPoint() - 1);
             }
             if(playerList[playerNumber].isWinning()){
-                System.out.println("Player" + (int) (playerNumber+1) + " Wins");
+                System.out.println("Player" + (playerNumber+1) + " Wins");
                 System.out.println("Good Game Go Next");
                 System.out.println("=============================");
 
@@ -137,7 +150,7 @@ public class GameEngine {
         return getChoice();
     }
 
-    private static int SelectPlayer(Player[] Players){
+    private static int selectPlayer(Player[] Players){
         System.out.println("Select Player number");
         int playerNumber = 1;
         for(Player player : Players){
@@ -148,7 +161,7 @@ public class GameEngine {
         return getChoice();
     }
 
-    private static int SelectHeroCard(Player Player){
+    private static int selectHeroCard(Player Player){
         HeroCard[] HeroCards = Player.getOwnedHero();
         System.out.println("Select Hero card number");
         int HeroCardNumber = 1;

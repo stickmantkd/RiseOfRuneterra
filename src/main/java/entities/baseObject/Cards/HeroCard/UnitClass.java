@@ -1,4 +1,4 @@
-package entities.baseObject.baseCards.HeroCard;
+package entities.baseObject.Cards.HeroCard;
 
 public enum UnitClass {
     Assassin,

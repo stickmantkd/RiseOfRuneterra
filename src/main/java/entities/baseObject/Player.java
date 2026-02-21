@@ -1,9 +1,13 @@
 package entities.baseObject;
 
-import entities.baseObject.baseCards.HeroCard.UnitClass;
-import entities.baseObject.baseCards.HeroCard.HeroCard;
+import entities.baseObject.Cards.HeroCard.UnitClass;
+import entities.baseObject.Cards.HeroCard.HeroCard;
+import entities.baseObject.Cards.ItemCard;
+import entities.baseObject.Cards.MagicCard;
 
 import java.util.ArrayList;
+
+import static entities.GameLogic.GameUtils.*;
 
 public class Player{
     //Fields
@@ -11,27 +15,64 @@ public class Player{
     private int actionPoint;
     private int maxActionPoint;
     private LeaderCard ownedLeader;
-    private HeroCard[] ownedHero;
     private int ownedObjective;
+    private HeroCard[] ownedHero;
     private ArrayList<baseCard> cardsInHand;
 
     //Constructors
     public Player(String name){
         setMaxActionPoint(3);
         setActionPoint(3);
-        HeroCard[] initialOwnedHero = new HeroCard[5];
-        setOwnedHero(initialOwnedHero);
         setOwnedObjective(0);
-        ArrayList<baseCard> initialHand = new ArrayList<>();
-        setCardsInHand(initialHand);
+        initializeOwnedHero();
+        initializeCardsInHand();
     }
 
-    //Functions
+    //Utilities
     @Override
     public String toString() {
         return name;
     }
 
+    public void DrawRandomCard(){
+        cardsInHand.add(GenerateRandomCard());
+    }
+
+
+    //Setups
+    private void initializeOwnedLeader(){
+        ownedLeader = GenerateRandomLeader();
+    }
+
+    private void initializeOwnedHero(){
+        ownedHero = new HeroCard[5];
+    }
+
+    private void initializeCardsInHand(){
+        cardsInHand = new ArrayList<>();
+        for(int i = 0; i < 5; ++i){
+            DrawRandomCard();
+        }
+    }
+
+    public void refillActionPoint() {
+        setActionPoint(maxActionPoint);
+    }
+
+    //get by Index
+    public baseCard getCardInHand(int index){
+        index--; // since array index start with 0
+        baseCard selectedCard = cardsInHand.get(index);
+        cardsInHand.remove(selectedCard);
+        return selectedCard;
+    }
+
+    public HeroCard getHeroCard(int index) {
+        index--; // since array index start with 0
+        return ownedHero[index];
+    }
+
+    //CheckWinning
     public boolean isWinning(){
         return checkOwnedAllClass() || checkOwnedThreeObjective();
     }
@@ -48,8 +89,25 @@ public class Player{
         return ownedObjective >= 3;
     }
 
-    public void refillActionPoint() {
-        setActionPoint(maxActionPoint);
+
+    //PlayCard
+    public boolean playHero(HeroCard heroCard) {
+        for (int i = 0; i < ownedHero.length; i++) {
+            if (ownedHero[i] == null) {
+                ownedHero[i] = heroCard;
+                heroCard.useAbility();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playMagic(MagicCard magicCard) {
+        return false;
+    }
+
+    public boolean playItem(ItemCard itemCard,HeroCard heroCard) {
+        return false;
     }
 
 

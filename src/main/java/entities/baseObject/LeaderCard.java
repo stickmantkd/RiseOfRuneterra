@@ -1,7 +1,7 @@
 package entities.baseObject;
 
 import entities.baseObject.Properties.haveClass;
-import entities.baseObject.baseCards.HeroCard.UnitClass;
+import entities.baseObject.Cards.HeroCard.UnitClass;
 
 public class LeaderCard implements haveClass {
     //Fields

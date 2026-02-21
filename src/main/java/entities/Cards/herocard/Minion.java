@@ -1,12 +1,7 @@
 package entities.Cards.herocard;
 
-import entities.GameLogic.GameUtils;
-import entities.baseObject.Player;
-import entities.baseObject.baseCards.HeroCard.HeroCard;
-import entities.baseObject.baseCards.HeroCard.UnitClass;
-import entities.GameLogic.GameUtils;
-
-import java.io.IOException;
+import entities.baseObject.Cards.HeroCard.HeroCard;
+import entities.baseObject.Cards.HeroCard.UnitClass;
 
 public class Minion extends HeroCard {
     public Minion() {
@@ -14,8 +9,6 @@ public class Minion extends HeroCard {
         super("Minion", "I'm a minion, not Neeko", UnitClass.Fighter);
         setAbilityDescription("Destroy 1 hero card");
     }
-
-
 
     @Override
     public void useAbility(){
