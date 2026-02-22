@@ -10,7 +10,7 @@ public class FinalSpark extends MagicCard {
     public FinalSpark(){
         super("Final Spark",
                 "Final light!",
-                "Destroy a Hero Card"
+                "Destroy A Hero Card"
         );
     }
 
@@ -20,6 +20,7 @@ public class FinalSpark extends MagicCard {
         Player selectedPlayer = players[playerNumber];
 
         int heroNumber = selectHeroCard(selectedPlayer);
+
         return selectedPlayer.removeHeroCard(heroNumber);
     }
 }
