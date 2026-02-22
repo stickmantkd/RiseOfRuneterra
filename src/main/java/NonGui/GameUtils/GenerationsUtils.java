@@ -1,7 +1,7 @@
 package NonGui.GameUtils;
 
 import NonGui.ListOfCards.herocard.Minion;
-import NonGui.BaseEntity.Cards.HeroCard.UnitClass;
+import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.baseCard;
 

@@ -3,6 +3,7 @@ package NonGui.BaseEntity;
 import NonGui.BaseEntity.Cards.HeroCard.*;
 import NonGui.BaseEntity.Cards.Itemcard.*;
 import NonGui.BaseEntity.Cards.MagicCard;
+import NonGui.BaseEntity.Properties.UnitClass;
 
 import java.util.ArrayList;
 

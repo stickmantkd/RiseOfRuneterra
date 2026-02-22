@@ -4,7 +4,7 @@ package NonGui.BaseEntity.Cards.Itemcard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.baseCard;
 
-public class ItemCard extends baseCard {
+public abstract class ItemCard extends baseCard {
     private String abilityDescription; //Dice,Skill,Mark
 
     public ItemCard(String name,String flavorText,String AbilityDescription){
@@ -13,13 +13,9 @@ public class ItemCard extends baseCard {
     }
 
     //Functions
-    public void enableAbility(HeroCard hero) {
+    public abstract void enableAbility(HeroCard hero);
 
-    }
-
-    public void disableAbility(HeroCard hero) {
-
-    }
+    public abstract void disableAbility(HeroCard hero);
 
     //getters n setters
     public String getAbilityDescription() {

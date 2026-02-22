@@ -1,7 +1,7 @@
 package NonGui.ListOfCards.herocard;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.HeroCard.UnitClass;
+import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Minion extends HeroCard {
     public Minion() {
