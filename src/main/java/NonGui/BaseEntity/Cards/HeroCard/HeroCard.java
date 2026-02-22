@@ -20,20 +20,20 @@ public abstract class HeroCard extends baseCard implements haveClass {
     public HeroCard(String name, String flavorText, UnitClass heroClass){
         super(name,flavorText);
         setItem(null);
-        Item.enableAbility(this);
         setUnitClass(heroClass);
     }
 
     //Functions
     public boolean EquipItem(ItemCard Item){
         if(getItem() != null) return false;
-        Item.disableAbility(this);
         setItem(Item);
+        Item.enableAbility(this);
         return true;
     }
 
     public boolean unEquipItem(){
         if(getItem() == null) return false;
+        Item.disableAbility(this);
         setItem(null);
         return true;
     }

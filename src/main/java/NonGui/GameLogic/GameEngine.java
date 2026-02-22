@@ -1,11 +1,9 @@
 package NonGui.GameLogic;
 
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
-import NonGui.BaseEntity.Objective;
-import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.baseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.MagicCard;
+import NonGui.BaseEntity.*;
 
 import java.util.Scanner;
 

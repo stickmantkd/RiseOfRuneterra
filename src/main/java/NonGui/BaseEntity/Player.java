@@ -31,6 +31,11 @@ public class Player{
     }
 
     //Utilities
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public void DrawRandomCard(){
         cardsInHand.add(GenerateRandomCard());
     }
