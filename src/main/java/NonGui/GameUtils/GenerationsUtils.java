@@ -1,6 +1,6 @@
 package NonGui.GameUtils;
 
-import NonGui.ListOfCards.herocard.Minion;
+import NonGui.ListOfCards.herocard.Fighter.Fiora;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.BaseCard;
@@ -11,7 +11,7 @@ public class GenerationsUtils {
 
     public static BaseCard GenerateRandomCard(){
         //currently just draw a minion
-        return new Minion();
+        return new Fiora();
     }
 
     public static LeaderCard GenerateRandomLeader(){

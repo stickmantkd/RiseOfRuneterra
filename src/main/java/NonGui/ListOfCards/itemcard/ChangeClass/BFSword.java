@@ -1,4 +1,4 @@
-package NonGui.ListOfCards.itemcard;
+package NonGui.ListOfCards.itemcard.ChangeClass;
 
 import NonGui.BaseEntity.Cards.Itemcard.ClassChangingItemCard;
 import NonGui.BaseEntity.Properties.UnitClass;
