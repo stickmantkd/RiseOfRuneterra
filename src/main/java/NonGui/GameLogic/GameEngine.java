@@ -60,28 +60,37 @@ public class GameEngine {
                 System.out.println("1 : Draw a card");
                 System.out.println("2 : Play a card");
                 System.out.println("3 : Try to complete the objective");
+
+                int usedAp = 0;
                 switch (getChoice()) {
                     case (1) -> {
                         currentPlayer.DrawRandomCard();
+                        usedAp = 1;
                     }
                     case (2) -> {
                         int selectedCardNumber = selectCardsInHand(currentPlayer);
                         BaseCard selectedCard = currentPlayer.getCardInHand(selectedCardNumber);
 
                         if(!selectedCard.playCard(currentPlayer)){
-                            System.out.println("Invalid: You cannot play that card that way!");
+                            System.out.println("Invalid action: You cannot play that card that way!");
                             currentPlayer.addCardToHand(selectedCard);
-                            currentPlayer.increaseActionPoint(1);
+                            continue;
                         }
+
+                        usedAp = 1;
                     }
                     case (3) -> {
-                        //now it only cose 1 action Point
+                        if(currentPlayer.getActionPoint() < 2){
+                            System.out.println("Invalid: You need 2 AP to attempt on an Objective");
+                            continue;
+                        }
                         int selectedObjective = selectObjective();
                         objectives[selectedObjective].tryToComplete(currentPlayer);
+                        usedAp = 2;
                     }
                 }
                 System.out.println("=============================");
-                currentPlayer.decreaseActionPoint(1);
+                currentPlayer.decreaseActionPoint(usedAp);
             }
             if(currentPlayer.isWinning()){
                 System.out.println(currentPlayer + " Wins");
