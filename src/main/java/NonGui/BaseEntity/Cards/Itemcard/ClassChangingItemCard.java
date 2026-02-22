@@ -9,18 +9,22 @@ public class ClassChangingItemCard extends ItemCard{
     private UnitClass newClass;
 
     //constructor
-    public ClassChangingItemCard(String name, String flavorText, String AbilityDescription){
+    public ClassChangingItemCard(String name,
+                                 String flavorText,
+                                 String AbilityDescription,
+                                 UnitClass newClass){
         super(name, flavorText, AbilityDescription);
+        setNewClass(newClass);
     }
 
     //Functions
     @Override
-    public void enableAbility(HeroCard hero) {
+    public void onEquip(HeroCard hero) {
         setOldClass(hero.getUnitClass());
         hero.setUnitClass(newClass);
     }
     @Override
-    public void disableAbility(HeroCard hero) {
+    public void onUnEquip(HeroCard hero) {
         hero.setUnitClass(oldClass);
     }
 

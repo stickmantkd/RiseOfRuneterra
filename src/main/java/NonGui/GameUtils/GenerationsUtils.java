@@ -3,13 +3,13 @@ package NonGui.GameUtils;
 import NonGui.ListOfCards.herocard.Minion;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
-import NonGui.BaseEntity.baseCard;
+import NonGui.BaseEntity.BaseCard;
 
 
 public class GenerationsUtils {
 
 
-    public static baseCard GenerateRandomCard(){
+    public static BaseCard GenerateRandomCard(){
         //currently just draw a minion
         return new Minion();
     }

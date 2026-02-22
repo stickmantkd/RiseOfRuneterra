@@ -1,22 +1,25 @@
 package NonGui.BaseEntity;
 
-public class baseCard {
+public abstract class BaseCard {
     //fields
     private String name;
     private String flavorText;
+    private String abilityDescription;
 
     //constructor
-    public baseCard(){
+    public BaseCard(){
         setName("Dummy");
         setFlavorText("Ello, Ello...");
     }
 
-    public baseCard(String name, String flavorText){
+    public BaseCard(String name, String flavorText, String abilityDescription){
         setName(name);
         setFlavorText(flavorText);
+        setAbilityDescription(abilityDescription);
     }
 
     //function
+    public abstract boolean playCard(Player player);
 
     @Override
     public String toString() {
@@ -36,5 +39,12 @@ public class baseCard {
     }
     public void setFlavorText(String flavorText) {
         this.flavorText = flavorText;
+    }
+
+    public String getAbilityDescription() {
+        return abilityDescription;
+    }
+    public void setAbilityDescription(String abilityDescription) {
+        this.abilityDescription = abilityDescription;
     }
 }

@@ -1,8 +1,6 @@
 package NonGui.BaseEntity;
 
 import NonGui.BaseEntity.Cards.HeroCard.*;
-import NonGui.BaseEntity.Cards.Itemcard.*;
-import NonGui.BaseEntity.Cards.MagicCard;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ public class Player{
     private int ownedObjective;
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
-    private ArrayList<baseCard> cardsInHand;
+    private ArrayList<BaseCard> cardsInHand;
 
     //Constructors
     public Player(String name){
@@ -40,11 +38,23 @@ public class Player{
         cardsInHand.add(GenerateRandomCard());
     }
 
+    public void addCardToHand(BaseCard card){
+        cardsInHand.add(card);
+    }
+
     public boolean boardIsEmpty() {
         for(HeroCard hero : ownedHero){
             if(hero != null) return false;
         }
         return true;
+    }
+
+    public void increaseActionPoint(int x){
+        this.setActionPoint(actionPoint + x);
+    }
+
+    public void decreaseActionPoint(int x){
+        this.setActionPoint(actionPoint - x);
     }
 
     public void refillActionPoint() {
@@ -67,12 +77,10 @@ public class Player{
         }
     }
 
-
-
     //Index Operation
-    public baseCard getCardInHand(int index){
+    public BaseCard getCardInHand(int index){
         index--; // since array index start with 0
-        baseCard selectedCard = cardsInHand.get(index);
+        BaseCard selectedCard = cardsInHand.get(index);
         cardsInHand.remove(selectedCard);
         return selectedCard;
     }
@@ -101,31 +109,9 @@ public class Player{
         }
         return true;
     }
-    public boolean checkOwnedThreeObjective(){
+    public boolean checkOwnedThreeObjective() {
         return ownedObjective >= 3;
     }
-
-
-    //PlayCard
-    public boolean playHero(HeroCard heroCard) {
-        for (int i = 0; i < ownedHero.length; i++) {
-            if (ownedHero[i] == null) {
-                ownedHero[i] = heroCard;
-                heroCard.useAbility();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean playMagic(MagicCard magicCard) {
-        return false;
-    }
-
-    public boolean playItem(ItemCard itemCard, HeroCard heroCard) {
-        return false;
-    }
-
 
     //getters n setters
     public LeaderCard getOwnedLeader() {
@@ -146,6 +132,8 @@ public class Player{
         return actionPoint;
     }
     public void setActionPoint(int actionPoint) {
+        if(actionPoint > maxActionPoint) actionPoint = maxActionPoint;
+        if(actionPoint < 0) actionPoint = 0;
         this.actionPoint = actionPoint;
     }
 
@@ -170,10 +158,10 @@ public class Player{
         this.ownedObjective = ownedObjective;
     }
 
-    public ArrayList<baseCard> getCardsInHand() {
+    public ArrayList<BaseCard> getCardsInHand() {
         return cardsInHand;
     }
-    public void setCardsInHand(ArrayList<baseCard> cardsInHand) {
+    public void setCardsInHand(ArrayList<BaseCard> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
 }

@@ -3,7 +3,7 @@ package NonGui.GameLogic;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Objective;
 import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.baseCard;
+import NonGui.BaseEntity.BaseCard;
 
 import static NonGui.GameLogic.GameEngine.*;
 
@@ -21,7 +21,7 @@ public class GameChoice {
     public static int selectCardsInHand(Player player){
         System.out.println("Select Card number");
         int CardNumber = 0;
-        for(baseCard card : player.getCardsInHand()){
+        for(BaseCard card : player.getCardsInHand()){
             CardNumber++;
             System.out.println(CardNumber + " : " + card);
         }

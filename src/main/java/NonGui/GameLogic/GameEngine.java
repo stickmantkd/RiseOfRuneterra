@@ -2,7 +2,7 @@ package NonGui.GameLogic;
 
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.MagicCard;
+import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.*;
 
 import java.util.Scanner;
@@ -11,9 +11,9 @@ import static NonGui.GameLogic.GameChoice.*;
 import static NonGui.GameLogic.GameSetup.*;
 
 public class GameEngine {
-    static Scanner keyBoard;
-    static Player[] players = new Player[4];
-    static Objective[] objectives;
+    public static Scanner keyBoard;
+    public static Player[] players = new Player[4];
+    public static Objective[] objectives;
 
     public static void main(String[] args) {
         System.out.println("Launching Rise of Runeterra...");
@@ -66,23 +66,12 @@ public class GameEngine {
                     }
                     case (2) -> {
                         int selectedCardNumber = selectCardsInHand(currentPlayer);
-                        baseCard selectedCard = currentPlayer.getCardInHand(selectedCardNumber);
+                        BaseCard selectedCard = currentPlayer.getCardInHand(selectedCardNumber);
 
-                        switch (selectedCard){
-                            case HeroCard heroCard -> {
-                                currentPlayer.playHero(heroCard);
-                            }
-                            case MagicCard magicCard -> {
-                                currentPlayer.playMagic(magicCard);
-                            }
-                            case ItemCard itemCard -> {
-                                int selectedPlayerNumber = selectPlayer(players);
-                                Player selectedPlayer = players[selectedPlayerNumber];
-                                int selectedHeroNumber = selectHeroCard(selectedPlayer);
-                                HeroCard selectedHero = selectedPlayer.getHeroCard(selectedHeroNumber);
-                                currentPlayer.playItem(itemCard, selectedHero);
-                            }
-                            default -> throw new IllegalStateException("Unexpected value: " + selectedCard);
+                        if(!selectedCard.playCard(currentPlayer)){
+                            System.out.println("Invalid: You cannot play that card that way!");
+                            currentPlayer.addCardToHand(selectedCard);
+                            currentPlayer.increaseActionPoint(1);
                         }
                     }
                     case (3) -> {
@@ -92,7 +81,7 @@ public class GameEngine {
                     }
                 }
                 System.out.println("=============================");
-                currentPlayer.setActionPoint(currentPlayer.getActionPoint() - 1);
+                currentPlayer.decreaseActionPoint(1);
             }
             if(currentPlayer.isWinning()){
                 System.out.println(currentPlayer + " Wins");
