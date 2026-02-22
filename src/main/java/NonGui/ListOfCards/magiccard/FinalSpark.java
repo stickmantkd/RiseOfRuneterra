@@ -16,8 +16,8 @@ public class FinalSpark extends MagicCard {
 
     @Override
     public boolean playCard(Player player) {
-        int playerNumber = selectPlayer(players);
-        Player selectedPlayer = players[playerNumber];
+        int playerIndex = selectPlayer(players);
+        Player selectedPlayer = players[playerIndex];
 
         int heroNumber = selectHeroCard(selectedPlayer);
 

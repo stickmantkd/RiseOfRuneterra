@@ -1,23 +1,12 @@
 package NonGui.GameUtils;
 
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
-import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
-import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.*;
 
-import static NonGui.GameLogic.GameChoice.selectHeroCard;
+import static NonGui.GameLogic.GameChoice.*;
+import static NonGui.GameLogic.GameEngine.*;
+import static NonGui.GameUtils.GenerationsUtils.*;
 
 public class GameplayUtils {
-    //PlayCards
-    public boolean playMagic(Player player,MagicCard magicCard) {
-        return false;
-    }
-
-    public boolean playItem(ItemCard itemCard, HeroCard heroCard) {
-
-        return false;
-    }
-
     //Sacrifice n Destroy
     public static void SacrificeHero(Player player, int number){
         for(int i = 0; i < number; ++i){
@@ -31,5 +20,10 @@ public class GameplayUtils {
                 --i;
             }
         }
+    }
+
+    //Rotate objective
+    public static void rotateObjective(int objectiveIndex){
+        objectives[objectiveIndex] = generateRandomObjective();
     }
 }

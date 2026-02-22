@@ -71,8 +71,8 @@ public class GameEngine {
                             System.out.println("Invalid action: Hand Is Empty!");
                             continue;
                         }
-                        int selectedCardNumber = selectCardsInHand(currentPlayer);
-                        BaseCard selectedCard = currentPlayer.getCardInHand(selectedCardNumber);
+                        int cardIndex = selectCardsInHand(currentPlayer);
+                        BaseCard selectedCard = currentPlayer.getCardInHand(cardIndex);
 
                         if(!selectedCard.playCard(currentPlayer)){
                             System.out.println("Invalid action: Board Is Full!");
@@ -87,8 +87,8 @@ public class GameEngine {
                             System.out.println("Invalid: You need 2 AP to attempt on an Objective");
                             continue;
                         }
-                        int selectedObjective = selectObjective();
-                        objectives[selectedObjective].tryToComplete(currentPlayer);
+                        int objectiveIndex = selectObjective();
+                        objectives[objectiveIndex].tryToComplete(objectiveIndex, currentPlayer);
                         currentPlayer.decreaseActionPoint(2);
                     }
                 }

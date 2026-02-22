@@ -1,6 +1,6 @@
 package NonGui.BaseEntity;
 
-import static NonGui.GameUtils.DiceUtils.getRoll;
+import static NonGui.GameUtils.DiceUtils.*;
 import static NonGui.GameUtils.GameplayUtils.*;
 
 public abstract class Objective{
@@ -32,9 +32,7 @@ public abstract class Objective{
         setMaxTargetRoll(maxTargetRoll);
     }
 
-    //
-
-
+    //To string
     @Override
     public String toString() {
         return name;
@@ -49,7 +47,7 @@ public abstract class Objective{
         return true;
     }
 
-    public void tryToComplete(Player player){
+    public void tryToComplete(int index, Player player){
         if(!canTry(player)) {
             System.out.println("Your owned Heroes don't math the requirement");
         }
@@ -59,6 +57,7 @@ public abstract class Objective{
         System.out.println("And you rolled a " + roll2);
         if(roll1+roll2 >= minTargetRoll && roll1+roll2 <= maxTargetRoll){
             grantPrize(player);
+            rotateObjective(index);
         }else {
             grantPunishment(player);
         }
