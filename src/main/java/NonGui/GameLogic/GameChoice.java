@@ -32,7 +32,7 @@ public class GameChoice {
             choice = selectCardsInHand(player);
         }
 
-        return choice;
+        return choice - 1;
     }
 
     public static int selectObjective(){
@@ -49,7 +49,7 @@ public class GameChoice {
             choice = selectObjective();
         }
 
-        return choice;
+        return choice - 1;
     }
 
     public static int selectPlayer(Player[] players){
@@ -66,7 +66,7 @@ public class GameChoice {
             choice = selectPlayer(players);
         }
 
-        return choice;
+        return choice - 1;
     }
 
     public static int selectHeroCard(Player player){
@@ -85,6 +85,6 @@ public class GameChoice {
             choice = selectHeroCard(player);
         }
 
-        return choice;
+        return choice - 1;
     }
 }

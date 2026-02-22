@@ -102,11 +102,9 @@ public class GameEngine {
                 isGameActive = false;
             }
 
-            if(currentPlayer.getActionPoint() == 0){
-                currentPlayer.refillActionPoint();
-                players[PlayerNumber] = currentPlayer;
-                PlayerNumber = (PlayerNumber + 1)%4;
-            }
+            currentPlayer.refillActionPoint();
+            players[PlayerNumber] = currentPlayer;
+            PlayerNumber = (PlayerNumber + 1)%4;
         }
     }
 }

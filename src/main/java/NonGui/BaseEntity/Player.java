@@ -83,19 +83,16 @@ public class Player{
 
     //Index Operation
     public BaseCard getCardInHand(int index){
-        index--; // since array index start with 0
         BaseCard selectedCard = cardsInHand.get(index);
         cardsInHand.remove(selectedCard);
         return selectedCard;
     }
 
     public HeroCard getHeroCard(int index) {
-        index--; // since array index start with 0
         return ownedHero[index];
     }
 
     public boolean removeHeroCard(int index) {
-        index--; // since array index start with 0
         if(ownedHero[index] == null) return false;
         ownedHero[index] = null;
         return true;
