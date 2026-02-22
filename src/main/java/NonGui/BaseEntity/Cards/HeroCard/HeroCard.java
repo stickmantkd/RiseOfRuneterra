@@ -1,22 +1,41 @@
 package NonGui.BaseEntity.Cards.HeroCard;
 
-import NonGui.BaseEntity.Properties.haveClass;
+import NonGui.BaseEntity.Properties.*;
 import NonGui.BaseEntity.baseCard;
+import NonGui.BaseEntity.Cards.Itemcard.*;
 
 public abstract class HeroCard extends baseCard implements haveClass {
     //Fields
     private UnitClass heroClass;
     private String abilityDescription;
+    private ItemCard Item;
 
     //Constructor
     public HeroCard(){
         super("Dummy Hero", "For Demacia!!!");
+        setItem(null);
         setAbilityDescription("No Ability, Pure POWER");
     }
 
     public HeroCard(String name, String flavorText, UnitClass heroClass){
         super(name,flavorText);
+        setItem(null);
+        Item.enableAbility(this);
         setUnitClass(heroClass);
+    }
+
+    //Functions
+    public boolean EquipItem(ItemCard Item){
+        if(getItem() != null) return false;
+        Item.disableAbility(this);
+        setItem(Item);
+        return true;
+    }
+
+    public boolean unEquipItem(){
+        if(getItem() == null) return false;
+        setItem(null);
+        return true;
     }
 
     public abstract void useAbility();
@@ -27,6 +46,11 @@ public abstract class HeroCard extends baseCard implements haveClass {
     }
     public String getAbilityDescription(){
         return abilityDescription;
+    }
+    public ItemCard getItem() {return Item;}
+
+    public void setItem(ItemCard item) {
+        Item = item;
     }
 
     @Override

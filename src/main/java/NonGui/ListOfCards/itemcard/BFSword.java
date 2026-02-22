@@ -1,8 +1,8 @@
 package NonGui.ListOfCards.itemcard;
 
-import NonGui.BaseEntity.Cards.ItemCard;
+import NonGui.BaseEntity.baseCard;
 
-public class BFSword extends ItemCard {
+public class BFSword extends baseCard {
     public BFSword(){
         super("BFSword","clank! clank!");
     }

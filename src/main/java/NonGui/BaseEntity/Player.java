@@ -1,8 +1,7 @@
 package NonGui.BaseEntity;
 
-import NonGui.BaseEntity.Cards.HeroCard.UnitClass;
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.ItemCard;
+import NonGui.BaseEntity.Cards.HeroCard.*;
+import NonGui.BaseEntity.Cards.Itemcard.*;
 import NonGui.BaseEntity.Cards.MagicCard;
 
 import java.util.ArrayList;
@@ -31,11 +30,6 @@ public class Player{
     }
 
     //Utilities
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public void DrawRandomCard(){
         cardsInHand.add(GenerateRandomCard());
     }
@@ -122,7 +116,7 @@ public class Player{
         return false;
     }
 
-    public boolean playItem(ItemCard itemCard,HeroCard heroCard) {
+    public boolean playItem(ItemCard itemCard, HeroCard heroCard) {
         return false;
     }
 

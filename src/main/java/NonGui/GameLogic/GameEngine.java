@@ -1,10 +1,10 @@
 package NonGui.GameLogic;
 
+import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import NonGui.BaseEntity.Objective;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.baseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.ItemCard;
 import NonGui.BaseEntity.Cards.MagicCard;
 
 import java.util.Scanner;
@@ -78,8 +78,10 @@ public class GameEngine {
                                 currentPlayer.playMagic(magicCard);
                             }
                             case ItemCard itemCard -> {
-                                int selectedHeroNumber = selectHeroCard(currentPlayer);
-                                HeroCard selectedHero = currentPlayer.getHeroCard(selectedHeroNumber);
+                                int selectedPlayerNumber = selectPlayer(players);
+                                Player selectedPlayer = players[selectedPlayerNumber];
+                                int selectedHeroNumber = selectHeroCard(selectedPlayer);
+                                HeroCard selectedHero = selectedPlayer.getHeroCard(selectedHeroNumber);
                                 currentPlayer.playItem(itemCard, selectedHero);
                             }
                             default -> throw new IllegalStateException("Unexpected value: " + selectedCard);
