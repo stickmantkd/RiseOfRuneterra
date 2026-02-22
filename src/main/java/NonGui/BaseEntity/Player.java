@@ -95,6 +95,7 @@ public class Player{
     }
 
     public boolean removeHeroCard(int index) {
+        index--; // since array index start with 0
         if(ownedHero[index] == null) return false;
         ownedHero[index] = null;
         return true;

@@ -3,7 +3,7 @@ package NonGui.ListOfObjective;
 import NonGui.BaseEntity.Objective;
 import NonGui.BaseEntity.Player;
 
-import static NonGui.GameUtils.GameplayUtils.SacrificeHero;
+import static NonGui.GameUtils.GameplayUtils.*;
 
 public class BaronNashor extends Objective {
     //constructors

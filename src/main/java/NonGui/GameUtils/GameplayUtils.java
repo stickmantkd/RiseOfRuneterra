@@ -21,11 +21,12 @@ public class GameplayUtils {
     //Sacrifice n Destroy
     public static void SacrificeHero(Player player, int number){
         for(int i = 0; i < number; ++i){
-            int selectedHero = selectHeroCard(player);
             if(player.boardIsEmpty()){
                 break;
             }
-            else if(!player.removeHeroCard(selectedHero)){
+
+            int selectedHero = selectHeroCard(player);
+            if(!player.removeHeroCard(selectedHero)){
                 System.out.println("Please selected NOT NULL hero");
                 --i;
             }

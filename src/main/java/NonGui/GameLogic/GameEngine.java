@@ -13,7 +13,7 @@ import static NonGui.GameLogic.GameSetup.*;
 public class GameEngine {
     public static Scanner keyBoard;
     public static Player[] players = new Player[4];
-    public static Objective[] objectives;
+    public static Objective[] objectives = new Objective[3];
 
     public static void main(String[] args) {
         System.out.println("Launching Rise of Runeterra...");

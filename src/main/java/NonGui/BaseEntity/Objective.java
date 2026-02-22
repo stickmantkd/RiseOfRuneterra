@@ -1,6 +1,7 @@
 package NonGui.BaseEntity;
 
 import static NonGui.GameUtils.DiceUtils.getRoll;
+import static NonGui.GameUtils.GameplayUtils.*;
 
 public abstract class Objective{
     //fields
@@ -31,6 +32,14 @@ public abstract class Objective{
         setMaxTargetRoll(maxTargetRoll);
     }
 
+    //
+
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
     //functions
     public abstract void grantPrize(Player player);
     public abstract void grantPunishment(Player player);
@@ -45,6 +54,7 @@ public abstract class Objective{
             System.out.println("Your owned Heroes don't math the requirement");
         }
         int roll = getRoll();
+        System.out.println("You roll a " + roll);
         if(roll >= minTargetRoll && roll <= maxTargetRoll){
             grantPrize(player);
         }else {

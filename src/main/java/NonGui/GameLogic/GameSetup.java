@@ -16,6 +16,8 @@ public class GameSetup {
 
     static void initializeObjective(){
         //To be implemented
-        objectives = new BaronNashor[3];
+        for(int i = 0; i < 3; ++i){
+            objectives[i] = new BaronNashor();
+        }
     }
 }
