@@ -49,12 +49,16 @@ public class Player{
         return true;
     }
 
-    public void increaseActionPoint(int x){
-        this.setActionPoint(actionPoint + x);
+    public boolean HandIsEmpty() {
+        return cardsInHand.isEmpty();
     }
 
-    public void decreaseActionPoint(int x){
-        this.setActionPoint(actionPoint - x);
+    public void increaseActionPoint(int incAp){
+        this.setActionPoint(actionPoint + incAp);
+    }
+
+    public void decreaseActionPoint(int decAp){
+        this.setActionPoint(actionPoint - decAp);
     }
 
     public void refillActionPoint() {

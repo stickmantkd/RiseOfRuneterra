@@ -61,23 +61,26 @@ public class GameEngine {
                 System.out.println("2 : Play a card");
                 System.out.println("3 : Try to complete the objective");
 
-                int usedAp = 0;
                 switch (getChoice()) {
                     case (1) -> {
                         currentPlayer.DrawRandomCard();
-                        usedAp = 1;
+                        currentPlayer.decreaseActionPoint(1);
                     }
                     case (2) -> {
+                        if(currentPlayer.HandIsEmpty()) {
+                            System.out.println("Invalid action: Hand Is Empty!");
+                            continue;
+                        }
                         int selectedCardNumber = selectCardsInHand(currentPlayer);
                         BaseCard selectedCard = currentPlayer.getCardInHand(selectedCardNumber);
 
                         if(!selectedCard.playCard(currentPlayer)){
-                            System.out.println("Invalid action: You cannot play that card that way!");
+                            System.out.println("Invalid action: Board Is Full!");
                             currentPlayer.addCardToHand(selectedCard);
                             continue;
                         }
 
-                        usedAp = 1;
+                        currentPlayer.decreaseActionPoint(1);
                     }
                     case (3) -> {
                         if(currentPlayer.getActionPoint() < 2){
@@ -86,11 +89,10 @@ public class GameEngine {
                         }
                         int selectedObjective = selectObjective();
                         objectives[selectedObjective].tryToComplete(currentPlayer);
-                        usedAp = 2;
+                        currentPlayer.decreaseActionPoint(2);
                     }
                 }
                 System.out.println("=============================");
-                currentPlayer.decreaseActionPoint(usedAp);
             }
             if(currentPlayer.isWinning()){
                 System.out.println(currentPlayer + " Wins");
