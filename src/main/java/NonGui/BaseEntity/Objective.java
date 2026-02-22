@@ -53,9 +53,11 @@ public abstract class Objective{
         if(!canTry(player)) {
             System.out.println("Your owned Heroes don't math the requirement");
         }
-        int roll = getRoll();
-        System.out.println("You roll a " + roll);
-        if(roll >= minTargetRoll && roll <= maxTargetRoll){
+        int roll1 = getRoll();
+        System.out.println("You rolled a " + roll1);
+        int roll2 = getRoll();
+        System.out.println("And you rolled a " + roll2);
+        if(roll1+roll2 >= minTargetRoll && roll1+roll2 <= maxTargetRoll){
             grantPrize(player);
         }else {
             grantPunishment(player);
