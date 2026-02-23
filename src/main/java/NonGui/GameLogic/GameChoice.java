@@ -1,9 +1,10 @@
 package NonGui.GameLogic;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Objective;
 import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.ActionCard;
 
 import static NonGui.GameLogic.GameEngine.*;
 
@@ -21,7 +22,7 @@ public class GameChoice {
     public static int selectCardsInHand(Player player){
         System.out.println("Select Card number");
         int CardNumber = 0;
-        for(BaseCard card : player.getCardsInHand()){
+        for(ActionCard card : player.getCardsInHand()){
             CardNumber++;
             System.out.println(CardNumber + " : " + card);
         }
@@ -83,6 +84,20 @@ public class GameChoice {
         if(choice < 1 || choice > HeroCardNumber){
             System.out.println("Invalid Hero number");
             choice = selectHeroCard(player);
+        }
+
+        return choice - 1;
+    }
+
+    public static int selectModifierEffect(ModifierCard modifier){
+        System.out.println("Select an effect to apply");
+        System.out.println("1 : Give + " + modifier.getPositiveModifier() + " to a roll.");
+        System.out.println("1 : Give - " + modifier.getNegativeModifier() + " to a roll.");
+
+        int choice = getChoice();
+        if(choice < 1 || choice > 2){
+            System.out.println("Invalid Choice");
+            choice = selectModifierEffect(modifier);
         }
 
         return choice - 1;

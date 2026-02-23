@@ -4,7 +4,7 @@ import NonGui.BaseEntity.Objective;
 import NonGui.ListOfCards.herocard.Minion;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
-import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.ActionCard;
 import NonGui.ListOfObjective.BaronNashor;
 
 
@@ -14,7 +14,7 @@ public class GenerationsUtils {
         return (new BaronNashor());
     }
 
-    public static BaseCard GenerateRandomCard(){
+    public static ActionCard GenerateRandomCard(){
         //currently just draw a minion
         return new Minion();
     }

@@ -1,8 +1,5 @@
 package NonGui.GameLogic;
 
-import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.*;
 
 import java.util.Scanner;
@@ -72,7 +69,7 @@ public class GameEngine {
                             continue;
                         }
                         int cardIndex = selectCardsInHand(currentPlayer);
-                        BaseCard selectedCard = currentPlayer.getCardInHand(cardIndex);
+                        ActionCard selectedCard = currentPlayer.getCardInHand(cardIndex);
 
                         if(!selectedCard.playCard(currentPlayer)){
                             System.out.println("Invalid action: Board Is Full!");

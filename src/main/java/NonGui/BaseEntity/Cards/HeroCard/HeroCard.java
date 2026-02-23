@@ -2,10 +2,10 @@ package NonGui.BaseEntity.Cards.HeroCard;
 
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.*;
-import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.ActionCard;
 import NonGui.BaseEntity.Cards.Itemcard.*;
 
-public abstract class HeroCard extends BaseCard implements haveClass {
+public abstract class HeroCard extends ActionCard implements haveClass {
     //Fields
     private UnitClass heroClass;
     private ItemCard Item;
