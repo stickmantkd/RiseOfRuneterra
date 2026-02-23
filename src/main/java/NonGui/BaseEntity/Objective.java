@@ -52,9 +52,7 @@ public abstract class Objective{
             System.out.println("Your owned Heroes don't math the requirement");
         }
         int roll1 = getRoll();
-        System.out.println("You rolled a " + roll1);
         int roll2 = getRoll();
-        System.out.println("And you rolled a " + roll2);
         if(roll1+roll2 >= minTargetRoll && roll1+roll2 <= maxTargetRoll){
             grantPrize(player);
             rotateObjective(index);
