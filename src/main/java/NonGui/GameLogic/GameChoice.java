@@ -1,10 +1,9 @@
 package NonGui.GameLogic;
 
+import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
-import NonGui.BaseEntity.Objective;
-import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.ActionCard;
+import NonGui.BaseEntity.*;
 
 import static NonGui.GameLogic.GameEngine.*;
 
@@ -22,7 +21,7 @@ public class GameChoice {
     public static int selectCardsInHand(Player player){
         System.out.println("Select Card number");
         int CardNumber = 0;
-        for(ActionCard card : player.getCardsInHand()){
+        for(BaseCard card : player.getCardsInHand()){
             CardNumber++;
             System.out.println(CardNumber + " : " + card);
         }
@@ -98,6 +97,42 @@ public class GameChoice {
         if(choice < 1 || choice > 2){
             System.out.println("Invalid Choice");
             choice = selectModifierEffect(modifier);
+        }
+
+        return choice - 1;
+    }
+
+    public static int selectedModifierCard(Player player){
+        System.out.println("Select Card number");
+        int CardNumber = 0;
+        System.out.println(CardNumber + " : Pass");
+        for(BaseCard card : player.getCardsInHand()){
+            CardNumber++;
+            if(card instanceof ModifierCard) System.out.println(CardNumber + " : " + card);
+        }
+
+        int choice = getChoice();
+        if(choice < 0 || choice > CardNumber){
+            System.out.println("Invalid Card number");
+            choice = selectedModifierCard(player);
+        }
+
+        return choice - 1;
+    }
+
+    public static int selectedChallengeCard(Player player){
+        System.out.println("Select Card number");
+        int CardNumber = 0;
+        System.out.println(CardNumber + " : Pass");
+        for(BaseCard card : player.getCardsInHand()){
+            CardNumber++;
+            if(card instanceof ChallengeCard) System.out.println(CardNumber + " : " + card);
+        }
+
+        int choice = getChoice();
+        if(choice < 0 || choice > CardNumber){
+            System.out.println("Invalid Card number");
+            choice = selectedChallengeCard(player);
         }
 
         return choice - 1;

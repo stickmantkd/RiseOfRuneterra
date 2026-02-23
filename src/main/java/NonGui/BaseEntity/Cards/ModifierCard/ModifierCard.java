@@ -24,8 +24,7 @@ public class ModifierCard extends TriggerCard {
     }
 
     //function
-    @Override
-    public boolean onTrigger(Player player) {
+    public int useModifier() {
         int selectedEffect = selectModifierEffect(this);
         return switch (selectedEffect) {
             case 0 -> positiveModifier;

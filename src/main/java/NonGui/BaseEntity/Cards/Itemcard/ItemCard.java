@@ -8,6 +8,7 @@ import NonGui.BaseEntity.Player;
 import static NonGui.GameLogic.GameChoice.selectHeroCard;
 import static NonGui.GameLogic.GameChoice.selectPlayer;
 import static NonGui.GameLogic.GameEngine.players;
+import static NonGui.GameUtils.TriggerUtils.challengeUtils.ChallengerWin;
 
 public abstract class ItemCard extends ActionCard {
     public ItemCard(String name,String flavorText,String abilityDescription){
@@ -22,6 +23,9 @@ public abstract class ItemCard extends ActionCard {
 
         int selectedHeroNumber = selectHeroCard(selectedPlayer);
         HeroCard selectedHero = selectedPlayer.getHeroCard(selectedHeroNumber);
+
+        System.out.println("Does anyone wanted to challenge");
+        if(ChallengerWin()) return true;
 
         return selectedHero.EquipItem(this);
     }

@@ -5,6 +5,8 @@ import NonGui.BaseEntity.Properties.*;
 import NonGui.BaseEntity.ActionCard;
 import NonGui.BaseEntity.Cards.Itemcard.*;
 
+import static NonGui.GameUtils.TriggerUtils.challengeUtils.ChallengerWin;
+
 public abstract class HeroCard extends ActionCard implements haveClass {
     //Fields
     private UnitClass heroClass;
@@ -28,6 +30,8 @@ public abstract class HeroCard extends ActionCard implements haveClass {
         HeroCard[] ownedHero = player.getOwnedHero();
         for (int i = 0; i < ownedHero.length; i++) {
             if (ownedHero[i] == null) {
+                System.out.println("Does anyone wanted to challenge");
+                if(ChallengerWin()) return true;
                 ownedHero[i] = this;
                 this.useAbility();
                 player.setOwnedHero(ownedHero);

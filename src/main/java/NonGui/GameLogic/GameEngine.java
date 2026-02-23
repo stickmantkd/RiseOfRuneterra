@@ -69,9 +69,13 @@ public class GameEngine {
                             continue;
                         }
                         int cardIndex = selectCardsInHand(currentPlayer);
-                        ActionCard selectedCard = currentPlayer.getCardInHand(cardIndex);
 
-                        if(!selectedCard.playCard(currentPlayer)){
+                        BaseCard selectedCard = currentPlayer.getCardInHand(cardIndex);
+                        if(!(selectedCard instanceof ActionCard)){
+                            System.out.println("Invalid action: You can't play a Trigger Card");
+                            continue;
+                        }
+                        if(!((ActionCard) selectedCard).playCard(currentPlayer)){
                             System.out.println("Invalid action: Board Is Full!");
                             currentPlayer.addCardToHand(selectedCard);
                             continue;

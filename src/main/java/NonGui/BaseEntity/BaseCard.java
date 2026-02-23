@@ -1,6 +1,6 @@
 package NonGui.BaseEntity;
 
-public class BaseCard {
+public abstract class BaseCard {
     //Fields
     private String name;
     private String flavorText;

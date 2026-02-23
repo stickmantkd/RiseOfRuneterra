@@ -10,11 +10,4 @@ public class ChallengeCard extends TriggerCard {
     public ChallengeCard(){
         super("Single Combat", "Save your words; we speak with blades.");
     }
-
-    @Override
-    public boolean onTrigger(Player player) {
-        int userRoll = getRoll();
-        int oppRoll = getRoll();
-        return userRoll > oppRoll;
-    }
 }

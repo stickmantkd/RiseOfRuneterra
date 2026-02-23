@@ -7,5 +7,4 @@ public abstract class TriggerCard extends BaseCard{
     }
 
     //functions
-    public abstract boolean onTrigger(Player player);
 }

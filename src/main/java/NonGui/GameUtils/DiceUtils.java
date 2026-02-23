@@ -2,6 +2,8 @@ package NonGui.GameUtils;
 
 import java.util.Random;
 
+import static NonGui.GameUtils.TriggerUtils.modifierUtils.TriggerModifier;;
+
 public class DiceUtils {
     public static int getRoll(){
         Random rand = new Random();

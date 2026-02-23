@@ -15,7 +15,7 @@ public class Player{
     private int ownedObjective;
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
-    private ArrayList<ActionCard> cardsInHand;
+    private ArrayList<BaseCard> cardsInHand;
 
     //Constructors
     public Player(String name){
@@ -38,7 +38,7 @@ public class Player{
         cardsInHand.add(GenerateRandomCard());
     }
 
-    public void addCardToHand(ActionCard card){
+    public void addCardToHand(BaseCard card){
         cardsInHand.add(card);
     }
 
@@ -82,8 +82,8 @@ public class Player{
     }
 
     //Index Operation
-    public ActionCard getCardInHand(int index){
-        ActionCard selectedCard = cardsInHand.get(index);
+    public BaseCard getCardInHand(int index){
+        BaseCard selectedCard = cardsInHand.get(index);
         cardsInHand.remove(selectedCard);
         return selectedCard;
     }
@@ -160,10 +160,10 @@ public class Player{
         this.ownedObjective = ownedObjective;
     }
 
-    public ArrayList<ActionCard> getCardsInHand() {
+    public ArrayList<BaseCard> getCardsInHand() {
         return cardsInHand;
     }
-    public void setCardsInHand(ArrayList<ActionCard> cardsInHand) {
+    public void setCardsInHand(ArrayList<BaseCard> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
 }
