@@ -23,6 +23,7 @@ public abstract class ItemCard extends ActionCard {
 
         int selectedHeroNumber = selectHeroCard(selectedPlayer);
         HeroCard selectedHero = selectedPlayer.getHeroCard(selectedHeroNumber);
+        if(selectedHero == null) return false;
 
         System.out.println("Does anyone wanted to challenge");
         if(ChallengerWin()) return true;

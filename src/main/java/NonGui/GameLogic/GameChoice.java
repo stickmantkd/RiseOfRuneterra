@@ -91,7 +91,7 @@ public class GameChoice {
     public static int selectModifierEffect(ModifierCard modifier){
         System.out.println("Select an effect to apply");
         System.out.println("1 : Give + " + modifier.getPositiveModifier() + " to a roll.");
-        System.out.println("1 : Give - " + modifier.getNegativeModifier() + " to a roll.");
+        System.out.println("2 : Give - " + modifier.getNegativeModifier() + " to a roll.");
 
         int choice = getChoice();
         if(choice < 1 || choice > 2){
