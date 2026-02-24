@@ -1,50 +1,36 @@
 package NonGui.BaseEntity;
 
 public abstract class BaseCard {
-    //fields
+    // Fields
     private String name;
     private String flavorText;
     private String abilityDescription;
+    private String type; // <-- new field
 
-    //constructor
-    public BaseCard(){
-        setName("Dummy");
-        setFlavorText("Ello, Ello...");
-    }
-
-    public BaseCard(String name, String flavorText, String abilityDescription){
+    // Constructor
+    BaseCard(String name, String flavorText, String abilityDescription, String type){
         setName(name);
         setFlavorText(flavorText);
         setAbilityDescription(abilityDescription);
+        setType(type);
     }
 
-    //function
-    public abstract boolean playCard(Player player);
-
+    // toString
     @Override
     public String toString() {
         return name;
     }
 
-    //getters n setters
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+    // Getters & setters
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getFlavorText() {
-        return flavorText;
-    }
-    public void setFlavorText(String flavorText) {
-        this.flavorText = flavorText;
-    }
+    public String getFlavorText() { return flavorText; }
+    public void setFlavorText(String flavorText) { this.flavorText = flavorText; }
 
-    public String getAbilityDescription() {
-        return abilityDescription;
-    }
-    public void setAbilityDescription(String abilityDescription) {
-        this.abilityDescription = abilityDescription;
-    }
+    public String getAbilityDescription() { return abilityDescription; }
+    public void setAbilityDescription(String abilityDescription) { this.abilityDescription = abilityDescription; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 }

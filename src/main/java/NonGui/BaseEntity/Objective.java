@@ -3,8 +3,10 @@ package NonGui.BaseEntity;
 import static NonGui.GameUtils.DiceUtils.*;
 import static NonGui.GameUtils.GameplayUtils.*;
 
-public abstract class Objective{
-    //fields
+import gui.board.StatusBar; // <-- import StatusBar for GUI messages
+
+public abstract class Objective {
+    // fields
     private String name;
     private String flavorText;
     private String requirementDescription;
@@ -13,7 +15,7 @@ public abstract class Objective{
     private String prizeDescription;
     private String punishmentDescription;
 
-    //constructors
+    // constructors
     public Objective() {
         setName("Dummy Objective");
         setFlavorText("I am Strong!!!");
@@ -32,39 +34,45 @@ public abstract class Objective{
         setMaxTargetRoll(maxTargetRoll);
     }
 
-    //To string
+    // To string
     @Override
     public String toString() {
         return name;
     }
 
-    //functions
+    // functions
     public abstract void grantPrize(Player player);
     public abstract void grantPunishment(Player player);
 
-    public boolean canTry(Player player){
-        //To be implemented
+    public boolean canTry(Player player) {
+        // To be implemented with hero requirements
         return true;
     }
 
-    public void tryToComplete(int index, Player player){
-        if(!canTry(player)) {
-            System.out.println("Your owned Heroes don't math the requirement");
+    public void tryToComplete(int index, Player player) {
+        if (!canTry(player)) {
+            StatusBar.showMessage("Your owned Heroes don't match the requirement");
+            return;
         }
+
         int roll1 = getRoll();
-        System.out.println("You rolled a " + roll1);
+        StatusBar.showMessage("You rolled a " + roll1);
+
         int roll2 = getRoll();
-        System.out.println("And you rolled a " + roll2);
-        if(roll1+roll2 >= minTargetRoll && roll1+roll2 <= maxTargetRoll){
+        StatusBar.showMessage("And you rolled a " + roll2);
+
+        int total = roll1 + roll2;
+        if (total >= minTargetRoll && total <= maxTargetRoll) {
             grantPrize(player);
+            StatusBar.showMessage("Objective completed! Prize: " + getPrizeDescription());
             rotateObjective(index);
-        }else {
+        } else {
             grantPunishment(player);
+            StatusBar.showMessage("Failed objective! Punishment: " + getPunishmentDescription());
         }
     }
 
-    //getters n setters
-
+    // getters n setters
     public String getFlavorText() {
         return flavorText;
     }
@@ -82,7 +90,6 @@ public abstract class Objective{
     public String getRequirementDescription() {
         return requirementDescription;
     }
-
     public void setRequirementDescription(String requirementDescription) {
         this.requirementDescription = requirementDescription;
     }
@@ -91,7 +98,7 @@ public abstract class Objective{
         return minTargetRoll;
     }
     public void setMinTargetRoll(int minTargetRoll) {
-        if(minTargetRoll < 2) minTargetRoll = 2;
+        if (minTargetRoll < 2) minTargetRoll = 2;
         this.minTargetRoll = minTargetRoll;
     }
 
@@ -99,7 +106,7 @@ public abstract class Objective{
         return maxTargetRoll;
     }
     public void setMaxTargetRoll(int maxTargetRoll) {
-        if(maxTargetRoll > 12) maxTargetRoll = 12;
+        if (maxTargetRoll > 12) maxTargetRoll = 12;
         this.maxTargetRoll = maxTargetRoll;
     }
 
@@ -113,7 +120,7 @@ public abstract class Objective{
     public void setPunishmentDescription(String punishmentDescription) {
         this.punishmentDescription = punishmentDescription;
     }
-   public String getPunishmentDescription() {
+    public String getPunishmentDescription() {
         return punishmentDescription;
     }
 }

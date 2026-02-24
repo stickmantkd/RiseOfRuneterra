@@ -4,6 +4,7 @@ import NonGui.BaseEntity.*;
 
 import static NonGui.GameLogic.GameChoice.*;
 import static NonGui.GameLogic.GameEngine.*;
+import static NonGui.GameUtils.DiceUtils.getRoll;
 import static NonGui.GameUtils.GenerationsUtils.*;
 
 public class GameplayUtils {
@@ -25,5 +26,15 @@ public class GameplayUtils {
     //Rotate objective
     public static void rotateObjective(int objectiveIndex){
         objectives[objectiveIndex] = generateRandomObjective();
+    }
+
+    //Challenge
+    public static boolean beginChallenge() {
+        int userRoll = 0,oppRoll = 0;
+        while (userRoll == oppRoll){
+            userRoll = getRoll();
+            oppRoll = getRoll();
+        }
+        return userRoll > oppRoll;
     }
 }

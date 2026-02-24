@@ -23,5 +23,6 @@ javafx {
 }
 
 application {
-    mainClass = 'game.GameEngine'
+    mainClass = 'gui.GameUI'
 }
+

@@ -2,23 +2,23 @@ package NonGui.BaseEntity;
 
 import NonGui.BaseEntity.Cards.HeroCard.*;
 import NonGui.BaseEntity.Properties.UnitClass;
-
-import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import static NonGui.GameUtils.GenerationsUtils.*;
 
-public class Player{
-    //Fields
+public class Player {
+    // Fields
     private String name;
     private int actionPoint;
     private int maxActionPoint;
     private int ownedObjective;
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
-    private ArrayList<BaseCard> cardsInHand;
+    private ObservableList<ActionCard> cardsInHand; // now observable
 
-    //Constructors
-    public Player(String name){
+    // Constructors
+    public Player(String name) {
         setName(name);
         setMaxActionPoint(3);
         setActionPoint(3);
@@ -28,23 +28,23 @@ public class Player{
         initializeCardsInHand();
     }
 
-    //Utilities
+    // Utilities
     @Override
     public String toString() {
         return name;
     }
 
-    public void DrawRandomCard(){
+    public void DrawRandomCard() {
         cardsInHand.add(GenerateRandomCard());
     }
 
-    public void addCardToHand(BaseCard card){
+    public void addCardToHand(ActionCard card) {
         cardsInHand.add(card);
     }
 
     public boolean boardIsEmpty() {
-        for(HeroCard hero : ownedHero){
-            if(hero != null) return false;
+        for (HeroCard hero : ownedHero) {
+            if (hero != null) return false;
         }
         return true;
     }
@@ -53,11 +53,11 @@ public class Player{
         return cardsInHand.isEmpty();
     }
 
-    public void increaseActionPoint(int incAp){
+    public void increaseActionPoint(int incAp) {
         this.setActionPoint(actionPoint + incAp);
     }
 
-    public void decreaseActionPoint(int decAp){
+    public void decreaseActionPoint(int decAp) {
         this.setActionPoint(actionPoint - decAp);
     }
 
@@ -65,25 +65,25 @@ public class Player{
         setActionPoint(maxActionPoint);
     }
 
-    //Setups
-    private void initializeOwnedLeader(){
+    // Setups
+    private void initializeOwnedLeader() {
         ownedLeader = GenerateRandomLeader();
     }
 
-    private void initializeOwnedHero(){
+    private void initializeOwnedHero() {
         ownedHero = new HeroCard[5];
     }
 
-    private void initializeCardsInHand(){
-        cardsInHand = new ArrayList<>();
-        for(int i = 0; i < 5; ++i){
+    private void initializeCardsInHand() {
+        cardsInHand = FXCollections.observableArrayList();
+        for (int i = 0; i < 5; ++i) {
             DrawRandomCard();
         }
     }
 
-    //Index Operation
-    public BaseCard getCardInHand(int index){
-        BaseCard selectedCard = cardsInHand.get(index);
+    // Index Operation
+    public ActionCard getCardInHand(int index) {
+        ActionCard selectedCard = cardsInHand.get(index);
         cardsInHand.remove(selectedCard);
         return selectedCard;
     }
@@ -93,55 +93,71 @@ public class Player{
     }
 
     public boolean removeHeroCard(int index) {
-        if(ownedHero[index] == null) return false;
+        if (ownedHero[index] == null) return false;
         ownedHero[index] = null;
         return true;
     }
 
-    //CheckWinning
-    public boolean isWinning(){
+    // addHero
+    public void addHeroCard(HeroCard hero) {
+        for (int i = 0; i < ownedHero.length; i++) {
+            if (ownedHero[i] == null) {
+                ownedHero[i] = hero;
+                return;
+            }
+        }
+    }
+
+    // CheckWinning
+    public boolean isWinning() {
         return checkOwnedAllClass() || checkOwnedThreeObjective();
     }
-    public boolean checkOwnedAllClass(){
+
+    public boolean checkOwnedAllClass() {
         UnitClass leaderClass = getOwnedLeader().getUnitClass();
-        for(HeroCard hero : ownedHero){
-            if(hero == null || hero.getUnitClass() == leaderClass){
+        for (HeroCard hero : ownedHero) {
+            if (hero == null || hero.getUnitClass() == leaderClass) {
                 return false;
             }
         }
         return true;
     }
+
     public boolean checkOwnedThreeObjective() {
         return ownedObjective >= 3;
     }
 
-    //getters n setters
+    // Getters and setters
     public LeaderCard getOwnedLeader() {
         return ownedLeader;
     }
+
     public void setOwnedLeader(LeaderCard leader) {
         this.ownedLeader = leader;
     }
 
-    public String  getName() {
+    public String getName() {
         return name;
     }
-    public void setName(String  name) {
+
+    public void setName(String name) {
         this.name = name;
     }
 
     public int getActionPoint() {
         return actionPoint;
     }
+
     public void setActionPoint(int actionPoint) {
-        if(actionPoint > maxActionPoint) actionPoint = maxActionPoint;
-        if(actionPoint < 0) actionPoint = 0;
+        if (actionPoint > maxActionPoint) actionPoint = maxActionPoint;
+        if (actionPoint < 0) actionPoint = 0;
         this.actionPoint = actionPoint;
     }
 
     public int getMaxActionPoint() {
         return maxActionPoint;
     }
+
     public void setMaxActionPoint(int maxActionPoint) {
         this.maxActionPoint = maxActionPoint;
     }
@@ -149,6 +165,7 @@ public class Player{
     public HeroCard[] getOwnedHero() {
         return ownedHero;
     }
+
     public void setOwnedHero(HeroCard[] heroList) {
         this.ownedHero = heroList;
     }
@@ -156,14 +173,16 @@ public class Player{
     public int getOwnedObjective() {
         return ownedObjective;
     }
+
     public void setOwnedObjective(int ownedObjective) {
         this.ownedObjective = ownedObjective;
     }
 
-    public ArrayList<BaseCard> getCardsInHand() {
+    public ObservableList<ActionCard> getCardsInHand() {
         return cardsInHand;
     }
-    public void setCardsInHand(ArrayList<BaseCard> cardsInHand) {
+
+    public void setCardsInHand(ObservableList<ActionCard> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
 }

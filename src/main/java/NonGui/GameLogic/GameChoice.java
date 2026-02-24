@@ -1,21 +1,21 @@
 package NonGui.GameLogic;
 
+import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Objective;
-import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
+import NonGui.BaseEntity.*;
 
 import static NonGui.GameLogic.GameEngine.*;
 
 public class GameChoice {
-     static int getChoice() {
+    static int getChoice() {
         System.out.print(">> ");
-        String input = keyBoard.nextLine();
+        /*String input = keyBoard.nextLine();
         try{
             return Integer.parseInt(input);
-        }catch(NumberFormatException e){
+        }catch(NumberFormatException e){*/
             return -1;
-        }
+        /*}*/
     }
 
     public static int selectCardsInHand(Player player){
@@ -83,6 +83,56 @@ public class GameChoice {
         if(choice < 1 || choice > HeroCardNumber){
             System.out.println("Invalid Hero number");
             choice = selectHeroCard(player);
+        }
+
+        return choice - 1;
+    }
+
+    public static int selectModifierEffect(ModifierCard modifier){
+        System.out.println("Select an effect to apply");
+        System.out.println("1 : Give + " + modifier.getPositiveModifier() + " to a roll.");
+        System.out.println("2 : Give - " + modifier.getNegativeModifier() + " to a roll.");
+
+        int choice = getChoice();
+        if(choice < 1 || choice > 2){
+            System.out.println("Invalid Choice");
+            choice = selectModifierEffect(modifier);
+        }
+
+        return choice - 1;
+    }
+
+    public static int selectedModifierCard(Player player){
+        System.out.println("Select Card number");
+        int CardNumber = 0;
+        System.out.println(CardNumber + " : Pass");
+        for(BaseCard card : player.getCardsInHand()){
+            CardNumber++;
+            if(card instanceof ModifierCard) System.out.println(CardNumber + " : " + card);
+        }
+
+        int choice = getChoice();
+        if(choice < 0 || choice > CardNumber){
+            System.out.println("Invalid Card number");
+            choice = selectedModifierCard(player);
+        }
+
+        return choice - 1;
+    }
+
+    public static int selectedChallengeCard(Player player){
+        System.out.println("Select Card number");
+        int CardNumber = 0;
+        System.out.println(CardNumber + " : Pass");
+        for(BaseCard card : player.getCardsInHand()){
+            CardNumber++;
+            if(card instanceof ChallengeCard) System.out.println(CardNumber + " : " + card);
+        }
+
+        int choice = getChoice();
+        if(choice < 0 || choice > CardNumber){
+            System.out.println("Invalid Card number");
+            choice = selectedChallengeCard(player);
         }
 
         return choice - 1;

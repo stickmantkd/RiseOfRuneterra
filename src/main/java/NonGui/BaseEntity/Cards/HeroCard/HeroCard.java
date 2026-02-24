@@ -1,28 +1,26 @@
 package NonGui.BaseEntity.Cards.HeroCard;
 
 import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.Properties.*;
-import NonGui.BaseEntity.BaseCard;
-import NonGui.BaseEntity.Cards.Itemcard.*;
+import NonGui.BaseEntity.Properties.UnitClass;
+import NonGui.BaseEntity.ActionCard;
+import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
+import NonGui.BaseEntity.Properties.haveClass;
 
-public abstract class HeroCard extends BaseCard implements haveClass {
-    //Fields
+public abstract class HeroCard extends ActionCard implements haveClass {
     private UnitClass heroClass;
     private ItemCard Item;
 
-    //Constructor
     public HeroCard(){
-        super("Dummy Hero", "For Demacia!!!","No Ability, Pure POWER");
+        super("Dummy Hero", "For Demacia!!!", "No Ability, Pure POWER", "Hero Card");
         setItem(null);
     }
 
-    public HeroCard(String name, String flavorText,  String abilityDescription, UnitClass heroClass){
-        super(name,flavorText,abilityDescription);
+    public HeroCard(String name, String flavorText, String abilityDescription, UnitClass heroClass){
+        super(name, flavorText, abilityDescription, "Hero Card");
         setItem(null);
         setUnitClass(heroClass);
     }
 
-    //On Play
     @Override
     public boolean playCard(Player player) {
         HeroCard[] ownedHero = player.getOwnedHero();
@@ -37,7 +35,6 @@ public abstract class HeroCard extends BaseCard implements haveClass {
         return false;
     }
 
-    //Functions
     public boolean EquipItem(ItemCard Item){
         if(getItem() != null) return false;
         setItem(Item);
@@ -54,20 +51,11 @@ public abstract class HeroCard extends BaseCard implements haveClass {
 
     public abstract void useAbility();
 
-    //getters n setters
-    public ItemCard getItem() {return Item;}
-
-    public void setItem(ItemCard item) {
-        Item = item;
-    }
+    public ItemCard getItem() { return Item; }
+    public void setItem(ItemCard item) { Item = item; }
 
     @Override
-    public UnitClass getUnitClass() {
-        return heroClass;
-    }
-
+    public UnitClass getUnitClass() { return heroClass; }
     @Override
-    public void setUnitClass(UnitClass unitClass) {
-        this.heroClass = unitClass;
-    }
+    public void setUnitClass(UnitClass unitClass) { this.heroClass = unitClass; }
 }

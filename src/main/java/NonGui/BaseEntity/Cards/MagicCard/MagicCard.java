@@ -1,11 +1,11 @@
 package NonGui.BaseEntity.Cards.MagicCard;
 
-import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.ActionCard;
 import NonGui.BaseEntity.Player;
 
-public abstract class MagicCard extends BaseCard {
+public abstract class MagicCard extends ActionCard {
     public MagicCard(String name, String flavorText, String abilityDescription){
-        super(name,flavorText,abilityDescription);
+        super(name, flavorText, abilityDescription, "Magic Card");
     }
 
     @Override

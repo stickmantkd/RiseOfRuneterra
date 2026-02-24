@@ -1,110 +1,68 @@
 package NonGui.GameLogic;
 
-import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.*;
 
-import java.util.Scanner;
-
-import static NonGui.GameLogic.GameChoice.*;
 import static NonGui.GameLogic.GameSetup.*;
 
 public class GameEngine {
-    public static Scanner keyBoard;
     public static Player[] players = new Player[4];
     public static Objective[] objectives = new Objective[3];
 
-    public static void main(String[] args) {
-        System.out.println("Launching Rise of Runeterra...");
+    private static int currentPlayerIndex = 0;
+    private static boolean isGameActive = false;
 
-        keyBoard = new Scanner(System.in);
-        while(true){
-            System.out.println("=============================");
-            System.out.println("Welcome to Rise of Runeterra");
-            System.out.println("=============================");
-            System.out.println("What are you doing?");
-            System.out.println("1) Start Game");
-            System.out.println("2) Quit");
-            System.out.println("=============================");
-            int results = getChoice();
+    // --- Initialization ---
+    public static void startGame() {
+        initializePlayer();
+        initializeObjective();
+        currentPlayerIndex = 0;
+        isGameActive = true;
+    }
 
-            if(results==1) {
-                System.out.println("=============================");
-                startGame();
-            }else if(results==2){
-                break;
-            }else {
-                System.out.println("Invalid Input, Terminate the game.");
-                break;
-            }
+    // --- Helpers for GUI ---
+    public static Player getCurrentPlayer() {
+        return players[currentPlayerIndex];
+    }
+
+    public static Objective[] getObjectives() {
+        return objectives;
+    }
+
+    public static boolean isGameActive() {
+        return isGameActive;
+    }
+
+    public static void nextTurn() {
+        Player current = getCurrentPlayer();
+        if (current.isWinning()) {
+            System.out.println(current.getName() + " Wins!");
+            isGameActive = false;
+            return;
+        }
+        current.refillActionPoint();
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+    }
+
+    // --- Actions ---
+    public static void drawCard(Player player) {
+        player.DrawRandomCard();
+        player.decreaseActionPoint(1);
+    }
+
+    public static void playCard(Player player, int handIndex) {
+        if (player.HandIsEmpty()) return;
+
+        ActionCard selectedCard = player.getCardInHand(handIndex);
+        if (!selectedCard.playCard(player)) {
+            player.addCardToHand(selectedCard); // put back if invalid
+        } else {
+            player.decreaseActionPoint(1);
         }
     }
 
-
-    private static void startGame(){
-        //Fields
-        initializePlayer();
-        initializeObjective();
-
-        boolean isGameActive = true;
-
-        int PlayerNumber = 0;
-        while(isGameActive) {
-            Player currentPlayer = players[PlayerNumber];
-            while(currentPlayer.getActionPoint() > 0){
-                System.out.println("It's " + currentPlayer + "'s turn");
-                System.out.println("=============================");
-                System.out.println("Action Point left: " + currentPlayer.getActionPoint());
-                System.out.println("Choose your action");
-                System.out.println("1 : Draw a card");
-                System.out.println("2 : Play a card");
-                System.out.println("3 : Try to complete the objective");
-
-                switch (getChoice()) {
-                    case (1) -> {
-                        currentPlayer.DrawRandomCard();
-                        currentPlayer.decreaseActionPoint(1);
-                    }
-                    case (2) -> {
-                        if(currentPlayer.HandIsEmpty()) {
-                            System.out.println("Invalid action: Hand Is Empty!");
-                            continue;
-                        }
-                        int cardIndex = selectCardsInHand(currentPlayer);
-                        BaseCard selectedCard = currentPlayer.getCardInHand(cardIndex);
-
-                        if(!selectedCard.playCard(currentPlayer)){
-                            System.out.println("Invalid action: Board Is Full!");
-                            currentPlayer.addCardToHand(selectedCard);
-                            continue;
-                        }
-
-                        currentPlayer.decreaseActionPoint(1);
-                    }
-                    case (3) -> {
-                        if(currentPlayer.getActionPoint() < 2){
-                            System.out.println("Invalid: You need 2 AP to attempt on an Objective");
-                            continue;
-                        }
-                        int objectiveIndex = selectObjective();
-                        objectives[objectiveIndex].tryToComplete(objectiveIndex, currentPlayer);
-                        currentPlayer.decreaseActionPoint(2);
-                    }
-                }
-                System.out.println("=============================");
-            }
-            if(currentPlayer.isWinning()){
-                System.out.println(currentPlayer + " Wins");
-                System.out.println("Good Game Go Next");
-                System.out.println("=============================");
-
-                isGameActive = false;
-            }
-
-            currentPlayer.refillActionPoint();
-            players[PlayerNumber] = currentPlayer;
-            PlayerNumber = (PlayerNumber + 1)%4;
-        }
+    public static void tryObjective(Player player, int objectiveIndex) {
+        if (player.getActionPoint() < 2) return;
+        objectives[objectiveIndex].tryToComplete(objectiveIndex, player);
+        player.decreaseActionPoint(2);
     }
 }
