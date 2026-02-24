@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard.Assassin;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Shaco extends HeroCard {
@@ -15,7 +16,7 @@ public class Shaco extends HeroCard {
     }
 
     @Override
-    public void useAbility() {
-        // Roll 7+. STEAL an Item card equipped to another player's Hero.
+    public void useAbility(Player player) {
+
     }
 }

@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard.Assassin;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Akali extends HeroCard {
@@ -15,7 +16,7 @@ public class Akali extends HeroCard {
     }
 
     @Override
-    public void useAbility() {
-        //Roll 8+. DESTROY a Hero card, then DRAW a card.
+    public void useAbility(Player player) {
+
     }
 }

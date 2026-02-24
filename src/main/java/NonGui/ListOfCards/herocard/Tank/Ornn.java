@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard.Tank;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Ornn extends HeroCard {
@@ -14,7 +15,7 @@ public class Ornn extends HeroCard {
     }
 
     @Override
-    public void useAbility() {
+    public void useAbility(Player player) {
         //Roll 9+. +5 to all of your rolls until the end of your turn.
     }
 }

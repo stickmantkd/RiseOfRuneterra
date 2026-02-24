@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard.Tank;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Nautilus extends HeroCard {
@@ -14,7 +15,7 @@ public class Nautilus extends HeroCard {
     }
 
     @Override
-    public void useAbility() {
+    public void useAbility(Player player) {
         //Roll 6+. Search the discard pile for a Modifier card and add it to your hand.
     }
 }

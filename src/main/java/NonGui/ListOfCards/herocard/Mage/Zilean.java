@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard.Mage;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Zilean extends HeroCard {
@@ -15,7 +16,7 @@ public class Zilean extends HeroCard {
     }
 
     @Override
-    public void useAbility() {
+    public void useAbility(Player player) {
         //Roll 5+. Search the discard pile for a Magic card and add it to your hand.
     }
 }

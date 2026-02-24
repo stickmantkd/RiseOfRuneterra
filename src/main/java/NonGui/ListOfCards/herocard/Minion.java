@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Minion extends HeroCard {
@@ -13,7 +14,7 @@ public class Minion extends HeroCard {
     }
 
     @Override
-    public void useAbility(){
+    public void useAbility(Player player){
 
     }
 }

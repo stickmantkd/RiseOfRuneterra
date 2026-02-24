@@ -19,7 +19,7 @@ public class Fiora extends HeroCard {
 
 
     @Override
-    public void useAbility() {
+    public void useAbility(Player player) {
         //Roll 8+. DESTROY a Hero card.
         // According to the requirement: Roll 8+. DESTROY a Hero card.
         System.out.println(getName() + " uses Riposte!");

@@ -25,7 +25,7 @@ public class GameplayUtils {
             if(player.boardIsEmpty()){
                 break;
             }
-            else if(!player.removeHeroCard(selectedHero)){
+            else if(!player.removeHeroCard(selectedHero-1)){
                 System.out.println("Please selected NOT NULL hero");
                 --i;
             }

@@ -1,6 +1,7 @@
 package NonGui.ListOfCards.herocard.Mage;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
 public class Zoe extends HeroCard {
@@ -15,7 +16,7 @@ public class Zoe extends HeroCard {
     }
 
     @Override
-    public void useAbility() {
+    public void useAbility(Player player) {
         //Roll 6+. DRAW a card. If it is a Magic card, you may play it immediately and DRAW a second card.
     }
 }

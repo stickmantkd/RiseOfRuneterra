@@ -29,7 +29,7 @@ public abstract class HeroCard extends BaseCard implements haveClass {
         for (int i = 0; i < ownedHero.length; i++) {
             if (ownedHero[i] == null) {
                 ownedHero[i] = this;
-                this.useAbility();
+                this.useAbility(player);
                 player.setOwnedHero(ownedHero);
                 return true;
             }
@@ -52,7 +52,7 @@ public abstract class HeroCard extends BaseCard implements haveClass {
         return true;
     }
 
-    public abstract void useAbility();
+    public abstract void useAbility(Player player);
 
     //getters n setters
     public ItemCard getItem() {return Item;}
