@@ -5,6 +5,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,38 +19,28 @@ public class LeaderCardView extends StackPane {
     public LeaderCardView(LeaderCard leader) {
         this.leader = leader;
 
-        double width = 90;
-        double height = 126;
+        double thumbWidth = 90;
+        double thumbHeight = 126;
 
-        Rectangle rect = new Rectangle(width, height, Color.LIGHTBLUE);
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(1);
+        // Build resource path from leader name
+        String resourcePath = "/card/leader/" + leader.getName().replaceAll("\\s+", "") + ".png";
+        java.net.URL resource = getClass().getResource(resourcePath);
 
-        Label nameLabel = new Label(leader.getName());
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 12;");
-        nameLabel.setWrapText(true);
-        nameLabel.setMaxWidth(width - 6);
-
-        Label flavorLabel = new Label(leader.getFlavorText());
-        flavorLabel.setStyle("-fx-font-size: 10; -fx-text-fill: gray;");
-        flavorLabel.setWrapText(true);
-        flavorLabel.setMaxWidth(width - 6);
-
-        Label abilityLabel = new Label(leader.getAbilityDescription());
-        abilityLabel.setStyle("-fx-font-size: 10;");
-        abilityLabel.setWrapText(true);
-        abilityLabel.setMaxWidth(width - 6);
-
-        VBox textBox = new VBox(4, nameLabel, flavorLabel, abilityLabel);
-        textBox.setAlignment(Pos.TOP_CENTER);
-        textBox.setMaxWidth(width - 4);
-        textBox.setMaxHeight(height - 4);
+        if (resource != null) {
+            ImageView thumbnail = new ImageView(new Image(resource.toExternalForm()));
+            thumbnail.setFitWidth(thumbWidth);
+            thumbnail.setFitHeight(thumbHeight);
+            thumbnail.setPreserveRatio(false); // stretch to fill
+            getChildren().add(thumbnail);
+        } else {
+            // Blank card with border and fill
+            Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.LIGHTBLUE);
+            rect.setStroke(Color.BLACK);
+            rect.setStrokeWidth(1);
+            getChildren().add(rect);
+        }
 
         setAlignment(Pos.CENTER);
-        getChildren().addAll(rect, textBox);
-
-        Rectangle clip = new Rectangle(width - 4, height - 4);
-        textBox.setClip(clip);
 
         // Click to show full leader card
         setOnMouseClicked(e -> showFullLeaderWindow());
@@ -57,11 +49,25 @@ public class LeaderCardView extends StackPane {
     private void showFullLeaderWindow() {
         Stage stage = new Stage();
 
-        // Left side: leader image placeholder (240 × 336 resolution)
-        Rectangle leaderImage = new Rectangle(240, 336, Color.LIGHTBLUE);
-        leaderImage.setStroke(Color.BLACK);
-        leaderImage.setStrokeWidth(2);
-        HBox imageBox = new HBox(leaderImage);
+        double fullWidth = 240;
+        double fullHeight = 336;
+
+        String resourcePath = "/card/leader/" + leader.getName().replaceAll("\\s+", "") + ".png";
+        java.net.URL resource = getClass().getResource(resourcePath);
+
+        HBox imageBox;
+        if (resource != null) {
+            ImageView leaderImage = new ImageView(new Image(resource.toExternalForm()));
+            leaderImage.setFitWidth(fullWidth);
+            leaderImage.setFitHeight(fullHeight);
+            leaderImage.setPreserveRatio(false); // stretch to fill
+            imageBox = new HBox(leaderImage);
+        } else {
+            Rectangle rect = new Rectangle(fullWidth, fullHeight, Color.LIGHTBLUE);
+            rect.setStroke(Color.BLACK);
+            rect.setStrokeWidth(2);
+            imageBox = new HBox(rect);
+        }
         imageBox.setAlignment(Pos.CENTER);
 
         // Top info box: type + name + flavor
@@ -85,36 +91,32 @@ public class LeaderCardView extends StackPane {
         topInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
 
         // Bottom info box: ability + class
-        Label abilityLabel = new Label(leader.getAbilityDescription());
+        Label abilityLabel = new Label("Ability: " + leader.getAbilityDescription());
         abilityLabel.setStyle("-fx-font-size: 12;");
         abilityLabel.setWrapText(true);
 
         Label classLabel = new Label("Class: " + leader.getUnitClass());
         classLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: black;");
 
-        // Use a StackPane so classLabel can be anchored bottom-right
         StackPane bottomInfoContent = new StackPane();
-
         VBox abilityBox = new VBox(abilityLabel);
         abilityBox.setAlignment(Pos.TOP_LEFT);
 
         StackPane.setAlignment(classLabel, Pos.BOTTOM_RIGHT);
-
         bottomInfoContent.getChildren().addAll(abilityBox, classLabel);
+
         bottomInfoContent.setPadding(new Insets(10));
         bottomInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
         VBox.setVgrow(bottomInfoContent, Priority.ALWAYS);
 
-        // Right side: outer border containing both top and bottom boxes
         VBox innerInfo = new VBox(0, topInfoContent, bottomInfoContent);
         innerInfo.setAlignment(Pos.TOP_LEFT);
         innerInfo.setStyle("-fx-border-color: black; -fx-border-width: 1;");
 
-        // Root layout: image + info side by side
-        HBox root = new HBox(20, imageBox, innerInfo);
+        HBox root = new HBox(0, imageBox, innerInfo);
         root.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(root, 520, 336); // match height to image resolution
+        Scene scene = new Scene(root, 520, 336);
 
         stage.setTitle(leader.getName());
         stage.setScene(scene);
