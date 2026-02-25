@@ -1,26 +1,28 @@
 package NonGui.BaseEntity.Cards.ModifierCard;
 
-import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.TriggerCard;
 
 import static NonGui.GameLogic.GameChoice.selectModifierEffect;
 
 public class ModifierCard extends TriggerCard {
+    // Fields
     private int positiveModifier;
     private int negativeModifier;
 
-    public ModifierCard(){
+    // Constructors
+    public ModifierCard() {
         super("Modifier Card", "Can grant or take power!", "Choose effect", "Modifier Card");
         setPositiveModifier(2);
         setNegativeModifier(2);
     }
 
-    public ModifierCard(String name, String flavorText, String abilityDescription, int positiveModifier, int negativeModifier){
-        super(name, flavorText, abilityDescription, "Modifier Card");
+    public ModifierCard(String name, String flavorText, int positiveModifier, int negativeModifier) {
+        super(name, flavorText, "Choose effect", "Modifier Card");
         setPositiveModifier(positiveModifier);
         setNegativeModifier(negativeModifier);
     }
 
+    // Function
     public int useModifier() {
         int selectedEffect = selectModifierEffect(this);
         return switch (selectedEffect) {
@@ -30,9 +32,20 @@ public class ModifierCard extends TriggerCard {
         };
     }
 
-    public int getPositiveModifier() { return positiveModifier; }
-    public void setPositiveModifier(int positiveModifier) { this.positiveModifier = positiveModifier; }
+    // Getters and Setters
+    public int getPositiveModifier() {
+        return positiveModifier;
+    }
 
-    public int getNegativeModifier() { return negativeModifier; }
-    public void setNegativeModifier(int negativeModifier) { this.negativeModifier = negativeModifier; }
+    public void setPositiveModifier(int positiveModifier) {
+        this.positiveModifier = positiveModifier;
+    }
+
+    public int getNegativeModifier() {
+        return negativeModifier;
+    }
+
+    public void setNegativeModifier(int negativeModifier) {
+        this.negativeModifier = negativeModifier;
+    }
 }

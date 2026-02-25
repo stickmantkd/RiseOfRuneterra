@@ -1,11 +1,21 @@
 package NonGui.GameUtils;
 
+import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.Objective;
+import NonGui.ListOfCards.herocard.Assassin.Akali;
+import NonGui.ListOfCards.herocard.Assassin.Shaco;
+import NonGui.ListOfCards.herocard.Minion;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.ActionCard;
-import NonGui.ListOfCards.herocard.Assassin.Akali;
+import NonGui.ListOfCards.itemcard.BFSword;
+import NonGui.ListOfCards.magiccard.FinalSpark;
+import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfObjective.BaronNashor;
+
+import java.security.interfaces.ECKey;
+import java.util.Random;
 
 
 public class GenerationsUtils {
@@ -14,9 +24,17 @@ public class GenerationsUtils {
         return (new BaronNashor());
     }
 
-    public static ActionCard GenerateRandomCard(){
+    public static BaseCard GenerateRandomCard(){
         //currently just draw a minion
-        return new Akali();
+        int rand = new Random().nextInt(6);
+        return switch (rand) {
+            case 0 -> new Akali();
+            case 1 -> new ChallengeCard();
+            case 2 -> new BFSword();
+            case 3 -> new ElixirOfWrath();
+            case 4 -> new Shaco();
+            default -> new FinalSpark();
+        };
     }
 
     public static LeaderCard GenerateRandomLeader(){

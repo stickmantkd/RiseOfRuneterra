@@ -31,9 +31,9 @@ public class FieldTableView extends StackPane {
 
         // hero/objective boxes
         grid.add(new TopHeroesBox(GameEngine.players[0]), 1, 0, 1, 1);
-        grid.add(new BottomHeroesBox(GameEngine.players[1]), 1, 2, 1, 1);
-        grid.add(new LeftHeroesBox(GameEngine.players[2]), 0, 0, 1, 3);
-        grid.add(new RightHeroesBox(GameEngine.players[3]), 2, 0, 1, 3);
+        grid.add(new BottomHeroesBox(GameEngine.players[2]), 1, 2, 1, 1);
+        grid.add(new LeftHeroesBox(GameEngine.players[3]), 0, 0, 1, 3);
+        grid.add(new RightHeroesBox(GameEngine.players[1]), 2, 0, 1, 3);
         grid.add(new ObjectivesBox(GameEngine.getObjectives()), 1, 1, 1, 1);
 
         getChildren().addAll(background,grid);

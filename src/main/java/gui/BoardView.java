@@ -9,6 +9,7 @@ import gui.card.LeaderCardView;
 import gui.card.ObjectiveView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class BoardView extends GridPane {
@@ -42,15 +43,28 @@ public class BoardView extends GridPane {
         // Redraw each player area
         for (int i = 0; i < GameEngine.players.length; i++) {
             Player p = GameEngine.players[i];
+            Region playerArea = switch (i) {
+                case 0 -> new TopPlayerArea(p);
+                case 1 -> new RightPlayerArea(p);
+                case 2 -> new BottomPlayerArea(p);
+                case 3 -> new LeftPlayerArea(p);
+                default -> null;
+            };
 
-            // Place player areas depending on index
+            // Highlight if this is the current player
+            if (i == GameEngine.getCurrentPlayerIndex()) {
+                playerArea.setStyle("-fx-border-color: black; -fx-border-width: 4;");
+            }
+
+            // Add to grid
             switch (i) {
-                case 0 -> instance.add(new TopPlayerArea(p), 2, 0);
-                case 1 -> instance.add(new BottomPlayerArea(p), 2, 2);
-                case 2 -> instance.add(new LeftPlayerArea(p), 1, 0, 1, 3);
-                case 3 -> instance.add(new RightPlayerArea(p), 3, 0, 1, 3);
+                case 0 -> instance.add(playerArea, 2, 0);
+                case 1 -> instance.add(playerArea, 3, 0, 1, 3);
+                case 2 -> instance.add(playerArea, 2, 2);
+                case 3 -> instance.add(playerArea, 1, 0, 1, 3);
             }
         }
+
 
         // Objectives in center (large 150x210)
         VBox objectiveBox = new VBox(20);

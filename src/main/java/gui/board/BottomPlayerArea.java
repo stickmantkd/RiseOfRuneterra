@@ -94,4 +94,6 @@ public class BottomPlayerArea extends HBox {
             seeMoreGrid.getChildren().add(new CardView(player.getCardsInHand().get(i), i));
         }
     }
+
+
 }

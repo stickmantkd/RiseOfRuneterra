@@ -15,6 +15,8 @@ import javafx.scene.paint.Color;
 
 public class MenuArea extends VBox {
 
+    private static Label turnLabel; // shows current player + AP
+
     public MenuArea() {
         setPrefSize(178, 624);
         setMinSize(178, 624);
@@ -25,13 +27,18 @@ public class MenuArea extends VBox {
         Label menuLabel = new Label("Menu");
         menuLabel.setTextFill(Color.WHITE);
 
+        // Turn info label
+        turnLabel = new Label();
+        turnLabel.setTextFill(Color.YELLOW);
+        updateTurnLabel(); // initial fill
+
         // Draw Card button
         Button drawButton = new Button("Draw Card");
         drawButton.setOnAction(e -> {
             Player current = GameEngine.getCurrentPlayer();
-            current.DrawRandomCard();
-            current.decreaseActionPoint(1);
-            BoardView.refresh(); // custom method to redraw GUI
+            GameEngine.drawCard(current);
+            updateTurnLabel();
+            BoardView.refresh();
         });
 
         // Play Card button
@@ -40,12 +47,9 @@ public class MenuArea extends VBox {
             Player current = GameEngine.getCurrentPlayer();
             if (!current.HandIsEmpty()) {
                 ActionCard card = (ActionCard) current.getCardInHand(0); // example: first card
-                if (!card.playCard(current)) {
-                    current.addCardToHand(card); // put back if invalid
-                } else {
-                    current.decreaseActionPoint(1);
-                }
+                GameEngine.playCard(current, 0);
             }
+            updateTurnLabel();
             BoardView.refresh();
         });
 
@@ -53,14 +57,29 @@ public class MenuArea extends VBox {
         Button objectiveButton = new Button("Try Objective");
         objectiveButton.setOnAction(e -> {
             Player current = GameEngine.getCurrentPlayer();
-            if (current.getActionPoint() >= 2) {
-                Objective obj = GameEngine.objectives[0]; // example: first objective
-                obj.tryToComplete(0, current);
-                current.decreaseActionPoint(2);
-            }
+            GameEngine.tryObjective(current, 0); // example: first objective
+            updateTurnLabel();
             BoardView.refresh();
         });
 
-        getChildren().addAll(menuLabel, drawButton, playButton, objectiveButton);
+        // End Turn button
+        Button endTurnButton = new Button("End Turn");
+        endTurnButton.setOnAction(e -> {
+            GameEngine.nextTurn();
+            updateTurnLabel();
+            BoardView.refresh();
+        });
+
+        getChildren().addAll(menuLabel, turnLabel, drawButton, playButton, objectiveButton, endTurnButton);
+    }
+
+    // --- Helper to update turn info ---
+    public static void updateTurnLabel() {
+        if (!GameEngine.isGameActive()) {
+            turnLabel.setText("Game Over");
+            return;
+        }
+        Player current = GameEngine.getCurrentPlayer();
+        turnLabel.setText(current.getName() + "'s Turn | AP: " + current.getActionPoint());
     }
 }

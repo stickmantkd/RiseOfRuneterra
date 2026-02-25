@@ -88,4 +88,5 @@ public class RightPlayerArea extends VBox {
             seeMoreGrid.getChildren().add(new CardView(player.getCardsInHand().get(i), i));
         }
     }
+
 }

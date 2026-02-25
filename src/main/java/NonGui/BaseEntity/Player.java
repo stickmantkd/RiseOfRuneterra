@@ -1,6 +1,6 @@
 package NonGui.BaseEntity;
 
-import NonGui.BaseEntity.Cards.HeroCard.*;
+import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Properties.UnitClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +15,7 @@ public class Player {
     private int ownedObjective;
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
-    private ObservableList<ActionCard> cardsInHand; // now observable
+    private ObservableList<BaseCard> cardsInHand; // unified: observable + BaseCard
 
     // Constructors
     public Player(String name) {
@@ -34,14 +34,17 @@ public class Player {
         return name;
     }
 
+    // Draw a random card into hand
     public void DrawRandomCard() {
         cardsInHand.add(GenerateRandomCard());
     }
 
-    public void addCardToHand(ActionCard card) {
+    // Add card to hand
+    public void addCardToHand(BaseCard card) {
         cardsInHand.add(card);
     }
 
+    // Check if board has no heroes
     public boolean boardIsEmpty() {
         for (HeroCard hero : ownedHero) {
             if (hero != null) return false;
@@ -49,10 +52,12 @@ public class Player {
         return true;
     }
 
+    // Check if hand is empty
     public boolean HandIsEmpty() {
         return cardsInHand.isEmpty();
     }
 
+    // Action point management
     public void increaseActionPoint(int incAp) {
         this.setActionPoint(actionPoint + incAp);
     }
@@ -82,8 +87,8 @@ public class Player {
     }
 
     // Index Operation
-    public ActionCard getCardInHand(int index) {
-        ActionCard selectedCard = cardsInHand.get(index);
+    public BaseCard getCardInHand(int index) {
+        BaseCard selectedCard = cardsInHand.get(index);
         cardsInHand.remove(selectedCard);
         return selectedCard;
     }
@@ -98,7 +103,7 @@ public class Player {
         return true;
     }
 
-    // addHero
+    // Add hero
     public void addHeroCard(HeroCard hero) {
         for (int i = 0; i < ownedHero.length; i++) {
             if (ownedHero[i] == null) {
@@ -178,11 +183,11 @@ public class Player {
         this.ownedObjective = ownedObjective;
     }
 
-    public ObservableList<ActionCard> getCardsInHand() {
+    public ObservableList<BaseCard> getCardsInHand() {
         return cardsInHand;
     }
 
-    public void setCardsInHand(ObservableList<ActionCard> cardsInHand) {
+    public void setCardsInHand(ObservableList<BaseCard> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
 }

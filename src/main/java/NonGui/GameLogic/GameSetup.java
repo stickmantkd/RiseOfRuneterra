@@ -41,9 +41,9 @@ public class GameSetup {
             p.addHeroCard(new Akali());
 
             // Give each player 2 cards in hand
-            p.addCardToHand(new Akali());
-            p.addCardToHand(new Shaco());
-            p.addCardToHand(new BFSword());
+            //p.addCardToHand(new Akali());
+            //p.addCardToHand(new Shaco());
+            //p.addCardToHand(new BFSword());
 
             GameEngine.players[i] = p;
         }

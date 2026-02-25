@@ -6,6 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,38 +22,29 @@ public class CardView extends StackPane {
         this.card = card;
         this.handIndex = handIndex;
 
-        double width = 75;
-        double height = 105;
+        double thumbWidth = 75;
+        double thumbHeight = 105;
 
-        Rectangle rect = new Rectangle(width, height, Color.WHITESMOKE);
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(1);
+        // Build resource path from card name
+        String resourcePath = "/card/base/" + card.getType().toLowerCase() + "/"
+                + card.getName().replaceAll("\\s+", "") + ".png";
+        java.net.URL resource = getClass().getResource(resourcePath);
 
-        Label nameLabel = new Label(card.getName());
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 10;");
-        nameLabel.setWrapText(true);
-        nameLabel.setMaxWidth(width - 6);
-
-        Label flavorLabel = new Label(card.getFlavorText());
-        flavorLabel.setStyle("-fx-font-size: 8; -fx-text-fill: gray;");
-        flavorLabel.setWrapText(true);
-        flavorLabel.setMaxWidth(width - 6);
-
-        Label abilityLabel = new Label(card.getAbilityDescription());
-        abilityLabel.setStyle("-fx-font-size: 8;");
-        abilityLabel.setWrapText(true);
-        abilityLabel.setMaxWidth(width - 6);
-
-        VBox textBox = new VBox(2, nameLabel, flavorLabel, abilityLabel);
-        textBox.setAlignment(Pos.TOP_CENTER);
-        textBox.setMaxWidth(width - 4);
-        textBox.setMaxHeight(height - 4);
+        if (resource != null) {
+            ImageView thumbnail = new ImageView(new Image(resource.toExternalForm()));
+            thumbnail.setFitWidth(thumbWidth);
+            thumbnail.setFitHeight(thumbHeight);
+            thumbnail.setPreserveRatio(false); // stretch to fill
+            getChildren().add(thumbnail);
+        } else {
+            // Blank card with border and fill
+            Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.WHITESMOKE);
+            rect.setStroke(Color.BLACK);
+            rect.setStrokeWidth(1);
+            getChildren().add(rect);
+        }
 
         setAlignment(Pos.CENTER);
-        getChildren().addAll(rect, textBox);
-
-        Rectangle clip = new Rectangle(width - 4, height - 4);
-        textBox.setClip(clip);
 
         // On click: show full card in new window
         setOnMouseClicked(e -> showFullCardWindow());
@@ -60,11 +53,27 @@ public class CardView extends StackPane {
     private void showFullCardWindow() {
         Stage stage = new Stage();
 
-        // Left side: card image placeholder
-        Rectangle cardImage = new Rectangle(200, 280, Color.WHITESMOKE);
-        cardImage.setStroke(Color.BLACK);
-        cardImage.setStrokeWidth(2);
-        HBox imageBox = new HBox(cardImage);
+        double fullWidth = 200;
+        double fullHeight = 280;
+
+        // Build resource path again
+        String resourcePath = "/card/base/" + card.getType().toLowerCase() + "/"
+                + card.getName().replaceAll("\\s+", "") + ".png";
+        java.net.URL resource = getClass().getResource(resourcePath);
+
+        HBox imageBox;
+        if (resource != null) {
+            ImageView cardImage = new ImageView(new Image(resource.toExternalForm()));
+            cardImage.setFitWidth(fullWidth);
+            cardImage.setFitHeight(fullHeight);
+            cardImage.setPreserveRatio(false); // stretch to fill
+            imageBox = new HBox(cardImage);
+        } else {
+            Rectangle rect = new Rectangle(fullWidth, fullHeight, Color.WHITESMOKE);
+            rect.setStroke(Color.BLACK);
+            rect.setStrokeWidth(2);
+            imageBox = new HBox(rect);
+        }
         imageBox.setAlignment(Pos.CENTER);
 
         // Top info box: type + name + flavor
@@ -95,10 +104,8 @@ public class CardView extends StackPane {
         StackPane bottomInfoContent = new StackPane();
         VBox abilityBox = new VBox(abilityLabel);
         abilityBox.setAlignment(Pos.TOP_LEFT);
-
         bottomInfoContent.getChildren().add(abilityBox);
 
-        // Only add class label if this card is a HeroCard
         if (card instanceof HeroCard hero) {
             Label classLabel = new Label("Class: " + hero.getUnitClass());
             classLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: black;");
@@ -110,12 +117,10 @@ public class CardView extends StackPane {
         bottomInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
         VBox.setVgrow(bottomInfoContent, Priority.ALWAYS);
 
-        // Right side: outer border containing both top and bottom boxes
         VBox innerInfo = new VBox(0, topInfoContent, bottomInfoContent);
         innerInfo.setAlignment(Pos.TOP_LEFT);
         innerInfo.setStyle("-fx-border-color: black; -fx-border-width: 1;");
 
-        // Root layout: image + info side by side
         HBox root = new HBox(0, imageBox, innerInfo);
         root.setAlignment(Pos.CENTER);
 
