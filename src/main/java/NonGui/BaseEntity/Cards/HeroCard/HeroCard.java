@@ -11,6 +11,7 @@ public abstract class HeroCard extends ActionCard implements haveClass {
     //Fields
     private UnitClass heroClass;
     private ItemCard Item;
+    private boolean canUseAbility;
 
     //Constructor
     public HeroCard(){
@@ -33,7 +34,7 @@ public abstract class HeroCard extends ActionCard implements haveClass {
                 System.out.println("Does anyone wanted to challenge");
                 if(ChallengerWin()) return true;
                 ownedHero[i] = this;
-                this.useAbility();
+                this.tryUseAbility();
                 player.setOwnedHero(ownedHero);
                 return true;
             }
@@ -56,6 +57,14 @@ public abstract class HeroCard extends ActionCard implements haveClass {
         return true;
     }
 
+    public boolean tryUseAbility(){
+        if(canUseAbility){
+            useAbility();
+            setCanUseAbility(false);
+            return true;
+        }
+        return  false;
+    }
     public abstract void useAbility();
 
     //getters n setters
@@ -69,9 +78,15 @@ public abstract class HeroCard extends ActionCard implements haveClass {
     public UnitClass getUnitClass() {
         return heroClass;
     }
-
     @Override
     public void setUnitClass(UnitClass unitClass) {
         this.heroClass = unitClass;
+    }
+
+    public boolean CanUseAbility() {
+        return canUseAbility;
+    }
+    public void setCanUseAbility(boolean canUseAbility) {
+        this.canUseAbility = canUseAbility;
     }
 }

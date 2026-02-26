@@ -56,7 +56,8 @@ public class GameEngine {
                 System.out.println("Choose your action");
                 System.out.println("1 : Draw a card");
                 System.out.println("2 : Play a card");
-                System.out.println("3 : Try to complete the objective");
+                System.out.println("3 : Use Hero's ability");
+                System.out.println("4 : Try to complete the objective");
 
                 switch (getChoice()) {
                     case (1) -> {
@@ -84,6 +85,14 @@ public class GameEngine {
                         currentPlayer.decreaseActionPoint(1);
                     }
                     case (3) -> {
+                        int heroIndex = selectHeroCard(currentPlayer);
+                        if(!currentPlayer.getHeroCard(heroIndex).tryUseAbility()){
+                            System.out.println("Invalid action: Ability on cooldown");
+                            continue;
+                        }
+                        currentPlayer.decreaseActionPoint(1);
+                    }
+                    case (4) -> {
                         if(currentPlayer.getActionPoint() < 2){
                             System.out.println("Invalid: You need 2 AP to attempt on an Objective");
                             continue;
@@ -92,6 +101,10 @@ public class GameEngine {
                         objectives[objectiveIndex].tryToComplete(objectiveIndex, currentPlayer);
                         currentPlayer.decreaseActionPoint(2);
                     }
+                    default -> {
+                        System.out.println("Invalid choice");
+                    }
+
                 }
                 System.out.println("=============================");
             }
