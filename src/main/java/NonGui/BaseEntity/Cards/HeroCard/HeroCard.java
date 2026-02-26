@@ -33,7 +33,7 @@ public abstract class HeroCard extends ActionCard implements haveClass {
                 System.out.println("Does anyone wanted to challenge");
                 if(ChallengerWin()) return true;
                 ownedHero[i] = this;
-                this.useAbility();
+                this.useAbility(player);
                 player.setOwnedHero(ownedHero);
                 return true;
             }
@@ -56,7 +56,7 @@ public abstract class HeroCard extends ActionCard implements haveClass {
         return true;
     }
 
-    public abstract void useAbility();
+    public abstract void useAbility(Player player);
 
     //getters n setters
     public ItemCard getItem() {return Item;}
