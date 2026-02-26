@@ -12,7 +12,8 @@ public class TahmKench extends HeroCard {
                 "Tahm Kench",
                 "Call me king, call me demon.",
                 "An Acquired Taste: Roll 9+. Trade hands with another player.",
-                UnitClass.Support
+                UnitClass.Support,
+                9
         );
     }
 
@@ -40,7 +41,7 @@ public class TahmKench extends HeroCard {
         // 2. เลือกผู้เล่นเป้าหมายที่จะสลับการ์ดบนมือ
         System.out.println(player.getName() + ", choose a player to TRADE hands with:");
         int targetIndex = NonGui.GameLogic.GameChoice.selectPlayer(validTargetsArray);
-        Player targetPlayer = validTargetsArray[targetIndex - 1];
+        Player targetPlayer = validTargetsArray[targetIndex];
 
         // 3. ดึงการ์ดบนมือของทั้งสองฝ่ายมาเก็บไว้ชั่วคราว
         java.util.ArrayList<NonGui.BaseEntity.BaseCard> myHand = player.getCardsInHand();

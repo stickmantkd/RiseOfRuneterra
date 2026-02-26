@@ -5,6 +5,9 @@ import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static NonGui.GameLogic.GameEngine.*;
 
 public class GameChoice {
@@ -70,22 +73,32 @@ public class GameChoice {
     }
 
     public static int selectHeroCard(Player player){
-        HeroCard[] heroCards =player.getOwnedHero();
+        HeroCard[] heroCards = player.getOwnedHero();
+        List<Integer> validIndexes = new ArrayList<>();
+
         System.out.println("Select Hero card number");
-        int HeroCardNumber = 0;
-        for(HeroCard hero : heroCards){
-            HeroCardNumber++;
-            if(hero == null) continue;
-            System.out.println(HeroCardNumber + " : "+ hero);
+        int displayNumber = 1;
+        for(int i = 0; i < heroCards.length; i++){
+            if(heroCards[i] != null){
+                System.out.println(displayNumber + " : " + heroCards[i]);
+                validIndexes.add(i); // เก็บ index จริงของ Hero
+                displayNumber++;
+            }
+        }
+
+        // ถ้าไม่มี Hero เลย
+        if(validIndexes.isEmpty()){
+            System.out.println("You don’t have any Hero to select.");
+            return -1; // ป้องกัน crash
         }
 
         int choice = getChoice();
-        if(choice < 1 || choice > HeroCardNumber){
+        if(choice < 1 || choice > validIndexes.size()){
             System.out.println("Invalid Hero number");
-            choice = selectHeroCard(player);
+            return selectHeroCard(player); // ให้เลือกใหม่
         }
 
-        return choice - 1;
+        return validIndexes.get(choice - 1); // คืนค่า index จริง
     }
 
     public static int selectModifierEffect(ModifierCard modifier){

@@ -16,7 +16,8 @@ public class Neeko extends HeroCard {
                 "Neeko",
                 "Neeko is not a sad tomato. She is a strong tomato!",
                 "Inherent Glamour: Roll 6+. Choose a player. STEAL a Hero from that player and move this card to their Party.",
-                UnitClass.Support
+                UnitClass.Support,
+                6
         );
     }
 
@@ -42,7 +43,7 @@ public class Neeko extends HeroCard {
         // 2. เลือกผู้เล่นเป้าหมาย
         System.out.println(player.getName() + ", choose a player to STEAL a Hero from:");
         int targetIndex = GameChoice.selectPlayer(validTargetsArray);
-        Player targetPlayer = validTargetsArray[targetIndex - 1];
+        Player targetPlayer = validTargetsArray[targetIndex];
 
         // 3. เลือกฮีโร่บนบอร์ดเป้าหมายที่จะขโมย
         System.out.println("Select a hero from " + targetPlayer.getName() + "'s board to STEAL:");
@@ -62,7 +63,7 @@ public class Neeko extends HeroCard {
         }
 
         // 5. เอาฮีโร่เป้าหมายออกจากบอร์ดศัตรู
-        targetPlayer.removeHeroCard(heroIndex - 1);
+        targetPlayer.removeHeroCard(heroIndex);
 
         // 6. เอาฮีโร่ที่ขโมยมา ใส่ลงในช่องว่างของบอร์ดคนร่าย
         for (int i = 0; i < player.getOwnedHero().length; i++) {

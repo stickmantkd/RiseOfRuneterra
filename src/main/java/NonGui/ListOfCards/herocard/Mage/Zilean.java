@@ -11,7 +11,8 @@ public class Zilean extends HeroCard {
                 "Zilean",
                 "I knew you would do that.",
                 "Rewind: Roll 5+. Search the discard pile for a Magic card and add it to your hand.",
-                UnitClass.Mage
+                UnitClass.Mage,
+                5
         );
     }
 

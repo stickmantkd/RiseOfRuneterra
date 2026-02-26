@@ -10,7 +10,8 @@ public class Braum extends HeroCard {
                 "Braum",
                 "Stand behind Braum!",
                 "Unbreakable: Roll 8+. Cards you play cannot be challenged for the rest of your turn.",
-                UnitClass.Tank
+                UnitClass.Tank,
+                8
         );
     }
 

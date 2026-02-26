@@ -13,7 +13,8 @@ public class Veigar extends HeroCard {
                 "Veigar",
                 "Know that if the tables were turned, I would show you no mercy!",
                 "Primordial Burst: Roll 7+. Choose a player. That player must SACRIFICE a Hero card.",
-                UnitClass.Mage
+                UnitClass.Mage,
+                7
         );
     }
 
@@ -40,7 +41,7 @@ public class Veigar extends HeroCard {
         // 2. คนร่ายสกิลเลือกผู้เล่นเป้าหมาย
         System.out.println(player.getName() + ", choose a player who must SACRIFICE a Hero:");
         int targetIndex = NonGui.GameLogic.GameChoice.selectPlayer(validTargetsArray);
-        NonGui.BaseEntity.Player targetPlayer = validTargetsArray[targetIndex - 1];
+        NonGui.BaseEntity.Player targetPlayer = validTargetsArray[targetIndex];
 
         // 3. บังคับให้เป้าหมายสังเวยฮีโร่ 1 ตัว โดยเรียกใช้จาก GameplayUtils ที่คุณเขียนเตรียมไว้
         System.out.println(targetPlayer.getName() + " is targeted and must SACRIFICE a hero!");

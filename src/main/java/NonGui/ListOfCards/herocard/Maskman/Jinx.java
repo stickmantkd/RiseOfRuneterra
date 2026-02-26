@@ -11,7 +11,8 @@ public class Jinx extends HeroCard {
                 "Jinx",
                 "Rules are made to be broken... like buildings! Or people!",
                 "Get Excited!: Roll 10+. DRAW cards until you have 7 cards in your hand.",
-                UnitClass.Maskman
+                UnitClass.Maskman,
+                10
         );
     }
 

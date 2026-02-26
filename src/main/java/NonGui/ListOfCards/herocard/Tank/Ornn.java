@@ -10,7 +10,8 @@ public class Ornn extends HeroCard {
                 "Ornn",
                 "I have made this. It is good.",
                 "Master Craftsman: Roll 9+. +5 to all of your rolls until the end of your turn.",
-                UnitClass.Tank
+                UnitClass.Tank,
+                9
         );
     }
 

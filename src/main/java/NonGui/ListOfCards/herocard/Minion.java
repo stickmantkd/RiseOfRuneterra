@@ -10,7 +10,9 @@ public class Minion extends HeroCard {
         super("Minion",
                 "I'm a minion, not Neeko",
                 "Destroy A Hero Card" ,
-                UnitClass.Fighter);
+                UnitClass.Fighter,
+                1
+        );
     }
 
     @Override

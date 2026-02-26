@@ -10,7 +10,8 @@ public class Bard extends HeroCard {
                 "Bard",
                 "*Mystical chime noises*", // เสียงกระดิ่งของ Bard
                 "Traveler's Call: Roll 7+. DRAW 2 cards.",
-                UnitClass.Support
+                UnitClass.Support,
+                7
         );
     }
 

@@ -13,7 +13,8 @@ public class Caitlyn extends HeroCard {
                 "Caitlyn",
                 "Meet the long gun of the law.",
                 "Ace in the Hole: Roll 9+. DESTROY a Hero card and DRAW a card.",
-                UnitClass.Maskman
+                UnitClass.Maskman,
+                9
         );
     }
 
@@ -39,13 +40,13 @@ public class Caitlyn extends HeroCard {
             // 2. เลือกผู้เล่นเป้าหมายที่จะทำลายฮีโร่
             System.out.println(player.getName() + ", choose a player to DESTROY their hero:");
             int targetIndex = NonGui.GameLogic.GameChoice.selectPlayer(validTargetsArray);
-            Player targetPlayer = validTargetsArray[targetIndex - 1];
+            Player targetPlayer = validTargetsArray[targetIndex];
 
             // 3. เลือกฮีโร่บนบอร์ดเป้าหมายและทำลายทิ้ง
             System.out.println("Select a hero from " + targetPlayer.getName() + "'s board to DESTROY:");
             int heroIndex = NonGui.GameLogic.GameChoice.selectHeroCard(targetPlayer);
 
-            targetPlayer.removeHeroCard(heroIndex - 1); // ลบฮีโร่ออกจากบอร์ดเป้าหมาย
+            targetPlayer.removeHeroCard(heroIndex); // ลบฮีโร่ออกจากบอร์ดเป้าหมาย
             System.out.println("BOOM! A hero from " + targetPlayer.getName() + "'s board has been destroyed!");
         }
 

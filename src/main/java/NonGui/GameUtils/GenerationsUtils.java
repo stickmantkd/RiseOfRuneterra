@@ -3,12 +3,26 @@ package NonGui.GameUtils;
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.Objective;
+import NonGui.ListOfCards.itemcard.BlueBuff;
+import NonGui.ListOfCards.itemcard.SnakesEmbrace;
+import NonGui.ListOfCards.magiccard.FinalSpark;
+import NonGui.ListOfCards.herocard.Assassin.Akali;
+import NonGui.ListOfCards.herocard.Assassin.Shaco;
+import NonGui.ListOfCards.herocard.Assassin.Talon;
+import NonGui.ListOfCards.herocard.Fighter.Fiora;
+import NonGui.ListOfCards.herocard.Fighter.Olaf;
+import NonGui.ListOfCards.herocard.Fighter.Volibear;
+import NonGui.ListOfCards.herocard.Mage.Veigar;
+import NonGui.ListOfCards.herocard.Mage.Zoe;
+import NonGui.ListOfCards.herocard.Maskman.Ezreal;
 import NonGui.ListOfCards.herocard.Minion;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.ActionCard;
 import NonGui.ListOfCards.itemcard.BFSword;
-import NonGui.ListOfCards.magiccard.FinalSpark;
+import NonGui.ListOfCards.magiccard.Charm;
+import NonGui.ListOfCards.magiccard.HowlingGale;
+import NonGui.ListOfCards.magiccard.PickACard;
 import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfObjective.BaronNashor;
 
@@ -26,11 +40,11 @@ public class GenerationsUtils {
         //currently just draw a minion
         int rand = new Random().nextInt(5);
         return switch (rand) {
-            case 0 -> new Minion();
-            case 1 -> new ChallengeCard();
-            case 2 -> new BFSword();
-            case 3 -> new ElixirOfWrath();
-            default -> new FinalSpark();
+            case 0 -> new BlueBuff();
+            case 1 -> new SnakesEmbrace();
+            //case 2 -> new HowlingGale();
+            //case 3 -> new PickACard();
+            default -> new Ezreal();
         };
     }
 

@@ -1,6 +1,7 @@
 package NonGui.GameLogic;
 
 import NonGui.BaseEntity.*;
+import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 
 import java.util.Scanner;
 
@@ -56,7 +57,8 @@ public class GameEngine {
                 System.out.println("Choose your action");
                 System.out.println("1 : Draw a card");
                 System.out.println("2 : Play a card");
-                System.out.println("3 : Try to complete the objective");
+                System.out.println("3 : Use Hero's ability");
+                System.out.println("4 : Try to complete the objective");
 
                 switch (getChoice()) {
                     case (1) -> {
@@ -84,6 +86,26 @@ public class GameEngine {
                         currentPlayer.decreaseActionPoint(1);
                     }
                     case (3) -> {
+                        int heroIndex = selectHeroCard(currentPlayer);
+                        if(heroIndex == -1){
+                            System.out.println("Invalid action: No Hero available");
+                            continue;
+                        }
+
+                        HeroCard hero = currentPlayer.getHeroCard(heroIndex);
+                        if(hero == null){
+                            System.out.println("Invalid action: No Hero at this slot");
+                            continue;
+                        }
+
+                        if(!hero.tryUseAbility(currentPlayer)){
+                            System.out.println("Invalid action: Ability on cooldown");
+                            continue;
+                        }
+
+                        currentPlayer.decreaseActionPoint(1);
+                    }
+                    case (4) -> {
                         if(currentPlayer.getActionPoint() < 2){
                             System.out.println("Invalid: You need 2 AP to attempt on an Objective");
                             continue;
@@ -92,6 +114,10 @@ public class GameEngine {
                         objectives[objectiveIndex].tryToComplete(objectiveIndex, currentPlayer);
                         currentPlayer.decreaseActionPoint(2);
                     }
+                    default -> {
+                        System.out.println("Invalid choice");
+                    }
+
                 }
                 System.out.println("=============================");
             }
@@ -104,6 +130,12 @@ public class GameEngine {
             }
 
             currentPlayer.refillActionPoint();
+            HeroCard[] ownedHero = currentPlayer.getOwnedHero();
+            for(int i = 0; i < ownedHero.length; i++){
+                if(ownedHero[i] != null){
+                    ownedHero[i].setCanUseAbility(true);
+                }
+            }
             players[PlayerNumber] = currentPlayer;
             PlayerNumber = (PlayerNumber + 1)%4;
         }

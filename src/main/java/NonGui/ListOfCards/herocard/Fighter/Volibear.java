@@ -16,7 +16,8 @@ public class Volibear extends HeroCard {
                 "Volibear",
                 "I am the storm!",
                 "Thundering Smash: Roll 5+. Choose a player. That player must DISCARD 2 cards.",
-                UnitClass.Fighter
+                UnitClass.Fighter,
+                5
         );
     }
 
@@ -45,7 +46,7 @@ public class Volibear extends HeroCard {
         System.out.println(player.getName() + ", choose a player to discard 2 cards:");
         int targetIndex = GameChoice.selectPlayer(validTargetsArray);
 
-        Player targetPlayer = validTargetsArray[targetIndex - 1];
+        Player targetPlayer = validTargetsArray[targetIndex];
 
         System.out.println(targetPlayer.getName() + " is targeted and must discard 2 cards!");
 

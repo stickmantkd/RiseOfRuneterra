@@ -13,7 +13,8 @@ public class Fiora extends HeroCard {
                 "Fiora",
                 "I demand satisfaction.",
                 "Riposte: Roll 8+. DESTROY a Hero card.",
-                UnitClass.Fighter
+                UnitClass.Fighter,
+                8
         );
     }
 
@@ -26,7 +27,7 @@ public class Fiora extends HeroCard {
 
         // 1. Select a target player (Enemies or yourself, but usually an enemy)
         int selectedPlayerIndex = GameChoice.selectPlayer(GameEngine.players);
-        Player targetPlayer = GameEngine.players[selectedPlayerIndex - 1]; // Adjustment if index starts at 1
+        Player targetPlayer = GameEngine.players[selectedPlayerIndex]; // Adjustment if index starts at 1
 
         // 2. Check if the target player even has any heroes to destroy
         if (targetPlayer.boardIsEmpty()) {
@@ -38,7 +39,7 @@ public class Fiora extends HeroCard {
         int selectedHeroIndex = GameChoice.selectHeroCard(targetPlayer);
 
         // 4. DESTROY! (Removing from their ownedHero array)
-        boolean success = targetPlayer.removeHeroCard(selectedHeroIndex - 1);
+        boolean success = targetPlayer.removeHeroCard(selectedHeroIndex);
 
         if (success) {
             System.out.println("En Garde! A Hero card from " + targetPlayer.getName() + " was destroyed.");

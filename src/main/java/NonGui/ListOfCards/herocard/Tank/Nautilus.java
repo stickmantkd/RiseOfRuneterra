@@ -10,7 +10,8 @@ public class Nautilus extends HeroCard {
                 "Nautilus",
                 "Beware the depths.",
                 "Dredge Line: Roll 6+. Search the discard pile for a Modifier card and add it to your hand.",
-                UnitClass.Tank
+                UnitClass.Tank,
+                6
         );
     }
 

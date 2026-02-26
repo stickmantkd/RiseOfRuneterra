@@ -17,7 +17,8 @@ public class Olaf extends HeroCard {
                 "Olaf",
                 "Leave nothing behind!",
                 "Ragnarok: Roll 10+. DISCARD up to 3 cards. For each card discarded, DESTROY a Hero card.",
-                UnitClass.Fighter
+                UnitClass.Fighter,
+                10
         );
     }
 
@@ -78,14 +79,14 @@ public class Olaf extends HeroCard {
             // เลือกผู้เล่นที่จะทำลายฮีโร่
             System.out.println(player.getName() + ", choose a player to DESTROY their hero (" + (i + 1) + "/" + numToDiscard + "):");
             int targetIndex = GameChoice.selectPlayer(validTargetsArray);
-            Player targetPlayer = validTargetsArray[targetIndex - 1];
+            Player targetPlayer = validTargetsArray[targetIndex];
 
             // เลือกฮีโร่จากผู้เล่นคนนั้น
             System.out.println("Select a hero from " + targetPlayer.getName() + "'s board to DESTROY:");
             int heroIndex = GameChoice.selectHeroCard(targetPlayer);
 
             // นำฮีโร่ออกจากบอร์ดเป้าหมาย (heroIndex - 1 เพราะในเมนู GameChoice เริ่มที่ 1 แต่ index ของ Array เริ่มที่ 0)
-            targetPlayer.removeHeroCard(heroIndex - 1);
+            targetPlayer.removeHeroCard(heroIndex);
             System.out.println("A hero from " + targetPlayer.getName() + " has been destroyed!");
         }
     }
