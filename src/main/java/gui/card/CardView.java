@@ -2,13 +2,11 @@ package gui.card;
 
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import javafx.geometry.Insets;
+import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -36,100 +34,64 @@ public class CardView extends StackPane {
             thumbnail.setFitHeight(thumbHeight);
             thumbnail.setPreserveRatio(false); // stretch to fill
             getChildren().add(thumbnail);
+
+            // If HeroCard has an item, overlay it bottom-right (25x35 fixed)
+            if (card instanceof HeroCard hero && hero.getItem() != null) {
+                ItemCard item = hero.getItem();
+                String itemPath = "/card/base/item card/" + item.getName().replaceAll("\\s+", "") + ".png";
+                java.net.URL itemRes = getClass().getResource(itemPath);
+                if (itemRes != null) {
+                    ImageView itemThumb = new ImageView(new Image(itemRes.toExternalForm()));
+                    itemThumb.setFitWidth(25);
+                    itemThumb.setFitHeight(35);
+                    itemThumb.setPreserveRatio(false);
+
+                    // Add a border rectangle behind the item for clarity
+                    Rectangle border = new Rectangle(25, 35, Color.TRANSPARENT);
+                    border.setStroke(Color.WHITE);
+                    border.setStrokeWidth(2);
+
+                    StackPane itemPane = new StackPane(border, itemThumb);
+                    itemPane.setPrefSize(25, 35);
+
+                    // Align bottom-right inside the same StackPane
+                    StackPane.setAlignment(itemPane, Pos.BOTTOM_RIGHT);
+                    getChildren().add(itemPane);
+                }
+            }
         } else {
             // Blank card with border and fill
             Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.WHITESMOKE);
             rect.setStroke(Color.BLACK);
             rect.setStrokeWidth(1);
-            getChildren().add(rect);
+
+            // Add card name label
+            javafx.scene.control.Label nameLabel = new javafx.scene.control.Label(card.getName());
+            nameLabel.setTextFill(Color.BLACK);
+            nameLabel.setStyle("-fx-font-size: 10; -fx-font-weight: bold;"); // small bold text
+            nameLabel.setWrapText(true);
+            nameLabel.setAlignment(Pos.CENTER);
+
+            StackPane textPane = new StackPane(nameLabel);
+            textPane.setPrefSize(thumbWidth, thumbHeight);
+
+            getChildren().addAll(rect, textPane);
         }
 
+        setPrefSize(thumbWidth, thumbHeight);
         setAlignment(Pos.CENTER);
 
-        // On click: show full card in new window
-        setOnMouseClicked(e -> showFullCardWindow());
-    }
+        // On click: show TWO FullCardView windows (hero + item)
+        setOnMouseClicked(e -> {
+            Stage heroStage = new FullCardView(card).show();
 
-    private void showFullCardWindow() {
-        Stage stage = new Stage();
-
-        double fullWidth = 200;
-        double fullHeight = 280;
-
-        // Build resource path again
-        String resourcePath = "/card/base/" + card.getType().toLowerCase() + "/"
-                + card.getName().replaceAll("\\s+", "") + ".png";
-        java.net.URL resource = getClass().getResource(resourcePath);
-
-        HBox imageBox;
-        if (resource != null) {
-            ImageView cardImage = new ImageView(new Image(resource.toExternalForm()));
-            cardImage.setFitWidth(fullWidth);
-            cardImage.setFitHeight(fullHeight);
-            cardImage.setPreserveRatio(false); // stretch to fill
-            imageBox = new HBox(cardImage);
-        } else {
-            Rectangle rect = new Rectangle(fullWidth, fullHeight, Color.WHITESMOKE);
-            rect.setStroke(Color.BLACK);
-            rect.setStrokeWidth(2);
-            imageBox = new HBox(rect);
-        }
-        imageBox.setAlignment(Pos.CENTER);
-
-        // Top info box: type + name + flavor
-        Label typeLabel = new Label(card.getType());
-        typeLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: white;");
-        typeLabel.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        typeLabel.setMaxWidth(Double.MAX_VALUE);
-        typeLabel.setAlignment(Pos.CENTER);
-
-        Label nameLabel = new Label(card.getName());
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
-        nameLabel.setWrapText(true);
-
-        Label flavorLabel = new Label(card.getFlavorText());
-        flavorLabel.setStyle("-fx-font-size: 12; -fx-text-fill: gray;");
-        flavorLabel.setWrapText(true);
-
-        VBox topInfoContent = new VBox(5, typeLabel, nameLabel, flavorLabel);
-        topInfoContent.setAlignment(Pos.TOP_CENTER);
-        topInfoContent.setPadding(new Insets(10));
-        topInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
-
-        // Bottom info box: ability (+ class if HeroCard)
-        Label abilityLabel = new Label(card.getAbilityDescription());
-        abilityLabel.setStyle("-fx-font-size: 12;");
-        abilityLabel.setWrapText(true);
-
-        StackPane bottomInfoContent = new StackPane();
-        VBox abilityBox = new VBox(abilityLabel);
-        abilityBox.setAlignment(Pos.TOP_LEFT);
-        bottomInfoContent.getChildren().add(abilityBox);
-
-        if (card instanceof HeroCard hero) {
-            Label classLabel = new Label("Class: " + hero.getUnitClass());
-            classLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: black;");
-            StackPane.setAlignment(classLabel, Pos.BOTTOM_RIGHT);
-            bottomInfoContent.getChildren().add(classLabel);
-        }
-
-        bottomInfoContent.setPadding(new Insets(10));
-        bottomInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
-        VBox.setVgrow(bottomInfoContent, Priority.ALWAYS);
-
-        VBox innerInfo = new VBox(0, topInfoContent, bottomInfoContent);
-        innerInfo.setAlignment(Pos.TOP_LEFT);
-        innerInfo.setStyle("-fx-border-color: black; -fx-border-width: 1;");
-
-        HBox root = new HBox(0, imageBox, innerInfo);
-        root.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(root, 480, 280);
-
-        stage.setTitle(card.getName());
-        stage.setScene(scene);
-        stage.setAlwaysOnTop(true);
-        stage.show();
+            if (card instanceof HeroCard hero && hero.getItem() != null) {
+                Stage itemStage = new FullCardView(hero.getItem()).show();
+                // Position item window slightly to the right of hero window
+                itemStage.setX(heroStage.getX() + heroStage.getWidth() + 10);
+                itemStage.setY(heroStage.getY());
+            }
+        });
     }
 
     public BaseCard getCard() {

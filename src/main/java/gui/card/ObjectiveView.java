@@ -37,7 +37,18 @@ public class ObjectiveView extends StackPane {
             Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.LIGHTGRAY);
             rect.setStroke(Color.BLACK);
             rect.setStrokeWidth(2);
-            getChildren().add(rect);
+
+            // Add objective name label
+            Label nameLabel = new Label(objective.getName());
+            nameLabel.setTextFill(Color.BLACK);
+            nameLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+            nameLabel.setWrapText(true);
+            nameLabel.setAlignment(Pos.CENTER);
+
+            StackPane textPane = new StackPane(nameLabel);
+            textPane.setPrefSize(thumbWidth, thumbHeight);
+
+            getChildren().addAll(rect, textPane);
         }
 
         setAlignment(Pos.CENTER);

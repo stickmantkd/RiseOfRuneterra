@@ -47,16 +47,18 @@ public abstract class Objective{
         return true;
     }
 
-    public void tryToComplete(int index, Player player){
-        if(!canTry(player)) {
-            System.out.println("Your owned Heroes don't math the requirement");
+    public void tryToComplete(int index, Player player) {
+        if (!canTry(player)) {
+            System.out.println("Your owned Heroes don't match the requirement");
+            return; // stop early if requirement not met
         }
-        int roll1 = getRoll();
-        int roll2 = getRoll();
-        if(roll1+roll2 >= minTargetRoll && roll1+roll2 <= maxTargetRoll){
+
+        int roll = getRoll();
+
+        if (roll >= minTargetRoll && roll <= maxTargetRoll) {
             grantPrize(player);
             rotateObjective(index);
-        }else {
+        } else {
             grantPunishment(player);
         }
     }

@@ -6,6 +6,7 @@ import gui.card.LeaderCardView;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.Background;
@@ -33,11 +34,17 @@ public class TopPlayerArea extends HBox {
         BackgroundFill areaFill = new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, null);
         setBackground(new Background(areaFill));
 
+        // Player name label
+        Label nameLabel = new Label(player.getName());
+        nameLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: black;");
+        nameLabel.setAlignment(Pos.CENTER_LEFT);
+
         // Leader card
         LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader());
 
         // Player cards (show only up to 5)
         handRow = new HBox(5);
+        handRow.setAlignment(Pos.CENTER);
         updateHandRow();
 
         // See More button (only if > 5 cards)
@@ -47,10 +54,11 @@ public class TopPlayerArea extends HBox {
             seeMore.setOnAction(e -> openSeeMoreWindow(areaFill));
         }
 
+        // Layout: name label on the left, then leader card, then hand row, then optional button
         if (seeMore != null) {
-            getChildren().addAll(leaderCard, handRow, seeMore);
+            getChildren().addAll(nameLabel, leaderCard, handRow, seeMore);
         } else {
-            getChildren().addAll(leaderCard, handRow);
+            getChildren().addAll(nameLabel, leaderCard, handRow);
         }
 
         // Listen for changes in the hand and auto-update
@@ -93,5 +101,4 @@ public class TopPlayerArea extends HBox {
             seeMoreGrid.getChildren().add(new CardView(player.getCardsInHand().get(i), i));
         }
     }
-
 }

@@ -1,43 +1,39 @@
 package NonGui.GameUtils;
 
 import NonGui.BaseEntity.BaseCard;
-import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.Objective;
-import NonGui.ListOfCards.herocard.Assassin.Akali;
-import NonGui.ListOfCards.herocard.Assassin.Shaco;
-import NonGui.ListOfCards.herocard.Minion;
+import NonGui.ListOfCards.itemcard.BlueBuff;
+import NonGui.ListOfCards.itemcard.SnakesEmbrace;
+import NonGui.ListOfCards.herocard.Maskman.Ezreal;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
-import NonGui.BaseEntity.ActionCard;
-import NonGui.ListOfCards.itemcard.BFSword;
-import NonGui.ListOfCards.magiccard.FinalSpark;
-import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
+import NonGui.ListOfCards.magiccard.HowlingGale;
+import NonGui.ListOfCards.magiccard.PickACard;
 import NonGui.ListOfObjective.BaronNashor;
+import NonGui.ListOfObjective.TestObjective;
 
-import java.security.interfaces.ECKey;
 import java.util.Random;
 
 
 public class GenerationsUtils {
     public static Objective generateRandomObjective(){
         //To be implemented
-        return (new BaronNashor());
+        return (new TestObjective());
     }
 
-    public static BaseCard GenerateRandomCard(){
+    public static BaseCard generateRandomCard(){
         //currently just draw a minion
-        int rand = new Random().nextInt(6);
+        int rand = new Random().nextInt(5);
         return switch (rand) {
-            case 0 -> new Akali();
-            case 1 -> new ChallengeCard();
-            case 2 -> new BFSword();
-            case 3 -> new ElixirOfWrath();
-            case 4 -> new Shaco();
-            default -> new FinalSpark();
+            case 0 -> new BlueBuff();
+            case 1 -> new SnakesEmbrace();
+            case 2 -> new HowlingGale();
+            case 3 -> new PickACard();
+            default -> new Ezreal();
         };
     }
 
-    public static LeaderCard GenerateRandomLeader(){
+    public static LeaderCard generateRandomLeader(){
         //currently just generate a dumbo
         return new LeaderCard("dumbo","Dumbass", UnitClass.Fighter);
     }

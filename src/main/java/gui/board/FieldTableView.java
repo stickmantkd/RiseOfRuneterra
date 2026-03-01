@@ -25,9 +25,13 @@ public class FieldTableView extends StackPane {
         background.setFill(Color.DARKSEAGREEN);
         background.setStroke(Color.BLACK);
         background.setStrokeWidth(1);
+
         // Bind background size to FieldTableView size
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
+
+        // Important: make background not intercept mouse events
+        background.setMouseTransparent(true);
 
         // hero/objective boxes
         grid.add(new TopHeroesBox(GameEngine.players[0]), 1, 0, 1, 1);
@@ -36,6 +40,7 @@ public class FieldTableView extends StackPane {
         grid.add(new RightHeroesBox(GameEngine.players[1]), 2, 0, 1, 3);
         grid.add(new ObjectivesBox(GameEngine.getObjectives()), 1, 1, 1, 1);
 
-        getChildren().addAll(background,grid);
+        // Add background first, then grid (grid is on top)
+        getChildren().addAll(background, grid);
     }
 }

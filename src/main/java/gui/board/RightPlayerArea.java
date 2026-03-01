@@ -1,12 +1,12 @@
 package gui.board;
 
 import NonGui.BaseEntity.Player;
-import NonGui.ListOfLeader.Darius;
 import gui.card.CardView;
 import gui.card.LeaderCardView;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.Background;
@@ -23,7 +23,7 @@ public class RightPlayerArea extends VBox {
     private final VBox handColumn;
 
     public RightPlayerArea(Player player) {
-        super(20);
+        super(10);
         this.player = player;
 
         setPrefSize(144, 480);
@@ -32,6 +32,11 @@ public class RightPlayerArea extends VBox {
 
         BackgroundFill areaFill = new BackgroundFill(Color.LIGHTPINK, CornerRadii.EMPTY, null);
         setBackground(new Background(areaFill));
+
+        // Player name label
+        Label nameLabel = new Label(player.getName());
+        nameLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: black;");
+        nameLabel.setAlignment(Pos.CENTER);
 
         // Leader card
         LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader());
@@ -46,9 +51,9 @@ public class RightPlayerArea extends VBox {
         }
 
         if (seeMore != null) {
-            getChildren().addAll(leaderCard, handColumn, seeMore);
+            getChildren().addAll(nameLabel, leaderCard, handColumn, seeMore);
         } else {
-            getChildren().addAll(leaderCard, handColumn);
+            getChildren().addAll(nameLabel, leaderCard, handColumn);
         }
 
         player.getCardsInHand().addListener((ListChangeListener.Change<?> change) -> {
@@ -88,5 +93,4 @@ public class RightPlayerArea extends VBox {
             seeMoreGrid.getChildren().add(new CardView(player.getCardsInHand().get(i), i));
         }
     }
-
 }

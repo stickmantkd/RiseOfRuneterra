@@ -24,5 +24,7 @@ javafx {
 
 application {
     mainClass = 'gui.GameUI'
+    applicationDefaultJvmArgs = [
+            '--enable-native-access=javafx.graphics',
+    ]
 }
-

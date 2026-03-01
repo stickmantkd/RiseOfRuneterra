@@ -2,7 +2,7 @@ package NonGui.BaseEntity.Cards.ModifierCard;
 
 import NonGui.BaseEntity.TriggerCard;
 
-import static NonGui.GameLogic.GameChoice.selectModifierEffect;
+import static gui.ModifierView.selectModifierEffect;
 
 public class ModifierCard extends TriggerCard {
     // Fields

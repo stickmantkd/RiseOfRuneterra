@@ -2,8 +2,11 @@ package NonGui.BaseEntity;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Properties.UnitClass;
+import NonGui.GameLogic.GameEngine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import static NonGui.GameUtils.GenerationsUtils.*;
 
@@ -16,6 +19,9 @@ public class Player {
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
     private ObservableList<BaseCard> cardsInHand; // unified: observable + BaseCard
+
+    // NEW: reactive property for current roll
+    private final IntegerProperty currentRoll = new SimpleIntegerProperty(-1);
 
     // Constructors
     public Player(String name) {
@@ -34,9 +40,14 @@ public class Player {
         return name;
     }
 
-    // Draw a random card into hand
+    // Draw a card from the main deck into hand
     public void DrawRandomCard() {
-        cardsInHand.add(GenerateRandomCard());
+        BaseCard card = GameEngine.deck.drawCard(); // pull from deck
+        if (card != null) {
+            cardsInHand.add(card);
+        } else {
+            System.out.println("Deck is empty! No card drawn.");
+        }
     }
 
     // Add card to hand
@@ -72,7 +83,7 @@ public class Player {
 
     // Setups
     private void initializeOwnedLeader() {
-        ownedLeader = GenerateRandomLeader();
+        ownedLeader = generateRandomLeader();
     }
 
     private void initializeOwnedHero() {
@@ -189,5 +200,23 @@ public class Player {
 
     public void setCardsInHand(ObservableList<BaseCard> cardsInHand) {
         this.cardsInHand = cardsInHand;
+    }
+
+    // Remove a specific card from hand
+    public void removeCardFromHand(BaseCard card) {
+        cardsInHand.remove(card);
+    }
+
+    // --- NEW: Roll property accessors ---
+    public IntegerProperty currentRollProperty() {
+        return currentRoll;
+    }
+
+    public int getCurrentRoll() {
+        return currentRoll.get();
+    }
+
+    public void setCurrentRoll(int roll) {
+        currentRoll.set(roll);
     }
 }

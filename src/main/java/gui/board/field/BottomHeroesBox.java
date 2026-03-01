@@ -17,18 +17,24 @@ public class BottomHeroesBox extends HBox {
 
         int count = 0;
 
+        // Add hero cards (clickable via CardView)
         for (HeroCard hero : player.getOwnedHero()) {
             if (hero != null) {
-                getChildren().add(new CardView(hero, -1));
+                getChildren().add(new CardView(hero, -1)); // CardView has its own click handler
                 count++;
             }
         }
 
+        // Fill remaining slots with placeholders
         while (count < 5) {
             Rectangle placeholder = new Rectangle(75, 105);
             placeholder.setFill(Color.LIGHTGRAY);
             placeholder.setStroke(Color.GRAY);
             placeholder.setStrokeWidth(1);
+
+            // Important: make placeholder transparent to mouse events
+            placeholder.setMouseTransparent(true);
+
             getChildren().add(placeholder);
             count++;
         }

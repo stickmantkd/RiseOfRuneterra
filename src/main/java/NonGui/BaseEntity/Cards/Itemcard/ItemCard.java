@@ -21,7 +21,7 @@ public abstract class ItemCard extends ActionCard {
         int selectedHeroNumber = selectHeroCard(selectedPlayer);
         HeroCard selectedHero = selectedPlayer.getHeroCard(selectedHeroNumber);
 
-        return selectedHero.EquipItem(this);
+        return selectedHero.equipItem(this);
     }
 
     public abstract void onEquip(HeroCard hero);
