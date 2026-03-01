@@ -40,7 +40,7 @@ public class TopPlayerArea extends HBox {
         nameLabel.setAlignment(Pos.CENTER_LEFT);
 
         // Leader card
-        LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader());
+        LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader(), player);
 
         // Player cards (show only up to 5)
         handRow = new HBox(5);

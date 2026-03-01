@@ -16,6 +16,7 @@ public class Player {
     private int actionPoint;
     private int maxActionPoint;
     private int ownedObjective;
+    private Objective[] ownedObjectives; // store up to 3 objectives
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
     private ObservableList<BaseCard> cardsInHand; // unified: observable + BaseCard
@@ -32,6 +33,7 @@ public class Player {
         initializeOwnedLeader();
         initializeOwnedHero();
         initializeCardsInHand();
+        ownedObjectives = new Objective[3];
     }
 
     // Utilities
@@ -218,5 +220,19 @@ public class Player {
 
     public void setCurrentRoll(int roll) {
         currentRoll.set(roll);
+    }
+
+    public void addOwnedObjective(Objective obj) {
+        for (int i = 0; i < ownedObjectives.length; i++) {
+            if (ownedObjectives[i] == null) {
+                ownedObjectives[i] = obj;
+                ownedObjective++; // keep count in sync
+                return;
+            }
+        }
+    }
+
+    public Objective[] getOwnedObjectives() {
+        return ownedObjectives;
     }
 }

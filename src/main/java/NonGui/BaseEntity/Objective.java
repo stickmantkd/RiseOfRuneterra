@@ -56,6 +56,7 @@ public abstract class Objective{
         int roll = getRoll();
 
         if (roll >= minTargetRoll && roll <= maxTargetRoll) {
+            player.addOwnedObjective(this);
             grantPrize(player);
             rotateObjective(index);
         } else {

@@ -39,7 +39,7 @@ public class LeftPlayerArea extends VBox {
         nameLabel.setAlignment(Pos.CENTER);
 
         // Leader card
-        LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader());
+        LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader(), player);
 
         handColumn = new VBox(5);
         updateHandColumn();

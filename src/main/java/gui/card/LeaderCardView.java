@@ -1,6 +1,8 @@
 package gui.card;
 
 import NonGui.BaseEntity.LeaderCard;
+import NonGui.BaseEntity.Objective;
+import NonGui.BaseEntity.Player;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,9 +17,11 @@ import javafx.stage.Stage;
 public class LeaderCardView extends StackPane {
 
     private final LeaderCard leader;
+    private final Player owner; // NEW: reference to player
 
-    public LeaderCardView(LeaderCard leader) {
+    public LeaderCardView(LeaderCard leader, Player owner) {
         this.leader = leader;
+        this.owner = owner;
 
         double thumbWidth = 90;
         double thumbHeight = 126;
@@ -53,8 +57,13 @@ public class LeaderCardView extends StackPane {
 
         setAlignment(Pos.CENTER);
 
-        // Click to show full leader card
-        setOnMouseClicked(e -> showFullLeaderWindow());
+        // Click to show full leader card AND objectives window
+        setOnMouseClicked(e -> {
+            showFullLeaderWindow();
+            if (owner != null) {
+                showOwnedObjectivesWindow(owner);
+            }
+        });
     }
 
     private void showFullLeaderWindow() {
@@ -130,6 +139,30 @@ public class LeaderCardView extends StackPane {
         Scene scene = new Scene(root, 520, 336);
 
         stage.setTitle(leader.getName());
+        stage.setScene(scene);
+        stage.setAlwaysOnTop(true);
+        stage.show();
+    }
+
+    // NEW: show objectives window
+    private void showOwnedObjectivesWindow(Player player) {
+        Stage stage = new Stage();
+        HBox root = new HBox(10);
+        root.setAlignment(Pos.CENTER);
+
+        Objective[] objs = player.getOwnedObjectives();
+        for (int i = 0; i < 3; i++) {
+            if (objs[i] != null) {
+                root.getChildren().add(new ObjectiveView(objs[i], i));
+            } else {
+                Rectangle blank = new Rectangle(150, 210, Color.LIGHTGRAY);
+                blank.setStroke(Color.BLACK);
+                root.getChildren().add(blank);
+            }
+        }
+
+        Scene scene = new Scene(root, 500, 250);
+        stage.setTitle(player.getName() + " Objectives");
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
         stage.show();
