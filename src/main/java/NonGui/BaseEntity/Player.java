@@ -19,7 +19,11 @@ public class Player {
     private Objective[] ownedObjectives; // store up to 3 objectives
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
-    private ObservableList<BaseCard> cardsInHand; // unified: observable + BaseCard
+    private ObservableList<BaseCard> cardsInHand;
+    // ในไฟล์ Player.java เพิ่มตัวแปรนี้เข้าไปครับ
+    private boolean isUnchallengeable = false;
+    private int rollBonus = 0; // ปกติเป็น 0
+
 
     // NEW: reactive property for current roll
     private final IntegerProperty currentRoll = new SimpleIntegerProperty(-1);
@@ -91,6 +95,9 @@ public class Player {
     private void initializeOwnedHero() {
         ownedHero = new HeroCard[5];
     }
+
+    public int getRollBonus() { return rollBonus; }
+    public void setRollBonus(int bonus) { this.rollBonus = bonus; }
 
     private void initializeCardsInHand() {
         cardsInHand = FXCollections.observableArrayList();
@@ -203,6 +210,9 @@ public class Player {
     public void setCardsInHand(ObservableList<BaseCard> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
+
+    public boolean isUnchallengeable() { return isUnchallengeable; }
+    public void setUnchallengeable(boolean state) { this.isUnchallengeable = state; }// unified: observable + BaseCard
 
     // Remove a specific card from hand
     public void removeCardFromHand(BaseCard card) {

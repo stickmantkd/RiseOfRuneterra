@@ -19,37 +19,49 @@ public class GameplayUtils {
                 break; // stop if no heroes left
             }
 
-            // Build list of hero options
+            // สร้าง List ของชื่อเพื่อแสดงผล และ List ของ index เพื่ออ้างอิงกลับ
             List<String> options = new ArrayList<>();
+            List<Integer> validIndices = new ArrayList<>();
+
             for (int j = 0; j < player.getOwnedHero().length; j++) {
                 HeroCard hero = player.getHeroCard(j);
                 if (hero != null) {
-                    options.add("Slot " + j + ": " + hero.getName());
+                    options.add(hero.getName()); // ใส่แค่ชื่อฮีโร่เพียวๆ เลย
+                    validIndices.add(j); // เก็บตำแหน่ง (Index) ไว้
                 }
             }
-            options.add("Cancel"); // allow cancel
 
             // Show choice dialog
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("Cancel", options);
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Sacrifice Hero");
-            dialog.setHeaderText(player.getName() + " - Choose a hero to sacrifice");
-            dialog.setContentText("Select a hero:");
+            dialog.setHeaderText(player.getName() + " - You MUST sacrifice a hero!");
+            dialog.setContentText("Select a hero to DESTROY:");
 
-            String result = dialog.showAndWait().orElse("Cancel");
+            // ดักรอผลลัพธ์
+            String result = dialog.showAndWait().orElse(null);
 
-            if (result.equals("Cancel")) {
-                // If cancel, retry this iteration
-                --i;
-                continue;
+            // ถ้าผู้เล่นกดปิดหน้าต่าง (พยายามหนี) บังคับลบตัวแรกสุดไปเลย เพื่อป้องกันเกมค้าง!
+            int indexToRemove = validIndices.get(0);
+
+            if (result != null) {
+                // หาว่าชื่อที่เลือก ตรงกับ Index ไหนในกระดาน
+                for (int j = 0; j < options.size(); j++) {
+                    if (options.get(j).equals(result)) {
+                        indexToRemove = validIndices.get(j);
+                        break;
+                    }
+                }
             }
 
-            // Extract index from string
-            int selectedHero = Integer.parseInt(result.split(" ")[1]);
+            // ทำลายฮีโร่
+            player.removeHeroCard(indexToRemove);
+            System.out.println(player.getName() + " sacrificed a hero.");
 
-            // Try to remove hero
-            if (!player.removeHeroCard(selectedHero)) {
-                System.out.println("Invalid choice: slot empty");
-                --i; // retry
+            // 🛠️ บังคับอัปเดตหน้าจอทันทีหลังจากลบการ์ด! (สำคัญมาก)
+            try {
+                gui.BoardView.refresh();
+            } catch (Exception e) {
+                // ignore if GUI not running
             }
         }
     }

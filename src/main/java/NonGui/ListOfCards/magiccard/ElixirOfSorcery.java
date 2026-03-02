@@ -14,8 +14,21 @@ public class ElixirOfSorcery extends MagicCard {
 
     @Override
     public boolean playCard(Player player) {
-        System.out.println(player.getName() + " played Elixir of Sorcery!");
-        // TODO: เพิ่มลอจิก บัฟ +2 ให้กับการทอยลูกเต๋าทั้งหมดของ Player จนจบเทิร์น
+        System.out.println("🧪 " + player.getName() + " drinks Elixir of Sorcery!");
+        System.out.println("✨ All rolls get +2 bonus until the end of turn.");
+
+        // 1. เพิ่มโบนัสการทอยให้กับตัวแปร rollBonus ในคลาส Player
+        // เราใช้ += เพื่อให้มันทับซ้อนกับบัฟอื่นได้ (เช่น ถ้า Ornn บัฟอยู่แล้ว +5 แล้วกินยานี้อีก +2 ก็จะเป็น +7)
+        int currentBonus = player.getRollBonus();
+        player.setRollBonus(currentBonus + 2);
+
+        // 2. Refresh GUI เพื่อให้หน้าจอแสดงสถานะใหม่ (ถ้ามี Label บอกโบนัส)
+        try {
+            gui.BoardView.refresh();
+        } catch (Exception e) {
+            // ignore if GUI not running
+        }
+
         return true;
     }
 }

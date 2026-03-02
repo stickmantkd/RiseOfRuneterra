@@ -17,6 +17,8 @@ public class Braum extends HeroCard {
 
     @Override
     public void useAbility(Player player) {
-        //Roll 8+. Cards you play cannot be challenged for the rest of your turn.
+        System.out.println("🛡️ Braum uses Unbreakable! Your cards cannot be challenged this turn.");
+        // เปิดโล่ทองคำ!
+        player.setUnchallengeable(true);
     }
 }

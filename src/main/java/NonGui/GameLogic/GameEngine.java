@@ -2,6 +2,7 @@ package NonGui.GameLogic;
 
 import NonGui.BaseEntity.*;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.ListOfCards.itemcard.CurseItem.VoidBinding;
 import gui.BoardView;
 
 import static NonGui.GameLogic.GameSetup.*;
@@ -54,25 +55,36 @@ public class GameEngine {
     }
 
     // --- Turn cycle ---
+    // ในไฟล์ GameEngine.java ตรงเมธอด nextTurn
     public static void nextTurn() {
         Player current = getCurrentPlayer();
 
-        // Check win condition before ending turn
         if (current.isWinning()) {
             System.out.println(current.getName() + " Wins!");
             isGameActive = false;
             return;
         }
 
-        // Move to next player
         currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
 
-        // Reset AP and hero abilities for next player
         Player next = getCurrentPlayer();
         next.refillActionPoint();
+
+        // 🛡️ RESET บัฟ Braum เมื่อเริ่มเทิร์นใหม่
+        next.setUnchallengeable(false);
+
+        // 🔨 Reset บัฟ Ornn
+        next.setRollBonus(0);
+
+        // ใน GameEngine.nextTurn()
         for (HeroCard hero : next.getOwnedHero()) {
             if (hero != null) {
-                hero.setCanUseAbility(true);
+                // ถ้าติด Void Binding ให้เป็น false ตลอดไปจนกว่าจะถอดออก
+                if (hero.getItem() instanceof VoidBinding) {
+                    hero.setCanUseAbility(false);
+                } else {
+                    hero.setCanUseAbility(true);
+                }
             }
         }
 
@@ -154,9 +166,26 @@ public class GameEngine {
             return;
         }
 
+        // ⛓️ [จับตาย VOID BINDING ตรงนี้!]
+        // เช็คว่าไอเทมที่ใส่อยู่ ชื่อคลาสตรงกับ VoidBinding หรือไม่
+        if (hero.getItem() != null && hero.getItem().getClass().getSimpleName().equals("VoidBinding")) {
+            System.out.println("❌ SILENCED! " + hero.getName() + " cannot use abilities while wearing Void Binding!");
+
+            // เด้ง Alert แจ้งเตือนคนเล่น
+            javafx.application.Platform.runLater(() -> {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+                alert.setTitle("Void Binding Active");
+                alert.setHeaderText("Hero Silenced");
+                alert.setContentText(hero.getName() + " cannot use abilities!");
+                alert.showAndWait();
+            });
+
+            return; // 🛑 หยุดการทำงานทันที ไม่คืน AP ไม่ทอยเต๋า
+        }
+
         // Try ability
         if (!hero.tryUseAbility(player)) {
-            System.out.println("Invalid action: Ability on cooldown");
+            System.out.println("Invalid action: Ability on cooldown or failed to cast");
             return;
         }
 

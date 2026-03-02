@@ -4,34 +4,34 @@ import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
-import NonGui.GameLogic.GameChoice;
+import NonGui.GameLogic.GameEngine;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
-
-import static NonGui.GameLogic.GameEngine.players;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class HowlingGale extends MagicCard {
 
     public HowlingGale() {
         super(
                 "Howling Gale",
-                "And you thought it was just a breeze!", // คำพูดของ Janna
+                "And you thought it was just a breeze!",
                 "Return an Item card equipped to any player's Hero card to that player's hand, then DRAW a card."
         );
     }
 
     @Override
     public boolean playCard(Player player) {
-        System.out.println("\n🌪️ " + player.getName() + " casts " + this.getName() + "! (Return an Item to hand, then DRAW a card)");
+        System.out.println("\n🌪️ " + player.getName() + " casts " + this.getName() + "!");
 
-        // ==========================================
-        // 1. ค้นหาเป้าหมาย: หาผู้เล่นที่มีฮีโร่สวมใส่ไอเทมอยู่
-        // ==========================================
-        ArrayList<Player> playersWithItems = new ArrayList<>();
-
-        for (Player p : players) {
+        // 1. ค้นหาผู้เล่นที่มี Hero สวม Item อยู่
+        List<Player> playersWithItems = new ArrayList<>();
+        for (Player p : GameEngine.players) {
+            if (p == null) continue;
             for (HeroCard hero : p.getOwnedHero()) {
-                // เรียกใช้ getItem() จากคลาส HeroCard ของคุณ
                 if (hero != null && hero.getItem() != null) {
                     if (!playersWithItems.contains(p)) {
                         playersWithItems.add(p);
@@ -40,51 +40,73 @@ public class HowlingGale extends MagicCard {
             }
         }
 
-        // ถ้าไม่มีฮีโร่ตัวไหนบนบอร์ดใส่ไอเทมเลย สกิลจะร่ายไม่ได้
+        // ถ้าไม่มีใครใส่ไอเทมเลย ร่ายไม่ได้ (คืนการ์ด)
         if (playersWithItems.isEmpty()) {
-            System.out.println("There are no equipped items on the board to return! The spell fizzles.");
+            showSimpleAlert("Spell Failed", "There are no equipped items on the board to return!");
             return false;
         }
 
-        // ==========================================
-        // 2. ขั้นตอนการ Return Item (เลือกเป้าหมายและคืนไอเทม)
-        // ==========================================
-        Player[] validTargetsArray = playersWithItems.toArray(new Player[0]);
+        // 2. เลือกผู้เล่นเป้าหมาย (GUI)
+        List<String> targetNames = playersWithItems.stream()
+                .map(Player::getName)
+                .collect(Collectors.toList());
 
-        // เลือกผู้เล่นเป้าหมาย (ไม่ต้อง -1 ตามที่คุณแก้ไขระบบไว้)
-        System.out.println("\nChoose a player whose hero has an item to return:");
-        int targetIndex = GameChoice.selectPlayer(validTargetsArray);
-        Player targetPlayer = validTargetsArray[targetIndex];
+        ChoiceDialog<String> playerDialog = new ChoiceDialog<>(targetNames.get(0), targetNames);
+        playerDialog.setTitle("Howling Gale: Select Target");
+        playerDialog.setHeaderText("Choose a player to return their item");
 
-        // วนลูปให้ผู้เล่นเลือกฮีโร่จนกว่าจะเลือกตัวที่มีไอเทม
-        HeroCard targetHero = null;
-        while (targetHero == null || targetHero.getItem() == null) {
-            System.out.println("Select a hero from " + targetPlayer.getName() + "'s board that has an item equipped:");
-            int heroIndex = GameChoice.selectHeroCard(targetPlayer);
-            targetHero = targetPlayer.getHeroCard(heroIndex);
+        Optional<String> playerResult = playerDialog.showAndWait();
+        if (playerResult.isPresent()) {
+            Player targetPlayer = playersWithItems.stream()
+                    .filter(p -> p.getName().equals(playerResult.get()))
+                    .findFirst().orElse(null);
 
-            if (targetHero == null || targetHero.getItem() == null) {
-                System.out.println("That hero doesn't have an item equipped! Please select again.");
+            // 3. เลือก Hero ที่มีไอเทม (กรองเฉพาะตัวที่มีไอเทมเท่านั้นมาให้เลือก)
+            List<String> heroOptions = new ArrayList<>();
+            HeroCard[] targetHeroes = targetPlayer.getOwnedHero();
+            for (int i = 0; i < targetHeroes.length; i++) {
+                if (targetHeroes[i] != null && targetHeroes[i].getItem() != null) {
+                    heroOptions.add(i + ": " + targetHeroes[i].getName() + " (" + targetHeroes[i].getItem().getName() + ")");
+                }
+            }
+
+            ChoiceDialog<String> heroDialog = new ChoiceDialog<>(heroOptions.get(0), heroOptions);
+            heroDialog.setTitle("Howling Gale: Select Hero");
+            heroDialog.setHeaderText("Which hero's item should be blown away?");
+
+            Optional<String> heroResult = heroDialog.showAndWait();
+            if (heroResult.isPresent()) {
+                int heroIdx = Integer.parseInt(heroResult.get().split(":")[0]);
+                HeroCard targetHero = targetPlayer.getHeroCard(heroIdx);
+
+                // 4. ดำเนินการคืนไอเทม
+                ItemCard itemToReturn = targetHero.getItem();
+
+                // ถอดไอเทม (onUnEquip จะทำงานอัตโนมัติ)
+                targetHero.unEquipItem();
+
+                // คืนเข้ามือเจ้าของ
+                targetPlayer.addCardToHand(itemToReturn);
+                System.out.println("🌪️ SWOOSH! " + itemToReturn.getName() + " returned to " + targetPlayer.getName() + "'s hand.");
+
+                // 5. DRAW (ผู้ร่ายจั่วการ์ด 1 ใบ)
+                player.DrawRandomCard();
+                System.out.println("✨ " + player.getName() + " drew a card from the wind.");
+
+                // Refresh GUI
+                try { gui.BoardView.refresh(); } catch (Exception e) {}
+                return true;
             }
         }
 
-        // ดึงการ์ดไอเทมออกมาเก็บไว้ก่อน
-        ItemCard itemToReturn = targetHero.getItem();
+        return false;
+    }
 
-        // ถอดไอเทมออกจากฮีโร่ (เรียกใช้ unEquipItem() ของคุณ ซึ่งจัดการ onUnEquip ให้เรียบร้อยแล้ว!)
-        targetHero.unEquipItem();
-
-        // นำการ์ดไอเทมกลับเข้ามือของเจ้าของฮีโร่
-        targetPlayer.addCardToHand(itemToReturn);
-        System.out.println("🌪️ SWOOSH! " + itemToReturn.getName() + " was blown off " + targetHero.getName() + " and returned to " + targetPlayer.getName() + "'s hand.");
-
-        // ==========================================
-        // 3. ขั้นตอนการ DRAW (คนร่ายจั่วการ์ด 1 ใบ)
-        // ==========================================
-        System.out.println(player.getName() + " draws a card from the flowing wind...");
-        player.DrawRandomCard();
-
-        System.out.println("✨ " + this.getName() + " resolved successfully!");
-        return true;
+    private void showSimpleAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

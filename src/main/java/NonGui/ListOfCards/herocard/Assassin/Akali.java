@@ -15,15 +15,16 @@ public class Akali extends HeroCard {
         super(
                 "Akali",
                 "Fear the assassin with no master.",
-                "Perfect Execution: Roll 8+. DESTROY a Hero card, then DRAW a card.",
+                // ถ้าอยากให้ข้อความตรงกับโค้ด แนะนำให้แก้ Description ตรงนี้ครับ
+                "Perfect Execution: Roll 8+. Pull a card from each player with an Assassin.",
                 UnitClass.Assassin,
-                7
+                8
         );
     }
 
     @Override
     public void useAbility(Player player) {
-        System.out.println(this.getName() + " uses their ability! (Pull cards from players with a Thief)");
+        System.out.println(this.getName() + " uses their ability! (Pull cards from players with an Assassin)");
 
         boolean stoleAnyCard = false;
         Random rand = new Random();
@@ -35,25 +36,25 @@ public class Akali extends HeroCard {
                 continue;
             }
 
-            // 2. เช็คว่าผู้เล่นคนนี้มีฮีโร่อาชีพ Thief บนบอร์ดหรือไม่
-            boolean hasThief = false;
+            // 2. เช็คว่าผู้เล่นคนนี้มีฮีโร่อาชีพ Assassin บนบอร์ดหรือไม่
+            boolean hasAssassin = false;
             for (HeroCard hero : targetPlayer.getOwnedHero()) {
                 if (hero != null && hero.getUnitClass() == UnitClass.Assassin) {
-                    hasThief = true;
-                    break; // เจอ Thief แค่ 1 ตัวก็ถือว่าเข้าเงื่อนไขแล้ว
+                    hasAssassin = true;
+                    break; // เจอ Assassin แค่ 1 ตัวก็ถือว่าเข้าเงื่อนไขแล้ว
                 }
             }
 
-            // 3. ถ้าเข้าเงื่อนไข (มี Thief และ มีการ์ดบนมือให้ขโมย)
-            if (hasThief) {
+            // 3. ถ้าเข้าเงื่อนไข (มี Assassin และ มีการ์ดบนมือให้ขโมย)
+            if (hasAssassin) {
                 if (targetPlayer.HandIsEmpty()) {
-                    System.out.println(targetPlayer.getName() + " has a Thief, but no cards in hand to steal!");
+                    System.out.println(targetPlayer.getName() + " has an Assassin, but no cards in hand to steal!");
                 } else {
                     // หาจำนวนการ์ดบนมือเป้าหมาย เพื่อนำมาสุ่ม index
                     int handSize = targetPlayer.getCardsInHand().size();
 
-                    // สุ่มตัวเลขตั้งแต่ 1 ถึง handSize (เพราะ getCardInHand ของคุณใช้ index - 1)
-                    int randomCardIndex = rand.nextInt(handSize) + 1;
+                    // 🛠️ แก้ไขบั๊ก IndexOutOfBounds: สุ่ม 0 ถึง handSize - 1
+                    int randomCardIndex = rand.nextInt(handSize);
 
                     // ดึงการ์ดออกจากมือเป้าหมาย
                     BaseCard stolenCard = targetPlayer.getCardInHand(randomCardIndex);
@@ -61,7 +62,7 @@ public class Akali extends HeroCard {
                     // นำการ์ดที่ขโมยมา เพิ่มเข้ามือของเรา
                     player.addCardToHand(stolenCard);
 
-                    System.out.println("SUCCESS! " + player.getName() + " pulled a card from " + targetPlayer.getName() + "'s hand!");
+                    System.out.println("SUCCESS! " + player.getName() + " pulled " + stolenCard.getName() + " from " + targetPlayer.getName() + "'s hand!");
                     stoleAnyCard = true;
                 }
             }
@@ -69,7 +70,7 @@ public class Akali extends HeroCard {
 
         // แจ้งเตือนกรณีไม่มีใครเข้าเงื่อนไขเลย
         if (!stoleAnyCard) {
-            System.out.println("No one else had a Thief in their party, or they had no cards. Nothing happened.");
+            System.out.println("No one else had an Assassin in their party, or they had no cards. Nothing happened.");
         }
     }
 }

@@ -12,6 +12,12 @@ import static NonGui.GameLogic.GameEngine.players;
 public class ChallengeUtils {
 
     public static boolean resolveChallenge(int challengedPlayerIndex, Player challengedPlayer, BaseCard card) {
+        if (challengedPlayer.isUnchallengeable()) {
+            System.out.println("✨ [BRAUM EFFECT] " + challengedPlayer.getName() + " is Unbreakable! This card cannot be challenged.");
+            // คืนค่า false เพื่อบอกว่า "ไม่โดนบล็อก" (ให้ร่ายการ์ดผ่านฉลุย)
+            return false;
+        }
+
         for (int i = 0; i < players.length; i++) {
             if (i == challengedPlayerIndex) continue;
 

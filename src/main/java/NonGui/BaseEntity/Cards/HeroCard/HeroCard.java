@@ -7,6 +7,7 @@ import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import NonGui.BaseEntity.Properties.haveClass;
 import NonGui.GameLogic.GameEngine;
 import NonGui.GameUtils.ChallengeUtils;
+import NonGui.GameUtils.DiceUtils;
 
 import static NonGui.GameUtils.DiceUtils.rollForAbility;
 
@@ -92,11 +93,24 @@ public abstract class HeroCard extends ActionCard implements haveClass {
 
     // Ability handling
     public boolean tryUseAbility(Player player) {
-        if (canUseAbility && rollForAbility(this, rollTarget)) {
-            useAbility(player);
-            canUseAbility = false;
+        // 🌌 [จุดที่ต้องเพิ่ม] ถ้าใส่ Void Binding ให้คืนค่า false ทันที!
+        if (this.getItem() instanceof NonGui.ListOfCards.itemcard.CurseItem.VoidBinding) {
+            System.out.println("🌌 " + this.getName() + " is bound by the Void! Ability is sealed.");
+            return false;
+        }
+
+        // โค้ดเดิมของคุณที่เช็ค canUseAbility
+        if (!canUseAbility) {
+            return false;
+        }
+
+        // โค้ดเดิมของคุณที่สั่งทอยเต๋า (DiceUtils.rollForAbility)
+        if (DiceUtils.rollForAbility(this, this.rollTarget)) {
+            this.useAbility(player);
+            this.canUseAbility = false; // ติดคูลดาวน์
             return true;
         }
+
         return false;
     }
 

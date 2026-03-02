@@ -20,11 +20,15 @@ public class Veigar extends HeroCard {
 
     @Override
     public void useAbility(Player player) {
+        // 🛠️ บังคับอัปเดตหน้าจอให้ Veigar โผล่มาบนบอร์ดก่อนเด้งป๊อปอัป
+        try {
+            gui.BoardView.refresh();
+        } catch (Exception e) {}
+
         System.out.println(this.getName() + " uses their ability! (Force a player to SACRIFICE a Hero)");
 
         // 1. คัดกรองผู้เล่นเป้าหมาย (ต้องไม่ใช่ตัวเอง และต้องมีฮีโร่บนบอร์ดให้สังเวย)
         java.util.ArrayList<Player> validTargetsList = new java.util.ArrayList<>();
-        // อย่าลืม import static NonGui.GameLogic.GameEngine.players; ไว้ด้านบนคลาสนะครับ
         for (Player p : players) {
             if (p != player && !p.boardIsEmpty()) {
                 validTargetsList.add(p);
@@ -41,12 +45,17 @@ public class Veigar extends HeroCard {
         // 2. คนร่ายสกิลเลือกผู้เล่นเป้าหมาย
         System.out.println(player.getName() + ", choose a player who must SACRIFICE a Hero:");
         int targetIndex = NonGui.GameLogic.GameChoice.selectPlayer(validTargetsArray);
+
+        // ดักกรณีคนร่ายเปลี่ยนใจกดยกเลิก
+        if (targetIndex == -1) {
+            System.out.println("Action canceled.");
+            return;
+        }
+
         Player targetPlayer = validTargetsArray[targetIndex];
 
-        // 3. บังคับให้เป้าหมายสังเวยฮีโร่ 1 ตัว โดยเรียกใช้จาก GameplayUtils ที่คุณเขียนเตรียมไว้
+        // 3. บังคับให้เป้าหมายสังเวยฮีโร่ 1 ตัว
         System.out.println(targetPlayer.getName() + " is targeted and must SACRIFICE a hero!");
         NonGui.GameUtils.GameplayUtils.SacrificeHero(targetPlayer, 1);
-
-        System.out.println("A hero from " + targetPlayer.getName() + "'s party has been sacrificed!");
     }
 }

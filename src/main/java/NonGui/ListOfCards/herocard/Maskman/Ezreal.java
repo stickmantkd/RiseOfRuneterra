@@ -5,9 +5,10 @@ import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
+import javafx.scene.control.ChoiceDialog;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 public class Ezreal extends HeroCard {
 
@@ -23,6 +24,11 @@ public class Ezreal extends HeroCard {
 
     @Override
     public void useAbility(Player player) {
+        // 🛠️ อัปเดตหน้าจอก่อนเริ่มสกิล
+        try {
+            gui.BoardView.refresh();
+        } catch (Exception e) {}
+
         System.out.println(this.getName() + " uses their ability! (DRAW 2 cards & maybe play an Item)");
 
         int initialHandSize = player.getCardsInHand().size();
@@ -46,60 +52,55 @@ public class Ezreal extends HeroCard {
         for (BaseCard card : drawnCards) {
             System.out.println("- " + card.getName());
 
-            // ใช้ instanceof เพื่อตรวจสอบให้ชัวร์ว่าเป็น ItemCard คลาสแท้ๆ
             if (card instanceof ItemCard) {
-                drawnItems.add((ItemCard) card); // Cast ให้เป็น ItemCard แล้วเก็บเข้าลิสต์
+                drawnItems.add((ItemCard) card);
             }
         }
 
-        // 3. ถ้ามี Item อย่างน้อย 1 ใบ ให้ถามว่าอยากร่ายเลยไหม
+        // 3. ถ้ามี Item อย่างน้อย 1 ใบ ให้ถามว่าอยากร่ายเลยไหม (เปลี่ยนจาก Scanner เป็น GUI)
         if (!drawnItems.isEmpty()) {
-            System.out.println("\n✨ You drew at least one Item card! Would you like to play one immediately? (Y/N)");
-            Scanner scanner = new Scanner(System.in);
-            String choice = scanner.nextLine().trim().toUpperCase();
+            List<String> options = new ArrayList<>();
+            options.add("0 : Keep in hand"); // ตัวเลือกแรกคือเก็บเข้ามือ
 
-            if (choice.equals("Y")) {
-                ItemCard itemToPlay = null;
+            for (int i = 0; i < drawnItems.size(); i++) {
+                options.add((i + 1) + " : Play " + drawnItems.get(i).getName());
+            }
 
-                if (drawnItems.size() == 1) {
-                    itemToPlay = drawnItems.get(0);
-                } else {
-                    // กรณีฟลุคจั่วได้ Item ทั้ง 2 ใบ ให้ผู้เล่นเลือกใบที่จะร่าย
-                    System.out.println("Choose an Item card to play:");
-                    for (int i = 0; i < drawnItems.size(); i++) {
-                        System.out.println((i + 1) + ". " + drawnItems.get(i).getName());
-                    }
-                    int itemIndex = -1;
-                    while (itemIndex < 1 || itemIndex > drawnItems.size()) {
-                        System.out.print("Enter number (1-" + drawnItems.size() + "): ");
-                        try {
-                            itemIndex = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input. Try again.");
-                        }
-                    }
-                    itemToPlay = drawnItems.get(itemIndex - 1);
-                }
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
+            dialog.setTitle("Ezreal Ability: Prodigal Explorer");
+            dialog.setHeaderText("✨ You drew at least one Item card!");
+            dialog.setContentText("Would you like to play one immediately?");
+
+            String result = dialog.showAndWait().orElse("0 : Keep in hand");
+
+            // ถ้าไม่ได้เลือก "0 : Keep in hand" แสดงว่าจะร่าย
+            if (!result.startsWith("0")) {
+                int choiceIndex = Integer.parseInt(result.split(" ")[0]) - 1;
+                ItemCard itemToPlay = drawnItems.get(choiceIndex);
 
                 System.out.println("⚡ Playing " + itemToPlay.getName() + " immediately!");
 
                 // 4. เอาการ์ดออกจากมือก่อนทำการร่าย
                 player.getCardsInHand().remove(itemToPlay);
 
-                // 5. เรียกใช้ playCard() ของไอเทมใบนั้น ซึ่งจะพาเข้าสู่ระบบเลือกฮีโร่และ Challenge ที่คุณเขียนไว้!
+                // 5. เรียกใช้ playCard() ของไอเทมใบนั้น
                 boolean isSuccessfullyPlayed = itemToPlay.playCard(player);
 
                 if (isSuccessfullyPlayed) {
                     System.out.println(">>> [SYSTEM] " + itemToPlay.getName() + " has been played! <<<");
                 } else {
-                    System.out.println(">>> [SYSTEM] Playing " + itemToPlay.getName() + " was canceled or failed. <<<");
-                    // (Optional) ถ้าคุณอยากให้มันกลับคืนเข้ามือกรณีที่เล่นไม่สำเร็จ (เช่น ไม่มีฮีโร่ให้ใส่)
-                    // คุณสามารถนำมันยัดกลับเข้ามือได้ที่นี่ ด้วย player.addCardToHand(itemToPlay);
+                    System.out.println(">>> [SYSTEM] Playing " + itemToPlay.getName() + " was canceled or failed. Returned to hand. <<<");
+                    // 🛠️ คืนการ์ดเข้ามือถ้าเล่นไม่สำเร็จ หรือกดยกเลิกระหว่างเล่น
+                    player.addCardToHand(itemToPlay);
                 }
-
             } else {
                 System.out.println("You chose to keep the Item cards in your hand.");
             }
         }
+
+        // 🛠️ อัปเดตหน้าจอหลังจั่วและจัดเตรียมของเสร็จ
+        try {
+            gui.BoardView.refresh();
+        } catch (Exception e) {}
     }
 }
