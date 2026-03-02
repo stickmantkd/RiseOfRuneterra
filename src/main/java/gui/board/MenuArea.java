@@ -48,6 +48,7 @@ public class MenuArea extends VBox {
             GameEngine.drawCard(current);
             updateTurnLabel();
             BoardView.refresh();
+            endTurn(current);
         });
 
         // Play Card button (uses GameChoice)
@@ -62,6 +63,7 @@ public class MenuArea extends VBox {
             }
             updateTurnLabel();
             BoardView.refresh();
+            endTurn(current);
         });
 
         // Use Hero Ability button (uses GameChoice)
@@ -74,6 +76,7 @@ public class MenuArea extends VBox {
             }
             updateTurnLabel();
             BoardView.refresh();
+            endTurn(current);
         });
 
         // Try Objective button (uses GameChoice)
@@ -86,14 +89,7 @@ public class MenuArea extends VBox {
             }
             updateTurnLabel();
             BoardView.refresh();
-        });
-
-        // End Turn button
-        Button endTurnButton = new Button("End Turn");
-        endTurnButton.setOnAction(e -> {
-            GameEngine.nextTurn();
-            updateTurnLabel();
-            BoardView.refresh();
+            endTurn(current);
         });
 
         // Roll Dice button
@@ -112,7 +108,7 @@ public class MenuArea extends VBox {
         seeDiscardButton.setOnAction(e -> openDiscardWindow());
 
         getChildren().addAll(menuLabel, turnLabel, drawButton, playButton, abilityButton,
-                objectiveButton, endTurnButton, diceButton, seeDeckButton, seeDiscardButton);
+                objectiveButton, diceButton, seeDeckButton, seeDiscardButton);
     }
 
     // --- Helper to update turn info ---
@@ -123,6 +119,17 @@ public class MenuArea extends VBox {
         }
         Player current = GameEngine.getCurrentPlayer();
         turnLabel.setText(current.getName() + "'s Turn | AP: " + current.getActionPoint());
+    }
+
+    private void endTurn(Player currentPlayer){
+        if(currentPlayer.isWinning()){
+            //To be Implemented
+            //Call the End Game Window Tells if the player is winning
+        }
+
+        GameEngine.nextTurn();
+        updateTurnLabel();
+        BoardView.refresh();
     }
 
     // --- Deck Window ---
