@@ -93,4 +93,7 @@ public class BoardView extends GridPane {
         overlayPane.setMouseTransparent(true); // pass clicks through
     }
 
+    public static void reStartGame() {
+        //To be implemented
+    }
 }

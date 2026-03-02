@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 
+import static gui.GameUI.endTurn;
+
 public class MenuArea extends VBox {
 
     private static Label turnLabel; // shows current player + AP

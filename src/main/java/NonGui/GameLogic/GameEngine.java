@@ -15,7 +15,7 @@ public class GameEngine {
     private static boolean isGameActive = false;
 
     // --- Initialization ---
-    public static void startGame() {
+    public static void reStartGame() {
         // Create players and objectives
         initializeDeck();
         initializePlayer();

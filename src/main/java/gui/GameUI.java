@@ -16,7 +16,7 @@ import java.util.Optional;
 import static gui.board.MenuArea.updateTurnLabel;
 
 public class GameUI extends Application {
-    private boolean gameOver;
+    private static boolean gameOver;
 
     @Override
     public void start(Stage primaryStage) {
@@ -44,7 +44,7 @@ public class GameUI extends Application {
         launch(args); // starts JavaFX Application Thread
     }
 
-    private void endTurn(Player currentPlayer){
+    public static void endTurn(Player currentPlayer){
         if(currentPlayer.isWinning()){
             gameOver = true;
             showWinningDialog(currentPlayer);
@@ -52,13 +52,14 @@ public class GameUI extends Application {
             return;
         }
 
-        GameEngine.nextTurn();
+        if(currentPlayer.getActionPoint() == 0){
+            GameEngine.nextTurn();
+        }
         updateTurnLabel();
         BoardView.refresh();
     }
 
-
-    private void showWinningDialog(Player currentPlayer) {
+    private static void showWinningDialog(Player currentPlayer) {
         // Ensure dialog runs on the FX Application Thread
         if (!Platform.isFxApplicationThread()) {
             Platform.runLater(() -> showWinningDialog(currentPlayer));
@@ -84,7 +85,7 @@ public class GameUI extends Application {
         }
     }
 
-        private void restartGame() {
+        private static void restartGame() {
         // Reset flags
         gameOver = false;
 
@@ -95,7 +96,7 @@ public class GameUI extends Application {
         BoardView.refresh();
     }
 
-    private void exitGame() {
+    private static void exitGame() {
         // Option A: Clean exit of the application
         System.exit(0);
 
