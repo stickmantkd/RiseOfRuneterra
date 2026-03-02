@@ -16,6 +16,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+
 public class MenuArea extends VBox {
 
     private static Label turnLabel; // shows current player + AP
@@ -25,6 +27,7 @@ public class MenuArea extends VBox {
     private Stage deckStage;
     private TilePane discardGrid;
     private Stage discardStage;
+    private boolean gameOver;
 
     public MenuArea() {
         setPrefSize(178, 624);
@@ -32,6 +35,7 @@ public class MenuArea extends VBox {
         setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         setSpacing(10);
         setAlignment(Pos.CENTER);
+        gameOver = false;
 
         Label menuLabel = new Label("Menu");
         menuLabel.setTextFill(Color.WHITE);
@@ -119,17 +123,6 @@ public class MenuArea extends VBox {
         }
         Player current = GameEngine.getCurrentPlayer();
         turnLabel.setText(current.getName() + "'s Turn | AP: " + current.getActionPoint());
-    }
-
-    private void endTurn(Player currentPlayer){
-        if(currentPlayer.isWinning()){
-            //To be Implemented
-            //Call the End Game Window Tells if the player is winning
-        }
-
-        GameEngine.nextTurn();
-        updateTurnLabel();
-        BoardView.refresh();
     }
 
     // --- Deck Window ---
