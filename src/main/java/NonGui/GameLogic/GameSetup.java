@@ -101,7 +101,7 @@ public class GameSetup {
 
     public static void initializeDeck() {
         // Fill the deck with starting cards
-        //GameEngine.deck.addToDeck(new Fiora(),5);
+        GameEngine.deck.addToDeck(new Fiora(),20);
         //GameEngine.deck.addToDeck(new BFSword(),20);
         //GameEngine.deck.addToDeck(new ChallengeCard(),20);
         //GameEngine.deck.addToDeck(new FinalSpark(),20);
@@ -111,15 +111,15 @@ public class GameSetup {
         //GameEngine.deck.addToDeck(new HowlingGale(),20);
         //GameEngine.deck.addToDeck(new PickACard(),20);
         //GameEngine.deck.addToDeck(new BlueBuff(),20);
-        //GameEngine.deck.addToDeck(new TearOfTheGoddess(),20);
+        GameEngine.deck.addToDeck(new TearOfTheGoddess(),20);
         //GameEngine.deck.addToDeck(new CursedDoubloon(),20);
-        GameEngine.deck.addToDeck(new VoidBinding(),20);
+        //GameEngine.deck.addToDeck(new VoidBinding(),20);
         //GameEngine.deck.addToDeck(new Ezreal(),10);
         //GameEngine.deck.addToDeck(new Akali(),10);
         //GameEngine.deck.addToDeck(new Shaco(),15);
         //GameEngine.deck.addToDeck(new Olaf(),15);
         //GameEngine.deck.addToDeck(new Volibear(),5);
-        GameEngine.deck.addToDeck(new Bard(),15);
+        //GameEngine.deck.addToDeck(new Bard(),15);
         //GameEngine.deck.addToDeck(new Neeko(),5);
         //GameEngine.deck.addToDeck(new TahmKench(),5);
         //GameEngine.deck.addToDeck(new Caitlyn(),5);

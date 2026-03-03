@@ -23,6 +23,11 @@ public class CardView extends StackPane {
         double thumbWidth = 75;
         double thumbHeight = 105;
 
+        Rectangle border = new Rectangle(thumbWidth, thumbHeight);
+        border.setFill(Color.TRANSPARENT); // no fill, just border
+        border.setStroke(Color.BLACK); // border color (choose as desired)
+        border.setStrokeWidth(5); // thickness
+
         // Build resource path from card name
         String resourcePath = "/card/base/" + card.getType().toLowerCase() + "/"
                 + card.getName().replaceAll("\\s+", "") + ".png";
@@ -33,7 +38,7 @@ public class CardView extends StackPane {
             thumbnail.setFitWidth(thumbWidth);
             thumbnail.setFitHeight(thumbHeight);
             thumbnail.setPreserveRatio(false); // stretch to fill
-            getChildren().add(thumbnail);
+            getChildren().addAll(border,thumbnail);
 
             // If HeroCard has an item, overlay it bottom-right (25x35 fixed)
             if (card instanceof HeroCard hero && hero.getItem() != null) {
@@ -47,11 +52,11 @@ public class CardView extends StackPane {
                     itemThumb.setPreserveRatio(false);
 
                     // Add a border rectangle behind the item for clarity
-                    Rectangle border = new Rectangle(25, 35, Color.TRANSPARENT);
-                    border.setStroke(Color.WHITE);
-                    border.setStrokeWidth(2);
+                    Rectangle itemBorder = new Rectangle(25, 35, Color.TRANSPARENT);
+                    itemBorder.setStroke(Color.WHITE);
+                    itemBorder.setStrokeWidth(2);
 
-                    StackPane itemPane = new StackPane(border, itemThumb);
+                    StackPane itemPane = new StackPane(itemBorder, itemThumb);
                     itemPane.setPrefSize(25, 35);
 
                     // Align bottom-right inside the same StackPane

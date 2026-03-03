@@ -85,7 +85,7 @@ public class FullCardView {
             bottomInfoContent.getChildren().add(classLabel);
 
             if (hero.getItem() != null) {
-                Label itemLabel = new Label("Equipped Item: " + hero.getItem().getName());
+                Label itemLabel = new Label("Equipped: " + hero.getItem().getName());
                 itemLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: darkgreen;");
                 StackPane.setAlignment(itemLabel, Pos.BOTTOM_LEFT);
                 bottomInfoContent.getChildren().add(itemLabel);
