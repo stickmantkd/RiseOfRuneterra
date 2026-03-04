@@ -168,7 +168,7 @@ public class GameEngine {
 
         // ⛓️ [จับตาย VOID BINDING ตรงนี้!]
         // เช็คว่าไอเทมที่ใส่อยู่ ชื่อคลาสตรงกับ VoidBinding หรือไม่
-        if (hero.getItem() != null && hero.getItem().getClass().getSimpleName().equals("VoidBinding")) {
+        /*if (hero.getItem() != null && hero.getItem().getClass().getSimpleName().equals("VoidBinding")) {
             System.out.println("❌ SILENCED! " + hero.getName() + " cannot use abilities while wearing Void Binding!");
 
             // เด้ง Alert แจ้งเตือนคนเล่น
@@ -181,7 +181,7 @@ public class GameEngine {
             });
 
             return; // 🛑 หยุดการทำงานทันที ไม่คืน AP ไม่ทอยเต๋า
-        }
+        }*/
 
         // Try ability
         if (!hero.tryUseAbility(player)) {
