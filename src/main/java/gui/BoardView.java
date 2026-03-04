@@ -36,10 +36,10 @@ public class BoardView extends GridPane {
         instance.getChildren().clear();
 
         // Menu area
-        instance.add(new MenuArea(), 0, 0, 1, 2);
+        instance.add(new MenuArea(), 0, 0, 1, 3);
 
         // Add status bar at bottom
-        instance.add(statusBar, 0, 2, 1, 1);
+        //instance.add(statusBar, 0, 2, 1, 1);
 
         // Redraw each player area
         for (int i = 0; i < GameEngine.players.length; i++) {
