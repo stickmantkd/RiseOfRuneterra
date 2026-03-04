@@ -9,7 +9,7 @@ import static NonGui.GameLogic.GameSetup.*;
 
 public class GameEngine {
     public static Player[] players = new Player[4];
-    public static Objective[] objectives = new Objective[3];
+    public static ObjectiveDeck objectiveDeck = new ObjectiveDeck();
     public static Deck deck = new Deck();
 
     private static int currentPlayerIndex = 0;

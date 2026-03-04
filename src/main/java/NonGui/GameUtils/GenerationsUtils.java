@@ -14,12 +14,18 @@ import NonGui.ListOfObjective.TestObjective;
 
 import java.util.Random;
 
+import static NonGui.GameLogic.GameEngine.objectiveDeck;
+
 
 public class GenerationsUtils {
-    public static Objective generateRandomObjective(){
-        //To be implemented
-        return (new TestObjective());
+    public static Objective generateRandomObjective() {
+        if (objectiveDeck.isDeckEmpty()) {
+            System.out.println("No objectives left in the deck!");
+            return null;
+        }
+        return objectiveDeck.drawObjective();
     }
+
 
     public static BaseCard generateRandomCard(){
         //currently just draw a minion

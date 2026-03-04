@@ -25,19 +25,16 @@ import NonGui.ListOfCards.itemcard.*;
 import NonGui.ListOfCards.magiccard.*;
 import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
-import NonGui.ListOfObjective.BaronNashor;
-import NonGui.ListOfObjective.BlueSentinel;
+import NonGui.ListOfObjective.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static NonGui.GameLogic.GameEngine.players;
-import static NonGui.GameLogic.GameEngine.objectives;
-
-import NonGui.ListOfObjective.TestObjective;
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
+
+import static NonGui.GameLogic.GameEngine.*;
 
 public class GameSetup {
 
@@ -94,9 +91,15 @@ public class GameSetup {
 
     // Initialize objectives for the center of the board
     public static void initializeObjective() {
-        objectives[0] = new TestObjective();
-        objectives[1] = new BlueSentinel();
-        objectives[2] = new BaronNashor();
+        objectiveDeck.addToDeck(new BaronNashor());
+        objectiveDeck.addToDeck(new BlueSentinel());
+        objectiveDeck.addToDeck(new FreljordianYeti());
+        objectiveDeck.addToDeck(new GreaterMurkWolf());
+        objectiveDeck.addToDeck(new InfernalDrake());
+        objectiveDeck.addToDeck(new RedBrambleback());
+        objectiveDeck.addToDeck(new RiftHerald());
+
+        objectiveDeck.shuffle();
     }
 
     public static void initializeDeck() {
@@ -133,7 +136,7 @@ public class GameSetup {
         //GameEngine.deck.addToDeck(new Talon(),10);
 
         // Shuffle the deck
-        Collections.shuffle(GameEngine.deck.getGameDeck());
+        deck.shuffle();
 
         System.out.println("Deck initialized with " + GameEngine.deck.getGameDeck().size() + " cards.");
     }
