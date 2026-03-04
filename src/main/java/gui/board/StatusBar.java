@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
+
+/// this is for debug in dev only ///
 public class StatusBar extends ScrollPane {
     private static StatusBar instance;        // singleton reference
     private VBox messageBox = new VBox(5);
