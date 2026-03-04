@@ -55,6 +55,7 @@ public class DiceUtils {
         Player owner = card.getOwner();
         if (owner != null) {
             total += owner.getRollBonus();
+            total += owner.getPermanentAbilityBonus(); // 🔵 โบนัสถาวรจาก Blue Sentinel!
         }
 
         // 2. คำนวณผลจากไอเทมสวมใส่

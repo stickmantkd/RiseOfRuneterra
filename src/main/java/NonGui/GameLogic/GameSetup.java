@@ -31,10 +31,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static NonGui.GameLogic.GameEngine.players;
+
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
-
-import static NonGui.GameLogic.GameEngine.*;
 
 public class GameSetup {
 
@@ -91,16 +91,19 @@ public class GameSetup {
 
     // Initialize objectives for the center of the board
     public static void initializeObjective() {
-        objectiveDeck.addToDeck(new BaronNashor());
-        objectiveDeck.addToDeck(new BlueSentinel());
-        objectiveDeck.addToDeck(new FreljordianYeti());
-        objectiveDeck.addToDeck(new GreaterMurkWolf());
-        objectiveDeck.addToDeck(new InfernalDrake());
-        objectiveDeck.addToDeck(new RedBrambleback());
-        objectiveDeck.addToDeck(new RiftHerald());
+        // Add starting objectives into the deck
+        GameEngine.objectiveDeck.addToDeck(new BaronNashor());
+        GameEngine.objectiveDeck.addToDeck(new BlueSentinel());
+        GameEngine.objectiveDeck.addToDeck(new FreljordianYeti());
+        GameEngine.objectiveDeck.addToDeck(new GreaterMurkWolf());
+        GameEngine.objectiveDeck.addToDeck(new InfernalDrake());
+        GameEngine.objectiveDeck.addToDeck(new RedBrambleback());
+        GameEngine.objectiveDeck.addToDeck(new RiftHerald());
 
-        objectiveDeck.shuffle();
+        // Shuffle so the order is randomized
+        GameEngine.objectiveDeck.shuffle();
     }
+
 
     public static void initializeDeck() {
         // Fill the deck with starting cards
@@ -136,7 +139,7 @@ public class GameSetup {
         //GameEngine.deck.addToDeck(new Talon(),10);
 
         // Shuffle the deck
-        deck.shuffle();
+        Collections.shuffle(GameEngine.deck.getGameDeck());
 
         System.out.println("Deck initialized with " + GameEngine.deck.getGameDeck().size() + " cards.");
     }

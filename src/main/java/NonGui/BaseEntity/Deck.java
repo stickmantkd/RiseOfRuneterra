@@ -36,8 +36,8 @@ public class Deck {
 
         // Shuffle before each draw
         Collections.shuffle(gameDeck);
-
-        return gameDeck.remove(0); // draw from top
+        BaseCard topCard = gameDeck.removeFirst();
+        return topCard; // draw from top
     }
 
     public boolean isDeckEmpty() {

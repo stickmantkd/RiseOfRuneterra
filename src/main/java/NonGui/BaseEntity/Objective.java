@@ -2,9 +2,11 @@ package NonGui.BaseEntity;
 
 import static NonGui.GameUtils.DiceUtils.*;
 import static NonGui.GameUtils.GameplayUtils.*;
+import javafx.scene.control.Alert;
+import javafx.application.Platform;
 
-public abstract class Objective{
-    //fields
+public abstract class Objective {
+    // Fields
     private String name;
     private String flavorText;
     private String requirementDescription;
@@ -13,7 +15,9 @@ public abstract class Objective{
     private String prizeDescription;
     private String punishmentDescription;
 
-    //constructors
+    // ==========================================
+    // Constructors (เดิม)
+    // ==========================================
     public Objective() {
         setName("Dummy Objective");
         setFlavorText("I am Strong!!!");
@@ -32,40 +36,62 @@ public abstract class Objective{
         setMaxTargetRoll(maxTargetRoll);
     }
 
-    //To string
+    // ==========================================
+    // Functions & Logic
+    // ==========================================
     @Override
     public String toString() {
         return name;
     }
 
-    //functions
     public abstract void grantPrize(Player player);
     public abstract void grantPunishment(Player player);
 
-    public boolean canTry(Player player){
-        //To be implemented
+    public boolean canTry(Player player) {
+        // To be implemented in subclasses (e.g., Check for Hero Classes)
         return true;
     }
 
     public void tryToComplete(int index, Player player) {
+        // 1. ตรวจสอบเงื่อนไขฮีโร่
         if (!canTry(player)) {
-            System.out.println("Your owned Heroes don't match the requirement");
-            return; // stop early if requirement not met
+            showSimpleAlert("Condition Not Met", "Requirement: " + getRequirementDescription());
+            return;
         }
 
-        int roll = getRoll();
+        // 2. ทอยเต๋า (ดึงค่า RollBonus จาก Ornn/Elixir มาคำนวณอัตโนมัติ)
+        int roll = getRoll(player);
 
+        // 3. ตรวจสอบผลแพ้-ชนะ
         if (roll >= minTargetRoll && roll <= maxTargetRoll) {
             player.addOwnedObjective(this);
             grantPrize(player);
-            rotateObjective(index);
+
+            showSimpleAlert("Victory!", "You defeated " + name + "!\nPrize: " + prizeDescription);
+            rotateObjective(index); // เลื่อน Objective ตัวใหม่ขึ้นมาแทน
         } else {
             grantPunishment(player);
+            showSimpleAlert("Defeat", name + " strikes back!\nPunishment: " + punishmentDescription);
         }
+
+        // Refresh กระดานหลังจบการต่อสู้
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 
-    //getters n setters
+    // Helper สำหรับ GUI
+    private void showSimpleAlert(String title, String content) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(content);
+            alert.showAndWait();
+        });
+    }
 
+    // ==========================================
+    // Getters & Setters (เดิม)
+    // ==========================================
     public String getFlavorText() {
         return flavorText;
     }
@@ -83,7 +109,6 @@ public abstract class Objective{
     public String getRequirementDescription() {
         return requirementDescription;
     }
-
     public void setRequirementDescription(String requirementDescription) {
         this.requirementDescription = requirementDescription;
     }
