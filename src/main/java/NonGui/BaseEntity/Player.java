@@ -15,6 +15,8 @@ import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
+import java.util.ArrayList;
+
 import static NonGui.GameUtils.GenerationsUtils.*;
 
 public class Player {
@@ -184,8 +186,22 @@ public class Player {
 
     public boolean checkOwnedAllClass() {
         UnitClass leaderClass = getOwnedLeader().getUnitClass();
+        ArrayList<HeroCard> otherHeroes = new ArrayList<>();
         for (HeroCard hero : ownedHero) {
-            if (hero == null || hero.getUnitClass() == leaderClass) {
+            if (hero == null ||
+                hero.getUnitClass() == leaderClass ||
+                repeatClass(hero, otherHeroes)){
+                    return false;
+            } else {
+                otherHeroes.add(hero);
+            }
+        }
+        return true;
+    }
+
+    private boolean repeatClass(HeroCard hero, ArrayList<HeroCard> otherHeroes) {
+        for(HeroCard other : otherHeroes){
+            if( hero.getUnitClass() == other.getUnitClass() ){
                 return false;
             }
         }

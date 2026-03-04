@@ -107,11 +107,10 @@ public abstract class HeroCard extends ActionCard implements haveClass {
         // โค้ดเดิมของคุณที่สั่งทอยเต๋า (DiceUtils.rollForAbility)
         if (DiceUtils.rollForAbility(this, this.rollTarget)) {
             this.useAbility(player);
-            this.canUseAbility = false; // ติดคูลดาวน์
-            return true;
         }
 
-        return false;
+        this.canUseAbility = false;
+        return true;
     }
 
     public abstract void useAbility(Player player);
