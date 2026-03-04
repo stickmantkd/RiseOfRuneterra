@@ -1,29 +1,11 @@
 package NonGui.GameLogic;
 
-import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.Player;
 import NonGui.ListOfCards.herocard.Assassin.Akali;
 import NonGui.ListOfCards.herocard.Assassin.Shaco;
-import NonGui.ListOfCards.herocard.Assassin.Talon;
 import NonGui.ListOfCards.herocard.Fighter.Fiora;
-import NonGui.ListOfCards.herocard.Fighter.Olaf;
-import NonGui.ListOfCards.herocard.Fighter.Volibear;
-import NonGui.ListOfCards.herocard.Mage.Veigar;
-import NonGui.ListOfCards.herocard.Mage.Zilean;
-import NonGui.ListOfCards.herocard.Mage.Zoe;
-import NonGui.ListOfCards.herocard.Maskman.Caitlyn;
-import NonGui.ListOfCards.herocard.Maskman.Ezreal;
-import NonGui.ListOfCards.herocard.Maskman.Jinx;
-import NonGui.ListOfCards.herocard.Support.Bard;
-import NonGui.ListOfCards.herocard.Support.Neeko;
-import NonGui.ListOfCards.herocard.Support.TahmKench;
-import NonGui.ListOfCards.herocard.Tank.Braum;
-import NonGui.ListOfCards.herocard.Tank.Nautilus;
-import NonGui.ListOfCards.herocard.Tank.Ornn;
 import NonGui.ListOfCards.itemcard.*;
-import NonGui.ListOfCards.magiccard.*;
-import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
 import NonGui.ListOfObjective.*;
 
@@ -31,10 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static NonGui.GameLogic.GameEngine.players;
-
-import javafx.scene.control.TextInputDialog;
-import java.util.Optional;
+import static NonGui.GameLogic.GameEngine.*;
+import static NonGui.GameUtils.GenerationsUtils.drawObjective;
 
 public class GameSetup {
 
@@ -91,23 +71,26 @@ public class GameSetup {
 
     // Initialize objectives for the center of the board
     public static void initializeObjective() {
-        // Add starting objectives into the deck
-        GameEngine.objectiveDeck.addToDeck(new BaronNashor());
-        GameEngine.objectiveDeck.addToDeck(new BlueSentinel());
-        GameEngine.objectiveDeck.addToDeck(new FreljordianYeti());
-        GameEngine.objectiveDeck.addToDeck(new GreaterMurkWolf());
-        GameEngine.objectiveDeck.addToDeck(new InfernalDrake());
-        GameEngine.objectiveDeck.addToDeck(new RedBrambleback());
-        GameEngine.objectiveDeck.addToDeck(new RiftHerald());
 
-        // Shuffle so the order is randomized
-        GameEngine.objectiveDeck.shuffle();
+        objectiveDeck.addToDeck(new BaronNashor());
+        objectiveDeck.addToDeck(new BlueSentinel());
+        objectiveDeck.addToDeck(new FreljordianYeti());
+        objectiveDeck.addToDeck(new GreaterMurkWolf());
+        objectiveDeck.addToDeck(new InfernalDrake());
+        objectiveDeck.addToDeck(new RedBrambleback());
+        objectiveDeck.addToDeck(new RiftHerald());
+
+        objectiveDeck.shuffle();
+
+        objectives[0] = drawObjective();
+        objectives[1] = drawObjective();
+        objectives[2] = drawObjective();
+
     }
-
 
     public static void initializeDeck() {
         // Fill the deck with starting cards
-        GameEngine.deck.addToDeck(new Fiora(),20);
+        for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Fiora());}
         //GameEngine.deck.addToDeck(new BFSword(),20);
         //GameEngine.deck.addToDeck(new ChallengeCard(),20);
         //GameEngine.deck.addToDeck(new FinalSpark(),20);
@@ -117,7 +100,7 @@ public class GameSetup {
         //GameEngine.deck.addToDeck(new HowlingGale(),20);
         //GameEngine.deck.addToDeck(new PickACard(),20);
         //GameEngine.deck.addToDeck(new BlueBuff(),20);
-        GameEngine.deck.addToDeck(new TearOfTheGoddess(),20);
+        for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
         //GameEngine.deck.addToDeck(new CursedDoubloon(),20);
         //GameEngine.deck.addToDeck(new VoidBinding(),20);
         //GameEngine.deck.addToDeck(new Ezreal(),10);
