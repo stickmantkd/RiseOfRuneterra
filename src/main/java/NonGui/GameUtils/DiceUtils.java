@@ -1,11 +1,13 @@
 package NonGui.GameUtils;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.ListOfCards.itemcard.BlueBuff;
 import NonGui.ListOfCards.itemcard.CursedDoubloon;
 import NonGui.ListOfCards.itemcard.SnakesEmbrace;
 import NonGui.BaseEntity.Player;
 import NonGui.ListOfCards.itemcard.TearOfTheGoddess;
+import gui.board.StatusBar;
 
 import java.util.Random;
 
@@ -22,9 +24,42 @@ public class DiceUtils {
         int dice2 = rand.nextInt(6) + 1;
         int total = dice1 + dice2 + player.getRollBonus();
 
+        if(player.getOwnedLeader().getUnitClass() == UnitClass.Maskman){
+            total += 1;
+        }
+
         // ✅ Set roll before modifiers so ModifierView sees correct value
         player.setCurrentRoll(total);
 
+        // Show GUI animation separately
+        gui.DiceView.showDiceRoll(dice1, dice2);
+
+        // Trigger modifier phase
+        total = ModifierUtils.TriggerModifier(total, player);
+
+        // Update after modifiers
+        player.setCurrentRoll(total);
+
+        return total;
+    }
+
+
+    public static int rollForChallenge(Player player) {
+        int dice1 = 6;
+        int dice2 = 6;
+        int total = dice1 + dice2 + player.getRollBonus();
+
+        // ✅ Set roll before modifiers so ModifierView sees correct value
+        player.setCurrentRoll(total);
+
+        // บวกโบนัสถาวรจากมังกรไฟ
+        total += player.getPermanentChallengeBonus();
+        if(player.getOwnedLeader().getUnitClass() == UnitClass.Fighter){
+            total += 2;
+        }
+
+        // บวกโบนัสชั่วคราวจาก Ornn/Elixir
+        total += player.getRollBonus();
         // Show GUI animation separately
         gui.DiceView.showDiceRoll(dice1, dice2);
 
@@ -55,7 +90,10 @@ public class DiceUtils {
         Player owner = card.getOwner();
         if (owner != null) {
             total += owner.getRollBonus();
-            total += owner.getPermanentAbilityBonus(); // 🔵 โบนัสถาวรจาก Blue Sentinel!
+            total += owner.getPermanentAbilityBonus();// 🔵 โบนัสถาวรจาก Blue Sentinel!
+            if(owner.getOwnedLeader().getUnitClass() == UnitClass.Support){
+                total += 1;
+            }
         }
 
         // 2. คำนวณผลจากไอเทมสวมใส่

@@ -1,11 +1,17 @@
 package NonGui.GameLogic;
 
+import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.Player;
 import NonGui.ListOfCards.herocard.Assassin.Akali;
 import NonGui.ListOfCards.herocard.Assassin.Shaco;
 import NonGui.ListOfCards.herocard.Fighter.Fiora;
+import NonGui.ListOfCards.herocard.Support.Bard;
+import NonGui.ListOfCards.herocard.Tank.Ornn;
 import NonGui.ListOfCards.itemcard.*;
+import NonGui.ListOfCards.magiccard.ElixirOfSorcery;
+import NonGui.ListOfCards.magiccard.FinalSpark;
+import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
 import NonGui.ListOfObjective.*;
 
@@ -79,6 +85,7 @@ public class GameSetup {
         objectiveDeck.addToDeck(new InfernalDrake());
         objectiveDeck.addToDeck(new RedBrambleback());
         objectiveDeck.addToDeck(new RiftHerald());
+        objectiveDeck.addToDeck(new ElderDragon());
 
         objectiveDeck.shuffle();
 
@@ -90,17 +97,18 @@ public class GameSetup {
 
     public static void initializeDeck() {
         // Fill the deck with starting cards
-        for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Fiora());}
-        //GameEngine.deck.addToDeck(new BFSword(),20);
-        //GameEngine.deck.addToDeck(new ChallengeCard(),20);
-        //GameEngine.deck.addToDeck(new FinalSpark(),20);
+        //for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Fiora());}
+        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new BlueBuff());}
+        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new ChallengeCard());}
+        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new FinalSpark());}
+        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new ElixirOfWrath());}
         //GameEngine.deck.addToDeck(new ElixirOfWrath(),20);
         //GameEngine.deck.addToDeck(new Charm(),20);
         //GameEngine.deck.addToDeck(new FinalSpark(),20);
         //GameEngine.deck.addToDeck(new HowlingGale(),20);
         //GameEngine.deck.addToDeck(new PickACard(),20);
         //GameEngine.deck.addToDeck(new BlueBuff(),20);
-        for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
+        //for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
         //GameEngine.deck.addToDeck(new CursedDoubloon(),20);
         //GameEngine.deck.addToDeck(new VoidBinding(),20);
         //GameEngine.deck.addToDeck(new Ezreal(),10);
@@ -118,7 +126,8 @@ public class GameSetup {
         //GameEngine.deck.addToDeck(new Zoe(),10);
         //GameEngine.deck.addToDeck(new Braum(),15);
         //GameEngine.deck.addToDeck(new Nautilus(),15);
-        //GameEngine.deck.addToDeck(new Ornn(),15);
+        //for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Ornn());}
+        for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Bard());}
         //GameEngine.deck.addToDeck(new Talon(),10);
 
         // Shuffle the deck

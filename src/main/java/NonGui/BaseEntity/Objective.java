@@ -52,11 +52,11 @@ public abstract class Objective {
         return true;
     }
 
-    public void tryToComplete(int index, Player player) {
+    public boolean tryToComplete(int index, Player player) {
         // 1. ตรวจสอบเงื่อนไขฮีโร่
         if (!canTry(player)) {
             showSimpleAlert("Condition Not Met", "Requirement: " + getRequirementDescription());
-            return;
+            return false;
         }
 
         // 2. ทอยเต๋า (ดึงค่า RollBonus จาก Ornn/Elixir มาคำนวณอัตโนมัติ)
@@ -76,6 +76,8 @@ public abstract class Objective {
 
         // Refresh กระดานหลังจบการต่อสู้
         try { gui.BoardView.refresh(); } catch (Exception e) {}
+
+        return true;
     }
 
     // Helper สำหรับ GUI

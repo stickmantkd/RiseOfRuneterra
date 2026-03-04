@@ -1,5 +1,6 @@
 package NonGui.GameUtils;
 
+import NonGui.BaseEntity.Objective;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import javafx.scene.control.ChoiceDialog;
@@ -7,9 +8,10 @@ import javafx.scene.control.ChoiceDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import static NonGui.GameLogic.GameEngine.objectiveDeck;
 import static NonGui.GameLogic.GameEngine.objectives;
 import static NonGui.GameUtils.DiceUtils.getRoll;
-import static NonGui.GameUtils.GenerationsUtils.generateRandomObjective;
+import static NonGui.GameUtils.GenerationsUtils.drawObjective;
 
 public class GameplayUtils {
     // Sacrifice n Destroy
@@ -68,8 +70,18 @@ public class GameplayUtils {
 
     // Rotate objective
     public static void rotateObjective(int objectiveIndex) {
-        objectives[objectiveIndex] = generateRandomObjective();
+        if (objectiveDeck.isDeckEmpty()) {
+            System.out.println("No objectives left to rotate!");
+            return;
+        }
+
+        Objective newObjective = drawObjective();
+
+        objectives[objectiveIndex] = newObjective;
+
+        System.out.println("Objective at slot " + objectiveIndex + " rotated to: " + newObjective.getName());
     }
+
 
     // Challenge (dice roll)
     public static boolean beginChallenge() {

@@ -3,8 +3,10 @@ package NonGui.GameUtils;
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
 import gui.ModifierView;
+import gui.board.StatusBar;
 
 import static NonGui.GameLogic.GameEngine.players;
 
@@ -62,6 +64,10 @@ public class ModifierUtils {
                     continue;
                 }
                 int effect = ((ModifierCard) modifier).useModifier();
+                if(currentPlayer.getOwnedLeader().getUnitClass() == UnitClass.Tank){
+                    if(effect > 0) effect += 1;
+                    else effect -= 1;
+                }
                 currentPlayer.removeCardFromHand(modifier);
                 GameEngine.deck.discardCard(modifier);
                 System.out.println("Modifier card " + modifier.getName() + " applied effect: " + effect +
