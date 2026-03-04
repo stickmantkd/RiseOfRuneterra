@@ -1,12 +1,19 @@
 package NonGui.BaseEntity;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
+import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 import static NonGui.GameUtils.GenerationsUtils.*;
 
@@ -20,10 +27,11 @@ public class Player {
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
     private ObservableList<BaseCard> cardsInHand;
-    // ในไฟล์ Player.java เพิ่มตัวแปรนี้เข้าไปครับ
     private boolean isUnchallengeable = false;
     private int rollBonus = 0; // ปกติเป็น 0
-
+    private int permanentAbilityBonus = 0; // โบนัสถาวรจากการปราบ Blue Sentinel
+    private boolean canPlayItemInstantly = false;
+    private boolean canPlayMagicInstantly = false;
 
     // NEW: reactive property for current roll
     private final IntegerProperty currentRoll = new SimpleIntegerProperty(-1);
@@ -53,6 +61,42 @@ public class Player {
             cardsInHand.add(card);
         } else {
             System.out.println("Deck is empty! No card drawn.");
+        }
+
+        // ❄️ [YETI PRIZE LOGIC]
+        if (this.canPlayItemInstantly && card instanceof ItemCard) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Yeti's Blessing");
+                alert.setHeaderText("You drew an Item: " + card.getName());
+                alert.setContentText("Would you like to equip it immediately without spending AP?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // เรียก Method สำหรับเลือก Hero เพื่อสวมใส่ไอเทม (คล้ายกับการเล่นไอเทมปกติ)
+                    ((ItemCard) card).playCard(this);
+                    this.getCardsInHand().remove(card);
+                    GameEngine.deck.discardCard(card);
+                }
+            });
+        }
+        // 🐺 [MURK WOLF PRIZE LOGIC]
+        if (this.canPlayMagicInstantly && card instanceof MagicCard) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Murk Wolf's Instinct");
+                alert.setHeaderText("You drew a Magic Card: " + card.getName());
+                alert.setContentText("Would you like to cast it immediately for 0 AP?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // ร่ายเวทมนตร์ทันที
+                    ((MagicCard) card).playCard(this);
+                    // นำออกจากมือเพราะร่ายไปแล้ว
+                    this.getCardsInHand().remove(card);
+                    GameEngine.deck.discardCard(card);
+                }
+            });
         }
     }
 
@@ -214,6 +258,9 @@ public class Player {
     public boolean isUnchallengeable() { return isUnchallengeable; }
     public void setUnchallengeable(boolean state) { this.isUnchallengeable = state; }// unified: observable + BaseCard
 
+    public int getPermanentAbilityBonus() { return permanentAbilityBonus; }
+    public void addPermanentAbilityBonus(int amount) { this.permanentAbilityBonus += amount; }
+
     // Remove a specific card from hand
     public void removeCardFromHand(BaseCard card) {
         cardsInHand.remove(card);
@@ -245,4 +292,11 @@ public class Player {
     public Objective[] getOwnedObjectives() {
         return ownedObjectives;
     }
+
+    public boolean isCanPlayItemInstantly() { return canPlayItemInstantly; }
+    public void setCanPlayItemInstantly(boolean value) { this.canPlayItemInstantly = value; }
+
+    public boolean isCanPlayMagicInstantly() { return canPlayMagicInstantly; }
+    public void setCanPlayMagicInstantly(boolean value) { this.canPlayMagicInstantly = value; }
+
 }

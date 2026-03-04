@@ -18,7 +18,6 @@ public class Bard extends HeroCard {
     @Override
     public void useAbility(Player player) {
         System.out.println(this.getName() + " uses Traveler's Call! " + player.getName() + " draws 2 cards.");
-
         player.DrawRandomCard();
         player.DrawRandomCard();
     }
