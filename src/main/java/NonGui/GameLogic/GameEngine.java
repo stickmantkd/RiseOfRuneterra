@@ -206,7 +206,10 @@ public class GameEngine {
         }
 
         // Attempt objective
-        objectives[objectiveIndex].tryToComplete(objectiveIndex, player);
+        if(!objectives[objectiveIndex].tryToComplete(objectiveIndex, player)){
+            System.out.println(player.getName() + " Requirement doesn't met");
+            return;
+        }
 
         // Deduct AP
         player.decreaseActionPoint(2);

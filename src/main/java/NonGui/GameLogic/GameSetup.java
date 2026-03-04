@@ -25,8 +25,7 @@ import NonGui.ListOfCards.itemcard.*;
 import NonGui.ListOfCards.magiccard.*;
 import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
-import NonGui.ListOfObjective.BaronNashor;
-import NonGui.ListOfObjective.BlueSentinel;
+import NonGui.ListOfObjective.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,8 +34,6 @@ import java.util.List;
 import static NonGui.GameLogic.GameEngine.players;
 import static NonGui.GameLogic.GameEngine.objectives;
 
-import NonGui.ListOfObjective.FreljordianYeti;
-import NonGui.ListOfObjective.TestObjective;
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
 
@@ -92,8 +89,8 @@ public class GameSetup {
     // Initialize objectives for the center of the board
     public static void initializeObjective() {
         objectives[0] = new FreljordianYeti();
-        objectives[1] = new FreljordianYeti();
-        objectives[2] = new FreljordianYeti();
+        objectives[1] = new BlueSentinel();
+        objectives[2] = new GreaterMurkWolf();
     }
 
     public static void initializeDeck() {

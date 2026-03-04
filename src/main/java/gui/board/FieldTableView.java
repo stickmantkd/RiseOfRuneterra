@@ -1,5 +1,7 @@
 package gui.board;
 
+import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.Player;
 import NonGui.GameLogic.GameEngine;
 import gui.board.field.*;
 import javafx.geometry.Pos;

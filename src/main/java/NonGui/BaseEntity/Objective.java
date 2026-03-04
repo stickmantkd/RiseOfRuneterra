@@ -52,17 +52,14 @@ public abstract class Objective {
         return true;
     }
 
-    public void tryToComplete(int index, Player player) {
-        // 1. ตรวจสอบเงื่อนไขฮีโร่
+    public boolean tryToComplete(int index, Player player) {
         if (!canTry(player)) {
             showSimpleAlert("Condition Not Met", "Requirement: " + getRequirementDescription());
-            return;
+            return false;
         }
 
-        // 2. ทอยเต๋า (ดึงค่า RollBonus จาก Ornn/Elixir มาคำนวณอัตโนมัติ)
         int roll = getRoll(player);
 
-        // 3. ตรวจสอบผลแพ้-ชนะ
         if (roll >= minTargetRoll && roll <= maxTargetRoll) {
             player.addOwnedObjective(this);
             grantPrize(player);
@@ -74,8 +71,8 @@ public abstract class Objective {
             showSimpleAlert("Defeat", name + " strikes back!\nPunishment: " + punishmentDescription);
         }
 
-        // Refresh กระดานหลังจบการต่อสู้
         try { gui.BoardView.refresh(); } catch (Exception e) {}
+        return true;
     }
 
     // Helper สำหรับ GUI
