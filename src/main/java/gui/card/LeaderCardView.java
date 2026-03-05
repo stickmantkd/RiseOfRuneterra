@@ -108,7 +108,7 @@ public class LeaderCardView extends StackPane {
             iv.setFitHeight(LEADER_H);
             iv.setPreserveRatio(false);
             iv.setSmooth(true);
-            getChildren().addAll(iv, CardView.goldBorder(LEADER_W, LEADER_H, 2, 4));
+            getChildren().addAll(iv, CardView.createGoldBorder(LEADER_W, LEADER_H, 2, 4));
         } else {
             Rectangle rect = new Rectangle(LEADER_W, LEADER_H, Color.web("#1a0a00"));
             rect.setStroke(Color.web("#FFD700"));
