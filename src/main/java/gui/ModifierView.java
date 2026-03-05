@@ -3,8 +3,11 @@ package gui;
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Player;
+import javafx.scene.Node;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,7 @@ public class ModifierView {
                     "-fx-font-family: 'Georgia';";
 
     public static int selectModifierCard(Player actingPlayer, Player targetPlayer) {
+
         List<String> options = new ArrayList<>();
         List<Integer> handIndexes = new ArrayList<>();
 
@@ -36,16 +40,19 @@ public class ModifierView {
                         "Current roll: " + targetPlayer.getCurrentRoll()
         );
         dialog.setContentText("Select a modifier card:");
-        styleDialog(dialog.getDialogPane());
+
+        DialogPane dp = dialog.getDialogPane();
+        styleDialog(dp);
 
         String result = dialog.showAndWait().orElse(null);
         if (result == null || result.equals("Pass")) return -1;
 
-        int choiceIndex = options.indexOf(result) - 1; // minus "Pass"
+        int choiceIndex = options.indexOf(result) - 1;
         return handIndexes.get(choiceIndex);
     }
 
     public static int selectModifierEffect(ModifierCard modifier) {
+
         List<String> options = List.of(
                 "➕  +" + modifier.getPositiveModifier() + "  to a roll",
                 "➖  −" + modifier.getNegativeModifier() + "  to a roll"
@@ -53,43 +60,62 @@ public class ModifierView {
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle("⚡ Modifier Effect");
-        dialog.setHeaderText("Choose an effect for  " + modifier.getName());
+        dialog.setHeaderText("Choose an effect for " + modifier.getName());
         dialog.setContentText("Effect:");
-        styleDialog(dialog.getDialogPane());
+
+        DialogPane dp = dialog.getDialogPane();
+        styleDialog(dp);
 
         String result = dialog.showAndWait().orElse(null);
         if (result == null) return -1;
 
-        return options.indexOf(result); // 0 = positive, 1 = negative
+        return options.indexOf(result);
     }
 
     private static void styleDialog(DialogPane dp) {
+
         dp.setStyle(DIALOG_STYLE);
 
-        // Style header panel background
-        javafx.scene.Node header = dp.lookup(".header-panel");
+        // Force CSS so lookup works
+        dp.applyCss();
+        dp.layout();
+
+        // Header panel background
+        Node header = dp.lookup(".header-panel");
         if (header != null) {
             header.setStyle("-fx-background-color: #2e1800;");
         }
 
-        // Style header label text
-        javafx.scene.Node headerLabel = dp.lookup(".header-panel .label");
-        if (headerLabel instanceof javafx.scene.control.Label l) {
-            l.setStyle("-fx-text-fill: #FFD700; -fx-font-family: 'Georgia'; -fx-font-size: 13;");
+        // Header text
+        Node headerLabel = dp.lookup(".header-panel .label");
+        if (headerLabel instanceof Label l) {
+            l.setStyle(
+                    "-fx-text-fill: #FFD700;" +
+                            "-fx-font-family: 'Georgia';" +
+                            "-fx-font-size: 13px;"
+            );
         }
 
-        // Style content text (the "Select a modifier card:" label)
-        javafx.scene.Node contentLabel = dp.lookup(".content .label");
-        if (contentLabel instanceof javafx.scene.control.Label l) {
-            l.setStyle("-fx-text-fill: white; -fx-font-family: 'Georgia'; -fx-font-size: 12;");
+        // Content text
+        Node contentLabel = dp.lookup(".content .label");
+        if (contentLabel instanceof Label l) {
+            l.setStyle(
+                    "-fx-text-fill: white;" +
+                            "-fx-font-family: 'Georgia';" +
+                            "-fx-font-size: 12px;"
+            );
         }
 
-        // Style choice list items
-        javafx.scene.Node listView = dp.lookup(".list-view");
-        if (listView instanceof javafx.scene.control.ListView<?> lv) {
-            lv.setStyle("-fx-control-inner-background: #1c0d00; -fx-text-fill: white; "
-                    + "-fx-font-family: 'Georgia'; -fx-selection-bar: #FFD700; "
-                    + "-fx-selection-bar-text: black;");
+        // List view styling
+        Node listView = dp.lookup(".list-view");
+        if (listView instanceof ListView<?> lv) {
+            lv.setStyle(
+                    "-fx-control-inner-background: #1c0d00;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-family: 'Georgia';" +
+                            "-fx-selection-bar: #FFD700;" +
+                            "-fx-selection-bar-text: black;"
+            );
         }
     }
 }
