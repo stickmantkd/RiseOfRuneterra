@@ -59,11 +59,6 @@ public class GameSetup {
             // Assign a unique leader from the shuffled list
             p.setOwnedLeader(leaders.get(i));
 
-            p.addHeroCard(new Shaco());
-            p.addHeroCard(new Bard());
-            p.addHeroCard(new Jinx());
-            p.addHeroCard(new Fiora());
-
             players[i] = p;
         }
     }
