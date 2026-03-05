@@ -39,8 +39,8 @@ public class CardView extends StackPane {
 
         setOnMouseClicked(e -> {
             Stage heroStage = new FullCardView(card).show();
-            if (card instanceof HeroCard hero && hero.getItem() != null) {
-                Stage itemStage = new FullCardView(hero.getItem()).show();
+            if (card instanceof HeroCard && ((HeroCard) card).getItem() != null) {
+                Stage itemStage = new FullCardView(((HeroCard) card).getItem()).show();
                 itemStage.setX(heroStage.getX() + heroStage.getWidth() + 10);
                 itemStage.setY(heroStage.getY());
             }
@@ -61,8 +61,8 @@ public class CardView extends StackPane {
 
             getChildren().addAll(iv, goldBorder(THUMB_W, THUMB_H, 2, 4));
 
-            if (card instanceof HeroCard hero && hero.getItem() != null) {
-                addItemOverlay(hero.getItem());
+            if (card instanceof HeroCard && ((HeroCard) card).getItem() != null) {
+                addItemOverlay(((HeroCard) card).getItem());
             }
         } else {
             addFallbackLabel();

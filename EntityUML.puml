@@ -1,0 +1,279 @@
+@startuml
+class NonGui.BaseEntity.LeaderCard {
+- String name
+- String flavorText
+- UnitClass leaderClass
+- String abilityDescription
++ <<Create>> LeaderCard(String,String,UnitClass)
++ String getName()
++ void setName(String)
++ String getFlavorText()
++ void setFlavorText(String)
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
++ String getAbilityDescription()
++ void setAbilityDescription(String)
+}
+
+
+class NonGui.BaseEntity.Cards.Itemcard.ClassChangingItemCard {
+- UnitClass oldClass
+- UnitClass newClass
++ <<Create>> ClassChangingItemCard(String,String,String,UnitClass)
++ void onEquip(HeroCard)
++ void onUnEquip(HeroCard)
++ UnitClass getOldClass()
++ void setOldClass(UnitClass)
++ UnitClass getNewClass()
++ void setNewClass(UnitClass)
+}
+
+
+class NonGui.BaseEntity.Cards.ModifierCard.ModifierCard {
+- int positiveModifier
+- int negativeModifier
++ <<Create>> ModifierCard()
++ <<Create>> ModifierCard(String,String,int,int)
++ int useModifier()
++ int getPositiveModifier()
++ void setPositiveModifier(int)
++ int getNegativeModifier()
++ void setNegativeModifier(int)
+}
+
+
+abstract class NonGui.BaseEntity.ActionCard {
++ <<Create>> ActionCard(String,String,String,String)
++ {abstract}boolean playCard(Player)
+}
+
+abstract class NonGui.BaseEntity.BaseCard {
+- String name
+- String flavorText
+- String abilityDescription
+- String type
+~ <<Create>> BaseCard(String,String,String,String)
++ String toString()
++ String getName()
++ void setName(String)
++ String getFlavorText()
++ void setFlavorText(String)
++ String getAbilityDescription()
++ void setAbilityDescription(String)
++ String getType()
++ void setType(String)
+}
+
+
+abstract class NonGui.BaseEntity.Objective {
+- String name
+- String flavorText
+- String requirementDescription
+- int minTargetRoll
+- int maxTargetRoll
+- String prizeDescription
+- String punishmentDescription
++ <<Create>> Objective()
++ <<Create>> Objective(String,String,int,int)
++ String toString()
++ {abstract}void grantPrize(Player)
++ {abstract}void grantPunishment(Player)
++ boolean canTry(Player)
++ boolean tryToComplete(int,Player)
+- void showSimpleAlert(String,String)
++ String getFlavorText()
++ void setFlavorText(String)
++ String getName()
++ void setName(String)
++ String getRequirementDescription()
++ void setRequirementDescription(String)
++ int getMinTargetRoll()
++ void setMinTargetRoll(int)
++ int getMaxTargetRoll()
++ void setMaxTargetRoll(int)
++ void setPrizeDescription(String)
++ String getPrizeDescription()
++ void setPunishmentDescription(String)
++ String getPunishmentDescription()
+}
+
+
+class NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard {
++ <<Create>> ChallengeCard()
++ void trigger(Player,Player)
+}
+
+interface NonGui.BaseEntity.Properties.haveClass {
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
+}
+
+abstract class NonGui.BaseEntity.Cards.HeroCard.HeroCard {
+- UnitClass heroClass
+- ItemCard item
+- boolean canUseAbility
+- int rollTarget
+- Player owner
++ <<Create>> HeroCard()
++ <<Create>> HeroCard(String,String,String,UnitClass,int)
++ boolean playCard(Player)
++ boolean equipItem(ItemCard)
++ boolean unEquipItem()
++ boolean tryUseAbility(Player)
++ {abstract}void useAbility(Player)
++ ItemCard getItem()
++ void setItem(ItemCard)
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
++ boolean canUseAbility()
++ void setCanUseAbility(boolean)
++ int getRollTarget()
++ void setRollTarget(int)
++ Player getOwner()
++ void setOwner(Player)
+}
+
+
+class NonGui.BaseEntity.Player {
+- String name
+- int actionPoint
+- int maxActionPoint
+- int ownedObjective
+- Objective[] ownedObjectives
+- LeaderCard ownedLeader
+- HeroCard[] ownedHero
+- ObservableList<BaseCard> cardsInHand
+- boolean isUnchallengeable
+- int rollBonus
+- int permanentAbilityBonus
+- boolean canPlayItemInstantly
+- boolean canPlayMagicInstantly
+- int permanentChallengeBonus
+- boolean itemUnchallengeable
+- boolean hasRedBuff
+- IntegerProperty currentRoll
++ <<Create>> Player(String)
++ String toString()
++ void DrawRandomCard()
++ void addCardToHand(BaseCard)
++ boolean boardIsEmpty()
++ boolean HandIsEmpty()
++ void increaseActionPoint(int)
++ void decreaseActionPoint(int)
++ void refillActionPoint()
+- void initializeOwnedLeader()
+- void initializeOwnedHero()
++ int getRollBonus()
++ void setRollBonus(int)
+- void initializeCardsInHand()
++ BaseCard getCardInHand(int)
++ HeroCard getHeroCard(int)
++ boolean removeHeroCard(int)
++ void addHeroCard(HeroCard)
++ boolean isWinning()
++ boolean checkOwnedAllClass()
+- boolean repeatClass(HeroCard,ArrayList<HeroCard>)
++ boolean checkOwnedThreeObjective()
++ LeaderCard getOwnedLeader()
++ void setOwnedLeader(LeaderCard)
++ String getName()
++ void setName(String)
++ int getActionPoint()
++ void setActionPoint(int)
++ int getMaxActionPoint()
++ void setMaxActionPoint(int)
++ HeroCard[] getOwnedHero()
++ void setOwnedHero(HeroCard[])
++ int getOwnedObjective()
++ void setOwnedObjective(int)
++ ObservableList<BaseCard> getCardsInHand()
++ void setCardsInHand(ObservableList<BaseCard>)
++ boolean isUnchallengeable()
++ void setUnchallengeable(boolean)
++ int getPermanentAbilityBonus()
++ void addPermanentAbilityBonus(int)
++ void removeCardFromHand(BaseCard)
++ IntegerProperty currentRollProperty()
++ int getCurrentRoll()
++ void setCurrentRoll(int)
++ void addOwnedObjective(Objective)
++ Objective[] getOwnedObjectives()
++ boolean isCanPlayItemInstantly()
++ void setCanPlayItemInstantly(boolean)
++ boolean isCanPlayMagicInstantly()
++ void setCanPlayMagicInstantly(boolean)
++ int getPermanentChallengeBonus()
++ void addPermanentChallengeBonus(int)
++ boolean isHasRedBuff()
++ void setHasRedBuff(boolean)
++ boolean isItemUnchallengeable()
++ void setItemUnchallengeable(boolean)
+}
+
+
+class NonGui.BaseEntity.ObjectiveDeck {
+- ObservableList<Objective> objectiveDeck
++ <<Create>> ObjectiveDeck()
++ void addToDeck(Objective)
++ void addToDeck(Objective,int)
++ Objective drawObjective()
++ boolean isDeckEmpty()
++ ObservableList<Objective> getObjectiveDeck()
++ void shuffle()
+}
+
+
+abstract class NonGui.BaseEntity.TriggerCard {
++ <<Create>> TriggerCard(String,String,String,String)
+}
+
+class NonGui.BaseEntity.Deck {
+- ObservableList<BaseCard> gameDeck
+- ObservableList<BaseCard> discardPile
++ <<Create>> Deck()
++ void addToDeck(BaseCard)
++ void addToDeck(BaseCard,int)
++ BaseCard drawCard()
++ boolean isDeckEmpty()
++ ObservableList<BaseCard> getGameDeck()
++ void discardCard(BaseCard)
++ ObservableList<BaseCard> getDiscardPile()
++ void clearDiscardPile()
++ void shuffle()
+}
+
+
+enum NonGui.BaseEntity.Properties.UnitClass {
++  Assassin
++  Fighter
++  Mage
++  Maskman
++  Support
++  Tank
+}
+
+abstract class NonGui.BaseEntity.Cards.MagicCard.MagicCard {
++ <<Create>> MagicCard(String,String,String)
++ {abstract}boolean playCard(Player)
+}
+
+abstract class NonGui.BaseEntity.Cards.Itemcard.ItemCard {
++ <<Create>> ItemCard(String,String,String)
++ boolean playCard(Player)
++ {abstract}void onEquip(HeroCard)
++ {abstract}void onUnEquip(HeroCard)
+}
+
+
+
+NonGui.BaseEntity.Properties.haveClass <|.. NonGui.BaseEntity.LeaderCard
+NonGui.BaseEntity.Cards.Itemcard.ItemCard <|-- NonGui.BaseEntity.Cards.Itemcard.ClassChangingItemCard
+NonGui.BaseEntity.TriggerCard <|-- NonGui.BaseEntity.Cards.ModifierCard.ModifierCard
+NonGui.BaseEntity.BaseCard <|-- NonGui.BaseEntity.ActionCard
+NonGui.BaseEntity.TriggerCard <|-- NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard
+NonGui.BaseEntity.Properties.haveClass <|.. NonGui.BaseEntity.Cards.HeroCard.HeroCard
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.HeroCard.HeroCard
+NonGui.BaseEntity.BaseCard <|-- NonGui.BaseEntity.TriggerCard
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.MagicCard.MagicCard
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.Itemcard.ItemCard
+@enduml

@@ -1,0 +1,289 @@
+@startuml
+class gui.board.MenuArea {
+- {static} Label turnLabel
+- TilePane deckGrid
+- Stage deckStage
+- TilePane discardGrid
+- Stage discardStage
+- TilePane objectiveDeckGrid
+- Stage objectiveDeckStage
+- {static} String POPUP_BG
++ <<Create>> MenuArea()
+- Button createMenuButton(String,String)
+- Region createSeparator()
++ {static} void updateTurnLabel()
+- void openDeckWindow()
+- void updateDeckGrid()
+- void openDiscardWindow()
+- void updateDiscardGrid()
+- void openObjectiveDeckWindow()
+- void updateObjectiveDeckGrid()
+- TilePane createPopupGrid()
+- ScrollPane createScrollPane(TilePane)
+- Stage buildPopupStage(String,ScrollPane)
+}
+
+
+class gui.board.field.ObjectivesBox {
++ <<Create>> ObjectivesBox(Objective[])
+- StackPane buildPlaceholder()
+}
+
+class gui.card.CardView {
+- {static} DropShadow HOVER_GLOW
+- BaseCard card
++ <<Create>> CardView(BaseCard,int)
+- void buildThumbnail()
+- void addItemOverlay(ItemCard)
+- void addFallbackLabel()
+~ {static} Rectangle goldBorder(double,double,double,double)
++ BaseCard getCard()
+}
+
+
+class gui.board.field.RightHeroesBox {
++ <<Create>> RightHeroesBox(Player)
+- StackPane buildPlaceholder()
+}
+
+class gui.BoardView {
+- {static} BoardView instance
+- {static} StatusBar statusBar
+- {static} StackPane overlayPane
++ <<Create>> BoardView()
++ {static} void refresh()
++ {static} void showOverlay(StackPane)
++ {static} void clearOverlay()
++ {static} void reStartGame()
+}
+
+
+class gui.board.field.TopHeroesBox {
++ <<Create>> TopHeroesBox(Player)
+- StackPane buildPlaceholder()
+}
+
+class gui.Launcher {
++ {static} void main(String[])
+}
+
+class gui.board.StatusBar {
+- {static} StatusBar instance
+- VBox messageBox
++ <<Create>> StatusBar()
++ {static} void showMessage(String)
+}
+
+
+class gui.board.LeftPlayerArea {
+- TilePane seeMoreGrid
+- Stage seeMoreStage
+- Player player
+- VBox handColumn
++ <<Create>> LeftPlayerArea(Player)
+- Button createSeeMoreButton()
+- void updateHandColumn()
+- void openSeeMoreWindow()
+- void updateSeeMoreGrid()
+}
+
+
+class gui.DiceView {
+- {static} String BREAKDOWN_STYLE
+- {static} String TARGET_STYLE
+- {static} String SUCCESS_BADGE_STYLE
+- {static} String FAIL_BADGE_STYLE
++ {static} void showDiceRoll(int,int,String)
++ {static} void showAbilityRoll(int,int,String,int,int)
++ {static} void showDiceRoll(int,int)
+- {static} void animateDice(DiceWidgets,int,int)
+- {static} StackPane buildDieFace(Text)
+- {static} String diceFace(int)
+}
+
+
+class gui.DiceView$DiceWidgets {
+~ StackPane overlay
+~ Text faceText1
+~ Text faceText2
+~ Label breakdownLabel
+~ Label targetLabel
+~ Label resultBadge
+~ <<Create>> DiceWidgets(boolean)
+}
+
+
+class gui.board.RightPlayerArea {
+- TilePane seeMoreGrid
+- Stage seeMoreStage
+- Player player
+- VBox handColumn
++ <<Create>> RightPlayerArea(Player)
+- Button createSeeMoreButton()
+- void updateHandColumn()
+- void openSeeMoreWindow()
+- void updateSeeMoreGrid()
+}
+
+
+class gui.card.ObjectiveView {
+- {static} DropShadow HOVER_GLOW
+- Objective objective
++ <<Create>> ObjectiveView(Objective,int)
+- void buildThumbnail()
+- void showFullObjectiveWindow()
++ Objective getObjective()
+}
+
+
+class gui.board.FieldTableView {
++ <<Create>> FieldTableView()
+}
+
+class gui.GameUI {
+- {static} boolean gameOver
++ void start(Stage)
++ {static} void main(String[])
++ {static} void endTurn(Player)
+- {static} void showWinningDialog(Player)
+- {static} void restartGame()
+- {static} void exitGame()
+}
+
+
+class gui.board.Theme {
++ {static} String TOP_BG
++ {static} String BOTTOM_BG
++ {static} String LEFT_BG
++ {static} String RIGHT_BG
++ {static} String BORDER_NORMAL
++ {static} String BORDER_ACTIVE
++ {static} String NAME_LABEL
++ {static} String SEE_MORE_BUTTON
+- <<Create>> Theme()
+}
+
+
+class gui.card.FullCardView {
+- BaseCard card
++ <<Create>> FullCardView(BaseCard)
++ Stage show()
+}
+
+
+class gui.board.BottomPlayerArea {
+- TilePane seeMoreGrid
+- Stage seeMoreStage
+- Player player
+- HBox handRow
++ <<Create>> BottomPlayerArea(Player)
+- Button createSeeMoreButton()
+- void updateHandRow()
+- void openSeeMoreWindow()
+- void updateSeeMoreGrid()
+}
+
+
+class gui.ModifierView {
+- {static} String DIALOG_STYLE
++ {static} int selectModifierCard(Player,Player)
++ {static} int selectModifierEffect(ModifierCard)
+- {static} void styleDialog(DialogPane)
+}
+
+
+class gui.card.ImageCache {
+- {static} Map<String,Image> CACHE
++ {static} double THUMB_W
++ {static} double THUMB_H
++ {static} double LEADER_W
++ {static} double LEADER_H
++ {static} double FULL_W
++ {static} double FULL_H
++ {static} double FULL_LEADER_W
++ {static} double FULL_LEADER_H
++ {static} double OBJ_THUMB_W
++ {static} double OBJ_THUMB_H
++ {static} double OBJ_FULL_W
++ {static} double OBJ_FULL_H
++ {static} double ITEM_W
++ {static} double ITEM_H
+- <<Create>> ImageCache()
++ {static} Image get(String,double,double)
++ {static} Image get(String)
++ {static} String cardPath(String,String)
++ {static} String leaderPath(String)
++ {static} String objectivePath(String)
++ {static} String itemPath(String)
++ {static} void clear()
+}
+
+
+class gui.card.LeaderCardView {
+- {static} DropShadow HOVER_GLOW
+- LeaderCard leader
+- Player owner
++ <<Create>> LeaderCardView(LeaderCard,Player)
+- void buildThumbnail()
+- void showFullLeaderWindow()
+- void showOwnedObjectivesWindow(Player)
++ LeaderCard getLeader()
+}
+
+
+class gui.board.TopPlayerArea {
+- TilePane seeMoreGrid
+- Stage seeMoreStage
+- Player player
+- HBox handRow
++ <<Create>> TopPlayerArea(Player)
+- Button createSeeMoreButton()
+- void updateHandRow()
+- void openSeeMoreWindow()
+- void updateSeeMoreGrid()
+}
+
+
+class gui.board.field.BottomHeroesBox {
++ <<Create>> BottomHeroesBox(Player)
+- StackPane buildPlaceholder()
+}
+
+class gui.ChallengeView {
+- {static} Label resultLabel
+- {static} String PANEL_STYLE
+- {static} String PLAYER_NAME_STYLE
+- {static} String ROLL_NUM_STYLE
+- {static} String LABEL_STYLE
++ <<Create>> ChallengeView(Player,Player,BaseCard)
++ {static} void showResult(boolean,String,String)
+}
+
+
+class gui.board.field.LeftHeroesBox {
++ <<Create>> LeftHeroesBox(Player)
+- StackPane buildPlaceholder()
+}
+
+
+
+gui.board.VBox <|-- gui.board.MenuArea
+javafx.scene.layout.HBox <|-- gui.board.field.ObjectivesBox
+javafx.scene.layout.StackPane <|-- gui.card.CardView
+javafx.scene.layout.HBox <|-- gui.board.field.RightHeroesBox
+javafx.scene.layout.GridPane <|-- gui.BoardView
+javafx.scene.layout.HBox <|-- gui.board.field.TopHeroesBox
+javafx.scene.control.ScrollPane <|-- gui.board.StatusBar
+javafx.scene.layout.VBox <|-- gui.board.LeftPlayerArea
+gui.DiceView +.. gui.DiceView$DiceWidgets
+javafx.scene.layout.VBox <|-- gui.board.RightPlayerArea
+gui.card.StackPane <|-- gui.card.ObjectiveView
+javafx.scene.layout.StackPane <|-- gui.board.FieldTableView
+javafx.application.Application <|-- gui.GameUI
+javafx.scene.layout.HBox <|-- gui.board.BottomPlayerArea
+gui.card.StackPane <|-- gui.card.LeaderCardView
+javafx.scene.layout.HBox <|-- gui.board.TopPlayerArea
+javafx.scene.layout.HBox <|-- gui.board.field.BottomHeroesBox
+javafx.stage.Stage <|-- gui.ChallengeView
+javafx.scene.layout.HBox <|-- gui.board.field.LeftHeroesBox
+@enduml

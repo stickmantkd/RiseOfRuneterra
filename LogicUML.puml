@@ -1,0 +1,87 @@
+@startuml
+class NonGui.GameLogic.GameChoice {
+- {static} String ROOT_STYLE
+- {static} String TITLE_STYLE
+- {static} String SUBTITLE_STYLE
+- {static} String ITEM_BASE
+- {static} String ITEM_HOVER
+- {static} String ITEM_SELECTED
+- {static} String CONFIRM_BTN
+- {static} String CONFIRM_BTN_HOVER
+- {static} String CANCEL_BTN
+- {static} int showPickerDialog(String,String,List<String>)
++ {static} int selectCardsInHand(Player)
++ {static} int selectObjective()
++ {static} int selectPlayer(Player[])
++ {static} int selectHeroCard(Player)
+}
+
+
+class NonGui.GameLogic.GameSetup {
++ {static} void initializePlayer()
++ {static} void initializeObjective()
++ {static} void initializeDeck()
+}
+
+class NonGui.GameLogic.GameEngine {
++ {static} Player[] players
++ {static} Objective[] objectives
++ {static} ObjectiveDeck objectiveDeck
++ {static} Deck deck
+- {static} int currentPlayerIndex
+- {static} boolean isGameActive
++ {static} void reStartGame()
++ {static} Player getCurrentPlayer()
++ {static} int getCurrentPlayerIndex()
++ {static} Objective[] getObjectives()
++ {static} boolean isGameActive()
++ {static} void nextTurn()
++ {static} void drawCard(Player)
++ {static} void playCard(Player,int)
++ {static} void useHeroAbility(Player,int)
++ {static} void tryObjective(Player,int)
+- {static} void safeRefresh()
+}
+
+
+class NonGui.GameUtils.ChallengeUtils {
++ {static} boolean resolveChallenge(int,Player,BaseCard)
+- {static} boolean hasChallengeCard(Player)
+- {static} boolean askChallengeCard(Player,Player,BaseCard)
+}
+
+class NonGui.GameUtils.GenerationsUtils {
++ {static} Objective drawObjective()
++ {static} BaseCard generateRandomCard()
++ {static} LeaderCard generateRandomLeader()
+}
+
+class NonGui.GameUtils.ModifierUtils {
+- {static} boolean[] confirmPass
++ {static} int TriggerModifier(int,Player)
+- {static} void resetConfirmPass()
+- {static} boolean allConfirmPass()
+- {static} int playModifierCard(int,Player)
+- {static} boolean hasModifierCard(Player)
+}
+
+
+class NonGui.GameUtils.DiceUtils {
+- {static} Random rand
++ {static} int getRoll(Player)
++ {static} int rollForChallenge(Player)
++ {static} boolean rollForAbility(HeroCard,int)
+- {static} String buildBreakdown(int,int,List<String>,int)
+- {static} String signed(int)
+- {static} void handleCursedDiscard(Player)
++ {static} int getRoll()
+}
+
+
+class NonGui.GameUtils.GameplayUtils {
++ {static} void SacrificeHero(Player,int)
++ {static} void rotateObjective(int)
++ {static} boolean beginChallenge()
+}
+
+@enduml

@@ -86,7 +86,8 @@ public class FullCardView {
         abilityBox.setAlignment(Pos.TOP_LEFT);
         bottomInfo.getChildren().add(abilityBox);
 
-        if (card instanceof HeroCard hero) {
+        if (card instanceof HeroCard) {
+            HeroCard hero = (HeroCard) card;
             Label classLabel = new Label("Class: " + hero.getUnitClass());
             classLabel.setStyle(
                     "-fx-font-family: 'Georgia'; -fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #FFD700;");

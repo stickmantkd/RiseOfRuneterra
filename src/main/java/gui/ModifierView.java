@@ -5,6 +5,8 @@ import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Player;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,19 +76,22 @@ public class ModifierView {
 
         // Style header label text
         javafx.scene.Node headerLabel = dp.lookup(".header-panel .label");
-        if (headerLabel instanceof javafx.scene.control.Label l) {
+        if (headerLabel instanceof javafx.scene.control.Label) {
+            Label l = (Label) headerLabel;
             l.setStyle("-fx-text-fill: #FFD700; -fx-font-family: 'Georgia'; -fx-font-size: 13;");
         }
 
         // Style content text (the "Select a modifier card:" label)
         javafx.scene.Node contentLabel = dp.lookup(".content .label");
-        if (contentLabel instanceof javafx.scene.control.Label l) {
+        if (contentLabel instanceof javafx.scene.control.Label) {
+            Label l = (Label) contentLabel;
             l.setStyle("-fx-text-fill: white; -fx-font-family: 'Georgia'; -fx-font-size: 12;");
         }
 
         // Style choice list items
         javafx.scene.Node listView = dp.lookup(".list-view");
-        if (listView instanceof javafx.scene.control.ListView<?> lv) {
+        if (listView instanceof javafx.scene.control.ListView<?>) {
+            ListView<?> lv = (ListView<?>) listView;
             lv.setStyle("-fx-control-inner-background: #1c0d00; -fx-text-fill: white; "
                     + "-fx-font-family: 'Georgia'; -fx-selection-bar: #FFD700; "
                     + "-fx-selection-bar-text: black;");
