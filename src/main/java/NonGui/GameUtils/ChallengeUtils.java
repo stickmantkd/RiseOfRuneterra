@@ -36,6 +36,11 @@ public class ChallengeUtils {
             boolean wantsToPlay = askChallengeCard(challenger, challengedPlayer, card);
             if (!wantsToPlay) continue;
 
+            for(BaseCard challengersCard : challenger.getCardsInHand()){
+                if(challengersCard instanceof ChallengeCard){
+                    challenger.removeCardFromHand(challengersCard);
+                }
+            }
             ChallengeView view = new ChallengeView(challenger, challengedPlayer, card);
             view.show();
 

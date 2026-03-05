@@ -53,8 +53,8 @@ public class DiceUtils {
     }
 
     public static int rollForChallenge(Player player) {
-        int dice1 = 6;
-        int dice2 = 6;
+        int dice1 = rand.nextInt(6) + 1;
+        int dice2 = rand.nextInt(6) + 1;
         int base  = dice1 + dice2;
 
         List<String> bonusTerms = new ArrayList<>();
