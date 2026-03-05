@@ -6,8 +6,20 @@ import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameChoice;
 import NonGui.GameLogic.GameEngine;
 
+/**
+ * Represents the "Fiora" Hero Card.
+ * <p>
+ * <b>Ability: Riposte</b><br>
+ * Requirement: Roll 8+<br>
+ * Effect: Target any player and select one Hero card from their board to be DESTROYED.
+ * <p>
+ * <i>Fiora excels at removing key threats directly from the battlefield.</i>
+ */
 public class Fiora extends HeroCard {
 
+    /**
+     * Constructs Fiora with her base stats and duelist flavor text.
+     */
     public Fiora() {
         super(
                 "Fiora",
@@ -18,16 +30,31 @@ public class Fiora extends HeroCard {
         );
     }
 
-
+    /**
+     * Executes Fiora's Riposte ability.
+     * <p>
+     * Logic Flow:
+     * 1. Player selects a target opponent.
+     * 2. System validates if the target has heroes on the board.
+     * 3. Player selects a specific hero to destroy.
+     * 4. The hero is removed from the board and sent to the discard pile.
+     * * @param player The player who activated Fiora's ability.
+     */
     @Override
     public void useAbility(Player player) {
-        //Roll 8+. DESTROY a Hero card.
-        // According to the requirement: Roll 8+. DESTROY a Hero card.
-        System.out.println(getName() + " uses Riposte!");
+        System.out.println(this.getName() + " uses Riposte!");
 
-        // 1. Select a target player (Enemies or yourself, but usually an enemy)
+        // 1. Select a target player
+        // Note: Using selectPlayer from GameChoice usually brings up a UI selection.
         int selectedPlayerIndex = GameChoice.selectPlayer(GameEngine.players);
-        Player targetPlayer = GameEngine.players[selectedPlayerIndex]; // Adjustment if index starts at 1
+
+        // Safety check for UI cancellation
+        if (selectedPlayerIndex == -1) {
+            System.out.println("Riposte canceled.");
+            return;
+        }
+
+        Player targetPlayer = GameEngine.players[selectedPlayerIndex];
 
         // 2. Check if the target player even has any heroes to destroy
         if (targetPlayer.boardIsEmpty()) {
@@ -38,13 +65,27 @@ public class Fiora extends HeroCard {
         // 3. Select which Hero card to destroy from that player's board
         int selectedHeroIndex = GameChoice.selectHeroCard(targetPlayer);
 
-        // 4. DESTROY! (Removing from their ownedHero array)
+        // Safety check for hero selection cancellation
+        if (selectedHeroIndex == -1) {
+            System.out.println("No hero selected. Riposte fails.");
+            return;
+        }
+
+        // 4. Capture reference for logging and discarding before removal
+        HeroCard heroToDestroy = targetPlayer.getHeroCard(selectedHeroIndex);
+
+        // 5. DESTROY! (Removing from their board)
         boolean success = targetPlayer.removeHeroCard(selectedHeroIndex);
 
-        if (success) {
-            System.out.println("En Garde! A Hero card from " + targetPlayer.getName() + " was destroyed.");
+        if (success && heroToDestroy != null) {
+            // ✅ Polish: Ensure the destroyed card goes to the discard pile
+            GameEngine.deck.discardCard(heroToDestroy);
+            System.out.println("⚔️ En Garde! " + heroToDestroy.getName() + " from " + targetPlayer.getName() + " was destroyed.");
         } else {
             System.out.println("Failed to destroy the Hero card.");
         }
+
+        // Refresh board UI to reflect the destruction
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 }

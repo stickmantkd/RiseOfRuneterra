@@ -2,7 +2,7 @@ package NonGui.ListOfCards.herocard.Mage;
 
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.MagicCard.MagicCard; // ⚠️ ตรวจสอบชื่อคลาส Magic ในโปรเจกต์คุณด้วยนะครับ
+import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
@@ -12,8 +12,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Zilean" Hero Card.
+ * <p>
+ * <b>Ability: Rewind</b><br>
+ * Requirement: Roll 5+<br>
+ * Effect: Search the discard pile for a Magic card and add it back to your hand.
+ * <p>
+ * <i>Zilean allows players to recycle powerful spells, making him a cornerstone for Mage-heavy decks.</i>
+ */
 public class Zilean extends HeroCard {
 
+    /**
+     * Constructs Zilean with his base stats and time-bending flavor text.
+     */
     public Zilean() {
         super(
                 "Zilean",
@@ -24,22 +36,32 @@ public class Zilean extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Rewind ability.
+     * <p>
+     * Logic Flow:
+     * 1. Access the global discard pile from GameEngine.
+     * 2. Filter the pile to identify only MagicCard instances.
+     * 3. Prompt the player with a ChoiceDialog to select a card from the past.
+     * 4. Remove the selected card from the discard pile and add it to the player's hand.
+     * * @param player The player who activated Zilean's ability.
+     */
     @Override
     public void useAbility(Player player) {
         System.out.println("⏳ Zilean uses Rewind! Turning back time...");
 
-        // 1. ดึงกองทิ้งมาหาเฉพาะ Magic Card
+        // 1. Filter the discard pile for Magic cards specifically
         List<BaseCard> magicInDiscard = GameEngine.deck.getDiscardPile().stream()
                 .filter(card -> card instanceof MagicCard)
                 .collect(Collectors.toList());
 
-        // 2. ถ้าไม่มี Magic Card เลย
+        // 2. Fail-safe: Check if any magic exists in the past
         if (magicInDiscard.isEmpty()) {
             System.out.println("⏳ Time is empty... No Magic cards in discard pile.");
             return;
         }
 
-        // 3. แสดงรายชื่อให้เลือกผ่าน ChoiceDialog
+        // 3. Prepare the UI Selection
         List<String> options = magicInDiscard.stream()
                 .map(BaseCard::getName)
                 .collect(Collectors.toList());
@@ -51,7 +73,7 @@ public class Zilean extends HeroCard {
 
         Optional<String> result = dialog.showAndWait();
 
-        // 4. ดำเนินการย้ายการ์ดกลับเข้ามือ
+        // 4. Time Paradox Resolution: Move the card back to hand
         result.ifPresent(selectedName -> {
             BaseCard pickedCard = magicInDiscard.stream()
                     .filter(c -> c.getName().equals(selectedName))
@@ -59,13 +81,13 @@ public class Zilean extends HeroCard {
                     .orElse(null);
 
             if (pickedCard != null) {
-                // ลบจากกองทิ้ง แล้วเข้ามือกดเล่นใหม่!
+                // Remove from discard and add to hand
                 GameEngine.deck.getDiscardPile().remove(pickedCard);
                 player.addCardToHand(pickedCard);
 
                 System.out.println("⏳ " + player.getName() + " retrieved " + pickedCard.getName() + " from the past!");
 
-                // Refresh GUI
+                // Synchronize board UI
                 try {
                     gui.BoardView.refresh();
                 } catch (Exception e) {}

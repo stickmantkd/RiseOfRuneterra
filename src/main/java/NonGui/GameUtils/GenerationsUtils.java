@@ -14,8 +14,20 @@ import java.util.Random;
 
 import static NonGui.GameLogic.GameEngine.objectiveDeck;
 
-
+/**
+ * Utility class responsible for generating or drawing specific entities.
+ * Acts as a factory for objectives, random cards (for testing), and leaders.
+ */
 public class GenerationsUtils {
+
+    // ==========================================
+    // Objective Generation
+    // ==========================================
+
+    /**
+     * Draws the top objective from the global Objective Deck.
+     * @return The first Objective in the deck, or null if the deck is empty.
+     */
     public static Objective drawObjective() {
         if (objectiveDeck.isDeckEmpty()) {
             System.out.println("No objectives left in the deck!");
@@ -25,10 +37,16 @@ public class GenerationsUtils {
         return objectiveDeck.getObjectiveDeck().removeFirst();
     }
 
+    // ==========================================
+    // Random Generation (Testing/Prototyping)
+    // ==========================================
 
-
+    /**
+     * Generates a random card from a predefined subset for testing purposes.
+     * @return A new instance of a BaseCard (Item, Magic, or Hero).
+     */
     public static BaseCard generateRandomCard(){
-        //currently just draw a minion
+        // currently just draw a minion/item for prototyping
         int rand = new Random().nextInt(5);
         return switch (rand) {
             case 0 -> new BlueBuff();
@@ -39,8 +57,13 @@ public class GenerationsUtils {
         };
     }
 
+    /**
+     * Generates a placeholder Leader card.
+     * Used typically when a valid leader is not yet assigned.
+     * @return A LeaderCard instance with placeholder "dumbo" data.
+     */
     public static LeaderCard generateRandomLeader(){
-        //currently just generate a dumbo
-        return new LeaderCard("dumbo","Dumbass", UnitClass.Fighter);
+        // currently just generate a placeholder for testing
+        return new LeaderCard("dumbo", "Dumbass", UnitClass.Fighter);
     }
 }

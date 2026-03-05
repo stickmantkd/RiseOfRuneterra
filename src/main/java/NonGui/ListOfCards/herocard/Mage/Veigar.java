@@ -3,11 +3,28 @@ package NonGui.ListOfCards.herocard.Mage;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
+import NonGui.GameLogic.GameChoice;
+import NonGui.GameUtils.GameplayUtils;
+
+import java.util.ArrayList;
 
 import static NonGui.GameLogic.GameEngine.players;
 
+/**
+ * Represents the "Veigar" Hero Card.
+ * <p>
+ * <b>Ability: Primordial Burst</b><br>
+ * Requirement: Roll 7+<br>
+ * Effect: Choose an opponent. That player must SACRIFICE one of their own Hero cards.
+ * <p>
+ * <i>Veigar's power forces others to make impossible choices,
+ * destroying their own allies to appease his dark sorcery.</i>
+ */
 public class Veigar extends HeroCard {
 
+    /**
+     * Constructs Veigar with his base stats and ominous flavor text.
+     */
     public Veigar(){
         super(
                 "Veigar",
@@ -18,17 +35,24 @@ public class Veigar extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Primordial Burst ability.
+     * <p>
+     * Logic Flow:
+     * 1. Target identification: Opponents with at least one hero.
+     * 2. Source selection: The owner chooses which opponent to target.
+     * 3. Target's Choice: The selected opponent must perform the sacrifice through GameplayUtils.
+     * * @param player The player who activated Veigar's ability.
+     */
     @Override
     public void useAbility(Player player) {
-        // 🛠️ บังคับอัปเดตหน้าจอให้ Veigar โผล่มาบนบอร์ดก่อนเด้งป๊อปอัป
-        try {
-            gui.BoardView.refresh();
-        } catch (Exception e) {}
+        // Ensure UI is updated so players see Veigar on the board before the choice pops up
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
 
-        System.out.println(this.getName() + " uses their ability! (Force a player to SACRIFICE a Hero)");
+        System.out.println("✨ " + this.getName() + " uses Primordial Burst!");
 
-        // 1. คัดกรองผู้เล่นเป้าหมาย (ต้องไม่ใช่ตัวเอง และต้องมีฮีโร่บนบอร์ดให้สังเวย)
-        java.util.ArrayList<Player> validTargetsList = new java.util.ArrayList<>();
+        // 1. Identify valid targets (Opponents with non-empty boards)
+        ArrayList<Player> validTargetsList = new ArrayList<>();
         for (Player p : players) {
             if (p != player && !p.boardIsEmpty()) {
                 validTargetsList.add(p);
@@ -42,11 +66,11 @@ public class Veigar extends HeroCard {
 
         Player[] validTargetsArray = validTargetsList.toArray(new Player[0]);
 
-        // 2. คนร่ายสกิลเลือกผู้เล่นเป้าหมาย
-        System.out.println(player.getName() + ", choose a player who must SACRIFICE a Hero:");
-        int targetIndex = NonGui.GameLogic.GameChoice.selectPlayer(validTargetsArray);
+        // 2. Select the victim player
+        System.out.println(player.getName() + ", choose a victim who must SACRIFICE a Hero:");
+        int targetIndex = GameChoice.selectPlayer(validTargetsArray);
 
-        // ดักกรณีคนร่ายเปลี่ยนใจกดยกเลิก
+        // Handle UI cancellation by the owner
         if (targetIndex == -1) {
             System.out.println("Action canceled.");
             return;
@@ -54,8 +78,14 @@ public class Veigar extends HeroCard {
 
         Player targetPlayer = validTargetsArray[targetIndex];
 
-        // 3. บังคับให้เป้าหมายสังเวยฮีโร่ 1 ตัว
-        System.out.println(targetPlayer.getName() + " is targeted and must SACRIFICE a hero!");
-        NonGui.GameUtils.GameplayUtils.SacrificeHero(targetPlayer, 1);
+        // 3. Force the sacrifice
+        System.out.println("🔥 " + targetPlayer.getName() + " is ensnared by dark magic and must sacrifice a hero!");
+
+        /* * Calling the robust SacrificeHero logic which handles both
+         * player choice and the fail-safe "forced discard" if the dialog is closed.
+         */
+        GameplayUtils.SacrificeHero(targetPlayer, 1);
+
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 }

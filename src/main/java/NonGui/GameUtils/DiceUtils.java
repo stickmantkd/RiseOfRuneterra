@@ -12,18 +12,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Utility class for all dice-rolling mechanics in the game.
+ * It calculates rolls for general actions, challenges, and hero abilities,
+ * including class-based bonuses, item effects, and UI breakdowns.
+ */
 public class DiceUtils {
 
     private static final Random rand = new Random();
 
-    // ── Public rolls ─────────────────────────────────────────────────────────
+    // ==========================================
+    // Public API: Rolls
+    // ==========================================
 
+    /**
+     * Executes a standard 2d6 roll for a player.
+     * Includes Roll Bonuses and Maskman class bonuses.
+     * * @param player The player rolling the dice.
+     * @return The final total after all bonuses and modifiers.
+     */
     public static int getRoll(Player player) {
         int dice1 = rand.nextInt(6) + 1;
         int dice2 = rand.nextInt(6) + 1;
         int base  = dice1 + dice2;
 
-        // Collect bonus terms for display
         List<String> bonusTerms = new ArrayList<>();
         int bonusTotal = 0;
 
@@ -52,6 +64,10 @@ public class DiceUtils {
         return total;
     }
 
+    /**
+     * Executes a 2d6 roll specifically for a Challenge attempt.
+     * Applies double Roll Bonuses, Permanent Challenge Bonuses, and Fighter class bonuses.
+     */
     public static int rollForChallenge(Player player) {
         int dice1 = rand.nextInt(6) + 1;
         int dice2 = rand.nextInt(6) + 1;
@@ -90,6 +106,13 @@ public class DiceUtils {
         return total;
     }
 
+    /**
+     * Executes a 2d6 roll for activating a Hero's ability.
+     * Handles specific item effects like Blue Buff, Frozen Heart, Tear, and Dark Seal.
+     * * @param card        The Hero Card attempting the ability.
+     * @param targetScore The required total to succeed.
+     * @return true if the final total meets or exceeds the targetScore.
+     */
     public static boolean rollForAbility(HeroCard card, int targetScore) {
         int dice1 = rand.nextInt(6) + 1;
         int dice2 = rand.nextInt(6) + 1;
@@ -118,6 +141,7 @@ public class DiceUtils {
             }
         }
 
+        // Item Specific Logic
         if (card.getItem() instanceof BlueBuff) {
             bonusTerms.add("+2 (Blue Buff)");
             bonusTotal += 2;
@@ -139,6 +163,7 @@ public class DiceUtils {
 
         boolean success = total >= targetScore;
 
+        // On-Roll Item Effects (Tear / Dark Seal)
         if (owner != null) {
             if (!success && card.getItem() instanceof TearOfTheGoddess) {
                 System.out.println("💧 Tear of the Goddess: Drawing a card...");
@@ -153,14 +178,15 @@ public class DiceUtils {
         return success;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // ==========================================
+    // Internal Helpers
+    // ==========================================
 
     /**
-     * Builds a human-readable breakdown string shown in the DiceView overlay.
+     * Builds a human-readable breakdown string for the UI.
      * Example: "4 + 3  +1 (Maskman)  = 8"
      */
-    private static String buildBreakdown(int d1, int d2,
-                                         List<String> bonusTerms, int total) {
+    private static String buildBreakdown(int d1, int d2, List<String> bonusTerms, int total) {
         StringBuilder sb = new StringBuilder();
         sb.append(d1).append(" + ").append(d2);
         for (String term : bonusTerms) {
@@ -174,6 +200,9 @@ public class DiceUtils {
         return value >= 0 ? "+" + value : String.valueOf(value);
     }
 
+    /**
+     * Specialized UI logic for forcing a discard when a Cursed Item effect triggers.
+     */
     private static void handleCursedDiscard(Player player) {
         if (player.getCardsInHand().isEmpty()) return;
 

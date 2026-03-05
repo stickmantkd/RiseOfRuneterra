@@ -18,9 +18,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static NonGui.GameLogic.GameEngine.*;
 
+/**
+ * A utility class responsible for displaying beautiful, styled JavaFX dialogs
+ * that allow players to make in-game choices (e.g., selecting cards, players, or objectives).
+ */
 public class GameChoice {
 
-    // ── Shared style constants ────────────────────────────────────────────────
+    // ==========================================
+    // Shared Style Constants (CSS)
+    // ==========================================
 
     private static final String ROOT_STYLE =
             "-fx-background-color: linear-gradient(to bottom, #1c0d00, #2e1800);" +
@@ -83,11 +89,16 @@ public class GameChoice {
                     "-fx-border-radius: 4; -fx-background-radius: 4;" +
                     "-fx-padding: 6 20 6 20; -fx-cursor: hand;";
 
-    // ── Core dialog builder ───────────────────────────────────────────────────
+    // ==========================================
+    // Core Dialog Builder
+    // ==========================================
 
     /**
-     * Shows a styled selection dialog. Returns the selected index into {@code items},
-     * or -1 if cancelled.
+     * Shows a styled, custom JavaFX selection dialog.
+     * * @param title   The main title of the dialog.
+     * @param subtitle The descriptive subtitle.
+     * @param items   The list of string options to display as buttons.
+     * @return The selected index of the {@code items} list, or -1 if the dialog was cancelled.
      */
     private static int showPickerDialog(String title, String subtitle, List<String> items) {
         // Result holder
@@ -214,8 +225,15 @@ public class GameChoice {
         return result.get();
     }
 
-    // ── Public API ────────────────────────────────────────────────────────────
+    // ==========================================
+    // Public API Methods
+    // ==========================================
 
+    /**
+     * Prompts the player to select a card from their hand.
+     * @param player The player making the choice.
+     * @return The index of the selected card in the player's hand, or -1 if cancelled.
+     */
     public static int selectCardsInHand(Player player) {
         List<String> options = new ArrayList<>();
         for (int i = 0; i < player.getCardsInHand().size(); i++) {
@@ -230,6 +248,10 @@ public class GameChoice {
         );
     }
 
+    /**
+     * Prompts the player to select an available objective from the board.
+     * @return The index of the selected objective, or -1 if cancelled.
+     */
     public static int selectObjective() {
         List<String> options = new ArrayList<>();
         for (int i = 0; i < objectives.length; i++) {
@@ -244,6 +266,11 @@ public class GameChoice {
         );
     }
 
+    /**
+     * Prompts the user to select a target player from the game.
+     * @param players The array of available players.
+     * @return The index of the selected player, or -1 if cancelled.
+     */
     public static int selectPlayer(Player[] players) {
         List<String> options = new ArrayList<>();
         for (Player p : players) {
@@ -258,6 +285,11 @@ public class GameChoice {
         );
     }
 
+    /**
+     * Prompts the player to select one of their currently owned Hero Cards on the board.
+     * @param player The player selecting the hero.
+     * @return The exact array index of the selected hero on the player's board, or -1 if cancelled.
+     */
     public static int selectHeroCard(Player player) {
         HeroCard[] heroCards = player.getOwnedHero();
         List<String> options  = new ArrayList<>();

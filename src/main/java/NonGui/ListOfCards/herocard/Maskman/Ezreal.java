@@ -10,8 +10,21 @@ import javafx.scene.control.ChoiceDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the "Ezreal" Hero Card.
+ * <p>
+ * <b>Ability: Prodigal Explorer</b><br>
+ * Requirement: Roll 8+<br>
+ * Effect: DRAW 2 cards. If at least one of the drawn cards is an Item card,
+ * you may choose to play one of those Item cards immediately for free.
+ * <p>
+ * <i>Ezreal excels at rapid equipment scaling, allowing players to gear up heroes mid-turn.</i>
+ */
 public class Ezreal extends HeroCard {
 
+    /**
+     * Constructs Ezreal with his base stats and explorer's spirit flavor text.
+     */
     public Ezreal() {
         super(
                 "Ezreal",
@@ -22,45 +35,53 @@ public class Ezreal extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Prodigal Explorer ability.
+     * <p>
+     * Logic Flow:
+     * 1. Records initial hand size to track newly drawn cards.
+     * 2. Draws 2 random cards from the deck.
+     * 3. Scans newly drawn cards for ItemCard instances.
+     * 4. Interaction: If an Item is found, prompts the player via ChoiceDialog to play it immediately.
+     * 5. Resolution: If played, triggers the Item's playCard() logic; otherwise, keeps cards in hand.
+     * * @param player The player who activated Ezreal's ability.
+     */
     @Override
     public void useAbility(Player player) {
-        // 🛠️ อัปเดตหน้าจอก่อนเริ่มสกิล
-        try {
-            gui.BoardView.refresh();
-        } catch (Exception e) {}
+        // Refresh UI to show Ezreal's presence before action starts
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
 
-        System.out.println(this.getName() + " uses their ability! (DRAW 2 cards & maybe play an Item)");
+        System.out.println("✨ " + this.getName() + " uses Prodigal Explorer!");
 
         int initialHandSize = player.getCardsInHand().size();
 
-        // 1. จั่วการ์ด 2 ใบ
+        // 1. Draw 2 cards phase
         player.drawRandomCard();
         player.drawRandomCard();
 
         int newHandSize = player.getCardsInHand().size();
         ArrayList<BaseCard> drawnCards = new ArrayList<>();
 
-        // เก็บการ์ดที่เพิ่งจั่วเข้ามาไว้ใน List
+        // Capture newly drawn cards into a sub-list
         for (int i = initialHandSize; i < newHandSize; i++) {
             drawnCards.add(player.getCardsInHand().get(i));
         }
 
-        System.out.println(player.getName() + " drew the following cards:");
+        System.out.println(player.getName() + " discovered:");
         ArrayList<ItemCard> drawnItems = new ArrayList<>();
 
-        // 2. แสดงการ์ดที่จั่วได้ และเช็คว่าเป็น ItemCard หรือไม่
+        // 2. Identify Item cards in the discovery
         for (BaseCard card : drawnCards) {
             System.out.println("- " + card.getName());
-
             if (card instanceof ItemCard) {
                 drawnItems.add((ItemCard) card);
             }
         }
 
-        // 3. ถ้ามี Item อย่างน้อย 1 ใบ ให้ถามว่าอยากร่ายเลยไหม (เปลี่ยนจาก Scanner เป็น GUI)
+        // 3. Instant Play Phase
         if (!drawnItems.isEmpty()) {
             List<String> options = new ArrayList<>();
-            options.add("0 : Keep in hand"); // ตัวเลือกแรกคือเก็บเข้ามือ
+            options.add("0 : Keep in hand");
 
             for (int i = 0; i < drawnItems.size(); i++) {
                 options.add((i + 1) + " : Play " + drawnItems.get(i).getName());
@@ -68,39 +89,37 @@ public class Ezreal extends HeroCard {
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Ezreal Ability: Prodigal Explorer");
-            dialog.setHeaderText("✨ You drew at least one Item card!");
-            dialog.setContentText("Would you like to play one immediately?");
+            dialog.setHeaderText("✨ Treasure Found! You drew " + drawnItems.size() + " Item(s).");
+            dialog.setContentText("Play one immediately for a display of skill?");
 
             String result = dialog.showAndWait().orElse("0 : Keep in hand");
 
-            // ถ้าไม่ได้เลือก "0 : Keep in hand" แสดงว่าจะร่าย
+            // Execute selection
             if (!result.startsWith("0")) {
                 int choiceIndex = Integer.parseInt(result.split(" ")[0]) - 1;
                 ItemCard itemToPlay = drawnItems.get(choiceIndex);
 
-                System.out.println("⚡ Playing " + itemToPlay.getName() + " immediately!");
+                System.out.println("⚡ Ezreal utilizes " + itemToPlay.getName() + "!");
 
-                // 4. เอาการ์ดออกจากมือก่อนทำการร่าย
+                // Temporarily remove to trigger play logic
                 player.getCardsInHand().remove(itemToPlay);
 
-                // 5. เรียกใช้ playCard() ของไอเทมใบนั้น
+                // 4. Trigger item application
                 boolean isSuccessfullyPlayed = itemToPlay.playCard(player);
 
                 if (isSuccessfullyPlayed) {
-                    System.out.println(">>> [SYSTEM] " + itemToPlay.getName() + " has been played! <<<");
+                    System.out.println(">>> [SYSTEM] " + itemToPlay.getName() + " applied! <<<");
                 } else {
-                    System.out.println(">>> [SYSTEM] Playing " + itemToPlay.getName() + " was canceled or failed. Returned to hand. <<<");
-                    // 🛠️ คืนการ์ดเข้ามือถ้าเล่นไม่สำเร็จ หรือกดยกเลิกระหว่างเล่น
+                    // Fail-safe: Return to hand if play is aborted or failed
                     player.addCardToHand(itemToPlay);
+                    System.out.println(">>> [SYSTEM] " + itemToPlay.getName() + " returned to hand. <<<");
                 }
             } else {
-                System.out.println("You chose to keep the Item cards in your hand.");
+                System.out.println("Items kept in hand for future turns.");
             }
         }
 
-        // 🛠️ อัปเดตหน้าจอหลังจั่วและจัดเตรียมของเสร็จ
-        try {
-            gui.BoardView.refresh();
-        } catch (Exception e) {}
+        // Final UI Sync
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 }

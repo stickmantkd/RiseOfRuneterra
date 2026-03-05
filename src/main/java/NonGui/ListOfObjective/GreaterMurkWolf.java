@@ -11,10 +11,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Greater Murk Wolf" Objective Card.
+ * <p>
+ * A vicious, two-headed apex predator stalking the jungle.
+ * Requirement: Requires at least 1 Hero and 1 Mage.
+ * Prize: Each time you DRAW a Magic card, you may play it immediately.
+ * Punishment: DISCARD 2 cards.
+ */
 public class GreaterMurkWolf extends Objective {
+
+    /**
+     * Constructs a new Greater Murk Wolf objective with its requirements and penalties.
+     */
     public GreaterMurkWolf() {
-        super("Greater Murk Wolf",
-                "A vicious, two-headed apex predator stalking the jungle.", 8, 12);
+        super(
+                "Greater Murk Wolf",
+                "A vicious, two-headed apex predator stalking the jungle.",
+                8,
+                12
+        );
         setRequirementDescription("Requires at least 1 Hero and 1 Mage.");
         setPrizeDescription("Each time you DRAW a Magic card, you may play it immediately.");
         setPunishmentDescription("DISCARD 2 cards.");
@@ -46,12 +62,12 @@ public class GreaterMurkWolf extends Objective {
     public void grantPunishment(Player player) {
         StatusBar.showMessage("The Wolf bites hard! Punishment: " + getPunishmentDescription());
 
-        // Logic การทิ้งการ์ด 2 ใบ (ใช้มาตรฐานเดียวกับบอสตัวก่อนๆ)
         for (int i = 0; i < 2; i++) {
             if (player.getCardsInHand().isEmpty()) break;
 
             List<String> options = player.getCardsInHand().stream()
-                    .map(c -> c.getName()).collect(Collectors.toList());
+                    .map(c -> c.getName())
+                    .collect(Collectors.toList());
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Murk Wolf's Punishment");
@@ -62,7 +78,8 @@ public class GreaterMurkWolf extends Objective {
 
             NonGui.BaseEntity.BaseCard toDiscard = player.getCardsInHand().stream()
                     .filter(c -> c.getName().equals(selected))
-                    .findFirst().orElse(player.getCardsInHand().get(0));
+                    .findFirst()
+                    .orElse(player.getCardsInHand().get(0));
 
             player.getCardsInHand().remove(toDiscard);
             GameEngine.deck.discardCard(toDiscard);

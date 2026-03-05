@@ -1,16 +1,30 @@
 package NonGui.ListOfCards.herocard.Fighter;
 
+import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameChoice;
+import NonGui.GameLogic.GameEngine;
 
 import java.util.ArrayList;
 
 import static NonGui.GameLogic.GameEngine.players;
 
+/**
+ * Represents the "Volibear" Hero Card.
+ * <p>
+ * <b>Ability: Thundering Smash</b><br>
+ * Requirement: Roll 5+<br>
+ * Effect: Target another player. That player must choose and DISCARD 2 cards from their hand.
+ * <p>
+ * <i>Volibear brings the storm to suppress his enemies' options early on.</i>
+ */
 public class Volibear extends HeroCard {
 
+    /**
+     * Constructs Volibear with his base stats and thunderous flavor text.
+     */
     public Volibear(){
         super(
                 "Volibear",
@@ -21,36 +35,49 @@ public class Volibear extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Thundering Smash ability.
+     * <p>
+     * Logic Flow:
+     * 1. Filter out the current player to identify valid opponents.
+     * 2. Prompt the current player to select a target opponent.
+     * 3. Force the target opponent to select and discard up to 2 cards via GameChoice.
+     * * @param player The player who activated Volibear's ability.
+     */
     @Override
     public void useAbility(Player player) {
         System.out.println(this.getName() + " uses Thundering Smash!");
 
-        // 1. กรองผู้เล่นที่ใช้สกิลออกไปจากตัวเลือก
+        // 1. Identify valid targets (Excluding the owner)
         ArrayList<Player> validTargetsList = new ArrayList<>();
         for (Player p : players) {
-            if (p != player) { // ถ้าไม่ใช่คนที่ร่ายสกิล ให้เพิ่มเข้า List
+            if (p != player) {
                 validTargetsList.add(p);
             }
         }
 
-        // เช็คเผื่อกรณีเล่นคนเดียว หรือไม่มีเป้าหมายเหลือแล้ว
         if (validTargetsList.isEmpty()) {
             System.out.println("No other players available to target!");
             return;
         }
 
-        // แปลง List กลับเป็น Array เพื่อส่งให้ GameChoice.selectPlayer
         Player[] validTargetsArray = validTargetsList.toArray(new Player[0]);
 
-        // 2. เลือกผู้เล่นเป้าหมาย (จากรายชื่อที่กรองแล้ว)
+        // 2. Select Target Player
         System.out.println(player.getName() + ", choose a player to discard 2 cards:");
         int targetIndex = GameChoice.selectPlayer(validTargetsArray);
 
+        // Handle potential UI cancellation
+        if (targetIndex == -1) {
+            System.out.println("Thundering Smash canceled.");
+            return;
+        }
+
         Player targetPlayer = validTargetsArray[targetIndex];
+        System.out.println("⚡ " + targetPlayer.getName() + " is targeted by the storm!");
 
-        System.out.println(targetPlayer.getName() + " is targeted and must discard 2 cards!");
+        // 3. Forced Discard Phase (2 cards)
 
-        // 3. บังคับเป้าหมายทิ้งการ์ด 2 ใบ
         for (int i = 0; i < 2; i++) {
             if (targetPlayer.handIsEmpty()) {
                 System.out.println(targetPlayer.getName() + " has no more cards in hand!");
@@ -60,8 +87,19 @@ public class Volibear extends HeroCard {
             System.out.println(targetPlayer.getName() + ", please select a card to DISCARD (" + (i + 1) + "/2):");
             int cardIndex = GameChoice.selectCardsInHand(targetPlayer);
 
-            targetPlayer.getCardInHand(cardIndex);
-            System.out.println("Card discarded.");
+            if (cardIndex != -1) {
+                // Ensure the card is removed and sent to the discard pile
+                BaseCard discarded = targetPlayer.getCardsInHand().remove(cardIndex);
+                GameEngine.deck.discardCard(discarded);
+                System.out.println("🗑️ Card discarded: " + discarded.getName());
+            } else {
+                // If the player tries to skip a mandatory discard, force discard the first card
+                BaseCard forcedDiscard = targetPlayer.getCardsInHand().remove(0);
+                GameEngine.deck.discardCard(forcedDiscard);
+                System.out.println("⚠️ Selection skipped. Auto-discarded: " + forcedDiscard.getName());
+            }
         }
+
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 }

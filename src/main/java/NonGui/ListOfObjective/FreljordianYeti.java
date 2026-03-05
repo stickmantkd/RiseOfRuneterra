@@ -11,10 +11,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Freljordian Yeti" Objective Card.
+ * <p>
+ * A massive, relentless beast from the Howling Abyss.
+ * Requirement: Requires at least 1 Hero and 1 Marksman.
+ * Prize: Each time you DRAW an Item card, you may play it immediately.
+ * Punishment: DISCARD 2 cards.
+ */
 public class FreljordianYeti extends Objective {
+
+    /**
+     * Constructs a new Freljordian Yeti objective with its requirements and penalties.
+     */
     public FreljordianYeti() {
-        super("Freljordian Yeti",
-                "A massive, relentless beast from the Howling Abyss.", 8, 12);
+        super(
+                "Freljordian Yeti",
+                "A massive, relentless beast from the Howling Abyss.",
+                8,
+                12
+        );
         setRequirementDescription("Requires at least 1 Hero and 1 Marksman.");
         setPrizeDescription("Each time you DRAW an Item card, you may play it immediately.");
         setPunishmentDescription("DISCARD 2 cards.");
@@ -39,19 +55,19 @@ public class FreljordianYeti extends Objective {
     @Override
     public void grantPrize(Player player) {
         StatusBar.showMessage("Slayed Freljordian Yeti! Prize: " + getPrizeDescription());
-        player.setCanPlayItemInstantly(true); // ปลดล็อคความสามารถพิเศษ
+        player.setCanPlayItemInstantly(true);
     }
 
     @Override
     public void grantPunishment(Player player) {
         StatusBar.showMessage("The Yeti stomps! Punishment: " + getPunishmentDescription());
 
-        // ใช้ Logic การทิ้งการ์ดเหมือน Blue Sentinel (ควรแยกเป็น Utility Method ในภายหลัง)
         for (int i = 0; i < 2; i++) {
             if (player.getCardsInHand().isEmpty()) break;
 
             List<String> options = player.getCardsInHand().stream()
-                    .map(c -> c.getName()).collect(Collectors.toList());
+                    .map(c -> c.getName())
+                    .collect(Collectors.toList());
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Yeti's Punishment");
@@ -62,7 +78,8 @@ public class FreljordianYeti extends Objective {
 
             NonGui.BaseEntity.BaseCard toDiscard = player.getCardsInHand().stream()
                     .filter(c -> c.getName().equals(selected))
-                    .findFirst().orElse(player.getCardsInHand().get(0));
+                    .findFirst()
+                    .orElse(player.getCardsInHand().get(0));
 
             player.getCardsInHand().remove(toDiscard);
             GameEngine.deck.discardCard(toDiscard);

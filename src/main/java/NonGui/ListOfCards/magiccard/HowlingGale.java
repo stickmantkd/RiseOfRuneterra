@@ -15,8 +15,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Howling Gale" Magic Card.
+ * <p>
+ * And you thought it was just a breeze!
+ * Effect: Return an Item card equipped to any player's Hero card to that player's hand, then DRAW a card.
+ */
 public class HowlingGale extends MagicCard {
 
+    /**
+     * Constructs a new Howling Gale card with its identity and effect text.
+     */
     public HowlingGale() {
         super(
                 "Howling Gale",
@@ -29,7 +38,6 @@ public class HowlingGale extends MagicCard {
     public boolean playCard(Player player) {
         System.out.println("\n🌪️ " + player.getName() + " casts " + this.getName() + "!");
 
-        // 1. ค้นหาผู้เล่นที่มี Hero สวม Item อยู่
         List<Player> playersWithItems = new ArrayList<>();
         for (Player p : GameEngine.players) {
             if (p == null) continue;
@@ -42,13 +50,11 @@ public class HowlingGale extends MagicCard {
             }
         }
 
-        // ถ้าไม่มีใครใส่ไอเทมเลย ร่ายไม่ได้ (คืนการ์ด)
         if (playersWithItems.isEmpty()) {
             showSimpleAlert("Spell Failed", "There are no equipped items on the board to return!");
             return false;
         }
 
-        // 2. เลือกผู้เล่นเป้าหมาย (GUI)
         List<String> targetNames = playersWithItems.stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());
@@ -63,7 +69,6 @@ public class HowlingGale extends MagicCard {
                     .filter(p -> p.getName().equals(playerResult.get()))
                     .findFirst().orElse(null);
 
-            // 3. เลือก Hero ที่มีไอเทม (กรองเฉพาะตัวที่มีไอเทมเท่านั้นมาให้เลือก)
             List<String> heroOptions = new ArrayList<>();
             HeroCard[] targetHeroes = targetPlayer.getOwnedHero();
             for (int i = 0; i < targetHeroes.length; i++) {
@@ -81,24 +86,22 @@ public class HowlingGale extends MagicCard {
                 int heroIdx = Integer.parseInt(heroResult.get().split(":")[0]);
                 HeroCard targetHero = targetPlayer.getHeroCard(heroIdx);
 
-                // 4. ดำเนินการคืนไอเทม
                 ItemCard itemToReturn = targetHero.getItem();
 
-                // ถอดไอเทม (onUnEquip จะทำงานอัตโนมัติ)
                 targetHero.unEquipItem();
 
-                // คืนเข้ามือเจ้าของ
                 targetPlayer.addCardToHand(itemToReturn);
                 System.out.println("🌪️ SWOOSH! " + itemToReturn.getName() + " returned to " + targetPlayer.getName() + "'s hand.");
 
-                // 5. DRAW (ผู้ร่ายจั่วการ์ด 1 ใบ)
                 player.drawRandomCard();
                 System.out.println("✨ " + player.getName() + " drew a card from the wind.");
 
-                // Refresh GUI
-                try { gui.BoardView.refresh(); } catch (Exception e) {}
-                if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-                    player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+                try {
+                    gui.BoardView.refresh();
+                } catch (Exception e) {}
+
+                if (player.getOwnedLeader().getUnitClass() == UnitClass.Mage) {
+                    player.drawRandomCard();
                     StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
                 }
                 return true;

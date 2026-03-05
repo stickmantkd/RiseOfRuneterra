@@ -13,8 +13,22 @@ import static NonGui.GameLogic.GameEngine.objectives;
 import static NonGui.GameUtils.DiceUtils.getRoll;
 import static NonGui.GameUtils.GenerationsUtils.drawObjective;
 
+/**
+ * Utility class providing logic for specific gameplay actions
+ * such as sacrificing heroes, rotating board objectives, and basic dice challenges.
+ */
 public class GameplayUtils {
-    // Sacrifice n Destroy
+
+    // ==========================================
+    // Sacrifice & Destroy Logic
+    // ==========================================
+
+    /**
+     * Forces a player to choose and sacrifice (destroy) a specified number of heroes from their board.
+     * Includes a fail-safe that automatically sacrifices the first hero if the dialog is closed.
+     * * @param player The player who must sacrifice heroes.
+     * @param number The number of heroes to be destroyed.
+     */
     public static void SacrificeHero(Player player, int number) {
         for (int i = 0; i < number; ++i) {
             if (player.boardIsEmpty()) {
@@ -68,7 +82,14 @@ public class GameplayUtils {
         }
     }
 
-    // Rotate objective
+    // ==========================================
+    // Board Management Logic
+    // ==========================================
+
+    /**
+     * Replaces an objective card at a specific slot on the board with a new one from the deck.
+     * * @param objectiveIndex The index (0-2) of the objective to be rotated.
+     */
     public static void rotateObjective(int objectiveIndex) {
         if (objectiveDeck.isDeckEmpty()) {
             System.out.println("No objectives left to rotate!");
@@ -76,18 +97,24 @@ public class GameplayUtils {
         }
 
         Objective newObjective = drawObjective();
-
         objectives[objectiveIndex] = newObjective;
 
         System.out.println("Objective at slot " + objectiveIndex + " rotated to: " + newObjective.getName());
     }
 
+    // ==========================================
+    // Challenge Logic
+    // ==========================================
 
-    // Challenge (dice roll)
+    /**
+     * Executes a simple 2d6 dice duel between two parties until a winner is determined.
+     * Typically used for internal game mechanics that require a tie-breaker.
+     * * @return true if the "User" (first roller) wins, false if the opponent wins.
+     */
     public static boolean beginChallenge() {
         int userRoll = 0, oppRoll = 0;
 
-        // Keep rolling until different results
+        // Keep rolling until different results (Sudden Death)
         while (userRoll == oppRoll) {
             userRoll = getRoll();
             oppRoll = getRoll();

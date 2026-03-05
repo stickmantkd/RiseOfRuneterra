@@ -15,8 +15,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Final Spark" Magic Card.
+ * <p>
+ * DEMACIA!!!
+ * Effect: DISCARD a card, then DESTROY a Hero card.
+ */
 public class FinalSpark extends MagicCard {
 
+    /**
+     * Constructs a new Final Spark card with its identity and effect text.
+     */
     public FinalSpark() {
         super(
                 "Final Spark",
@@ -29,13 +38,11 @@ public class FinalSpark extends MagicCard {
     public boolean playCard(Player player) {
         System.out.println("\n✨ " + player.getName() + " casts " + this.getName() + "!");
 
-        // 1. Safety Check: ต้องมีการ์ดให้ทิ้ง (ไม่นับใบ Final Spark เองที่กำลังเล่นอยู่)
         if (player.getCardsInHand().isEmpty()) {
             showSimpleAlert("Spell Failed", "You have no other cards in hand to discard!");
             return false;
         }
 
-        // 2. DISCARD Step (GUI)
         List<String> handOptions = player.getCardsInHand().stream()
                 .map(BaseCard::getName)
                 .collect(Collectors.toList());
@@ -54,16 +61,13 @@ public class FinalSpark extends MagicCard {
 
             if (toDiscard != null) {
                 player.getCardsInHand().remove(toDiscard);
-                GameEngine.deck.discardCard(toDiscard); // ส่งลงกองทิ้ง
+                GameEngine.deck.discardCard(toDiscard);
                 System.out.println("🗑️ " + toDiscard.getName() + " discarded.");
             }
         } else {
-            // ถ้ากดยกเลิก ไม่ให้ร่ายเวท (หรือจะบังคับให้เลือกก็ได้)
             return false;
         }
 
-        // 3. DESTROY Step (GUI)
-        // ค้นหาผู้เล่นทุกคนที่มี Hero บนบอร์ด (รวมตัวเองด้วยก็ได้ตาม Text "DESTROY a Hero")
         List<Player> validTargets = new ArrayList<>();
         for (Player p : GameEngine.players) {
             if (p != null && !p.boardIsEmpty()) {
@@ -73,10 +77,9 @@ public class FinalSpark extends MagicCard {
 
         if (validTargets.isEmpty()) {
             showSimpleAlert("Final Spark", "The laser fires into the sky... (No heroes to destroy)");
-            return true; // ร่ายสำเร็จแต่ไม่มีเป้าหมาย
+            return true;
         }
 
-        // เลือกผู้เล่นเป้าหมาย
         List<String> targetNames = validTargets.stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());
@@ -91,7 +94,6 @@ public class FinalSpark extends MagicCard {
                     .filter(p -> p.getName().equals(targetPlayerName.get()))
                     .findFirst().orElse(null);
 
-            // เลือก Hero จากบอร์ดของผู้เล่นคนนั้น
             List<String> heroOptions = new ArrayList<>();
             HeroCard[] targetHeroes = targetPlayer.getOwnedHero();
             for (int i = 0; i < targetHeroes.length; i++) {
@@ -109,16 +111,17 @@ public class FinalSpark extends MagicCard {
                 int heroIdx = Integer.parseInt(heroResult.get().split(":")[0]);
                 HeroCard destroyedHero = targetPlayer.getHeroCard(heroIdx);
 
-                // ส่ง Hero ลงกองทิ้ง (ถ้ามีระบบทิ้ง Hero) หรือแค่ลบออก
                 targetPlayer.removeHeroCard(heroIdx);
                 GameEngine.deck.discardCard(destroyedHero);
 
                 System.out.println("💥 BZZZT! " + destroyedHero.getName() + " was vaporized!");
 
-                // Refresh หน้าจอ
-                try { gui.BoardView.refresh(); } catch (Exception e) {}
-                if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-                    player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+                try {
+                    gui.BoardView.refresh();
+                } catch (Exception e) {}
+
+                if (player.getOwnedLeader().getUnitClass() == UnitClass.Mage) {
+                    player.drawRandomCard();
                     StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
                 }
                 return true;

@@ -39,9 +39,21 @@ import java.util.List;
 import static NonGui.GameLogic.GameEngine.*;
 import static NonGui.GameUtils.GenerationsUtils.drawObjective;
 
+/**
+ * Utility class responsible for setting up the initial state of the game.
+ * Handles player creation, leader assignment, deck building, and objective initialization.
+ */
 public class GameSetup {
 
-    // Initialize 4 players with names, leaders, heroes, and hands
+    // ==========================================
+    // Player Initialization
+    // ==========================================
+
+    /**
+     * Initializes the 4 players for the game.
+     * Assigns them names, shuffles and assigns unique Leader cards,
+     * and sets up their initial state.
+     */
     public static void initializePlayer() {
         // Step 1: create a list of all leaders
         List<LeaderCard> leaders = new ArrayList<>();
@@ -92,7 +104,14 @@ public class GameSetup {
         }
     }
 
-    // Initialize objectives for the center of the board
+    // ==========================================
+    // Objective Initialization
+    // ==========================================
+
+    /**
+     * Initializes the central objectives on the board.
+     * Populates the ObjectiveDeck, shuffles it, and draws the first 3 visible objectives.
+     */
     public static void initializeObjective() {
 
         objectiveDeck.addToDeck(new BaronNashor());
@@ -112,9 +131,19 @@ public class GameSetup {
 
     }
 
+    // ==========================================
+    // Deck Initialization
+    // ==========================================
+
+    /**
+     * Builds the main game deck.
+     * Adds copies of Hero cards, Item cards, Magic cards, Modifier cards,
+     * and Challenge cards to the deck, then shuffles them.
+     */
     public static void initializeDeck() {
         // Fill the deck with starting cards
-        //hero
+
+        // --- Heroes ---
         //Assassin
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Akali());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Shaco());}
@@ -139,7 +168,8 @@ public class GameSetup {
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Braum());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Nautilus());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Ornn());}
-        //item
+
+        // --- Items ---
         //ChangeClass
         for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new BFSword());}
         for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new ForbiddenIdol());}
@@ -154,19 +184,22 @@ public class GameSetup {
         //BuffItem
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BlueBuff());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
-        //Magic
+
+        // --- Magic ---
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Charm());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BattleFury());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FinalSpark());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new HowlingGale());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new PickACard());}
-        //Modifier
+
+        // --- Modifiers ---
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new Deny());}
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new FlashFreeze());}
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new ForDemacia());}
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new ShapedStone());}
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new TwinDisciplines());}
-        //Challenge
+
+        // --- Challenge ---
         for(int i=0;i<15;i++){GameEngine.deck.addToDeck(new ChallengeCard());}
 
         // Shuffle the deck

@@ -19,14 +19,36 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static NonGui.GameLogic.GameEngine.players;
 
+/**
+ * Utility class for handling the Challenge mechanic in the game.
+ * Responsible for checking challenge conditions, prompting other players,
+ * resolving dice rolls, and applying the consequences.
+ */
 public class ChallengeUtils {
 
+    // ==========================================
+    // Main Resolution Logic
+    // ==========================================
+
+    /**
+     * Resolves a challenge attempt when a player plays a card.
+     * Asks other players if they want to use a Challenge Card, rolls dice to determine the outcome,
+     * and applies the results (card discarded or successfully played).
+     *
+     * @param challengedPlayerIndex The index of the player trying to play the card.
+     * @param challengedPlayer      The player trying to play the card.
+     * @param card                  The card being played.
+     * @return true if the challenge was SUCCESSFUL (card is discarded), false otherwise.
+     */
     public static boolean resolveChallenge(int challengedPlayerIndex, Player challengedPlayer, BaseCard card) {
+
+        // 1. Check for immunity (e.g., Braum's Unchallengeable buff)
         if (challengedPlayer.isUnchallengeable() || (card instanceof ItemCard && challengedPlayer.isUnchallengeable())) {
             System.out.println("✨ [BRAUM EFFECT] " + challengedPlayer.getName() + " is Unbreakable! This card cannot be challenged.");
             return false;
         }
 
+        // 2. Ask other players if they want to challenge
         for (int i = 0; i < players.length; i++) {
             if (i == challengedPlayerIndex) continue;
 
@@ -45,9 +67,11 @@ public class ChallengeUtils {
                 }
             }
 
+            // 3. Display the challenge combat view
             ChallengeView view = new ChallengeView(challenger, challengedPlayer, card);
             view.show();
 
+            // 4. Roll dice
             int challengerRoll = DiceUtils.rollForChallenge(challenger);
             int challengedRoll  = DiceUtils.rollForChallenge(challengedPlayer);
 
@@ -63,6 +87,7 @@ public class ChallengeUtils {
             System.out.println(heroMsg);
             ChallengeView.showResult(success, challenger.getName(), heroMsg);
 
+            // 5. Apply Results
             if (success) {
                 GameEngine.deck.discardCard(card);
                 return true;
@@ -85,8 +110,13 @@ public class ChallengeUtils {
         return false;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // ==========================================
+    // Helper Methods
+    // ==========================================
 
+    /**
+     * Checks if a player has at least one Challenge Card in their hand.
+     */
     private static boolean hasChallengeCard(Player player) {
         for (BaseCard card : player.getCardsInHand()) {
             if (card instanceof ChallengeCard) return true;
@@ -96,6 +126,10 @@ public class ChallengeUtils {
 
     /**
      * Styled YES / NO challenge prompt that matches the dark fantasy theme.
+     * * @param challenger The player being asked.
+     * @param challenged The player who played the card.
+     * @param card       The card being played.
+     * @return true if the challenger chooses to play a Challenge Card, false otherwise.
      */
     private static boolean askChallengeCard(Player challenger, Player challenged, BaseCard card) {
         if (!hasChallengeCard(challenger)) return false;

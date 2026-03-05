@@ -1,9 +1,11 @@
 package NonGui.ListOfCards.herocard.Fighter;
 
+import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameChoice;
+import NonGui.GameLogic.GameEngine;
 import javafx.scene.control.ChoiceDialog;
 
 import java.util.ArrayList;
@@ -11,8 +13,21 @@ import java.util.List;
 
 import static NonGui.GameLogic.GameEngine.players;
 
+/**
+ * Represents the "Olaf" Hero Card.
+ * <p>
+ * <b>Ability: Ragnarok</b><br>
+ * Requirement: Roll 10+<br>
+ * Effect: Discard up to 3 cards from your hand. For each card discarded,
+ * you may DESTROY one Hero card from any opponent's board.
+ * <p>
+ * <i>Olaf turns his own resources into pure destructive power.</i>
+ */
 public class Olaf extends HeroCard {
 
+    /**
+     * Constructs Olaf with his base stats and berserker flavor text.
+     */
     public Olaf(){
         super(
                 "Olaf",
@@ -23,23 +38,30 @@ public class Olaf extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Ragnarok ability.
+     * <p>
+     * Logic Flow:
+     * 1. Determine maximum possible discards (capped at 3).
+     * 2. Prompt user for the number of cards to sacrifice via ChoiceDialog.
+     * 3. Perform discards from owner's hand.
+     * 4. For each successful discard, target and destroy an opponent's hero.
+     * * @param player The player who activated Olaf's ability.
+     */
     @Override
     public void useAbility(Player player) {
-        // 🛠️ อัปเดตหน้าจอก่อนเริ่มสกิล
-        try {
-            gui.BoardView.refresh();
-        } catch (Exception e) {}
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
 
         System.out.println(this.getName() + " uses Ragnarok!");
 
-        // เช็คจำนวนการ์ดบนมือก่อน ว่ามีให้ทิ้งสูงสุดกี่ใบ
+        // Check potential discard amount
         int maxDiscard = Math.min(3, player.getCardsInHand().size());
         if (maxDiscard == 0) {
-            System.out.println(player.getName() + " has no cards to discard. Ragnarok ends.");
+            System.out.println(player.getName() + " has no cards to discard. Ragnarok fails.");
             return;
         }
 
-        // 1. ถามผู้เล่นว่าจะทิ้งการ์ดกี่ใบ (เปลี่ยนมาใช้ ChoiceDialog แทน Scanner แก้เกมค้าง!)
+        // 1. Ask for amount to discard
         List<String> amountOptions = new ArrayList<>();
         for (int i = 0; i <= maxDiscard; i++) {
             amountOptions.add(String.valueOf(i));
@@ -47,31 +69,36 @@ public class Olaf extends HeroCard {
 
         ChoiceDialog<String> amountDialog = new ChoiceDialog<>(amountOptions.get(0), amountOptions);
         amountDialog.setTitle("Olaf Ability: Ragnarok");
-        amountDialog.setHeaderText(player.getName() + ", choose amount to DISCARD");
-        amountDialog.setContentText("How many cards do you want to DISCARD? (0 to " + maxDiscard + "):");
+        amountDialog.setHeaderText(player.getName() + ", prepare for sacrifice!");
+        amountDialog.setContentText("How many cards to DISCARD? (0 to " + maxDiscard + "):");
 
-        // ดักผลลัพธ์ ถ้ากดปิดหน้าต่าง (Cancel) ให้ถือว่าเลือก 0
         String result = amountDialog.showAndWait().orElse("0");
         int numToDiscard = Integer.parseInt(result);
 
         if (numToDiscard == 0) {
-            System.out.println(player.getName() + " chose to discard 0 cards. Ragnarok ends.");
+            System.out.println(player.getName() + " chose not to discard. Ragnarok ends.");
             return;
         }
 
-        // 2. ทิ้งการ์ดตามจำนวนที่ระบุ
+        // 2. Perform Discards
         for (int i = 0; i < numToDiscard; i++) {
-            System.out.println(player.getName() + ", select a card to DISCARD (" + (i + 1) + "/" + numToDiscard + "):");
+            System.out.println("Select card to DISCARD (" + (i + 1) + "/" + numToDiscard + "):");
             int cardIndex = GameChoice.selectCardsInHand(player);
 
-            // ดักกดยกเลิก
             if (cardIndex != -1) {
-                player.getCardInHand(cardIndex); // โค้ดคุณบอกว่าเมธอดนี้ remove ให้อยู่แล้ว
-                System.out.println("Card discarded.");
+                // Ensure card is moved to global discard pile
+                BaseCard discarded = player.getCardsInHand().remove(cardIndex);
+                GameEngine.deck.discardCard(discarded);
+                System.out.println("Discarded: " + discarded.getName());
+            } else {
+                // If user cancels during sub-selection, we should probably reduce the kill count
+                numToDiscard = i;
+                break;
             }
         }
 
-        // 3. ทำลายฮีโร่ตามจำนวนการ์ดที่ทิ้งไป
+        // 3. Destroy Heroes based on count
+
         for (int i = 0; i < numToDiscard; i++) {
             ArrayList<Player> validTargetsList = new ArrayList<>();
             for (Player p : players) {
@@ -86,35 +113,32 @@ public class Olaf extends HeroCard {
             }
 
             Player[] validTargetsArray = validTargetsList.toArray(new Player[0]);
-
-            System.out.println(player.getName() + ", choose a player to DESTROY their hero (" + (i + 1) + "/" + numToDiscard + "):");
+            System.out.println("Choose target player to DESTROY hero (" + (i + 1) + "/" + numToDiscard + "):");
             int targetIndex = GameChoice.selectPlayer(validTargetsArray);
 
-            if (targetIndex == -1) {
-                System.out.println("Canceled targeting.");
-                continue;
-            }
+            if (targetIndex == -1) continue;
 
             Player targetPlayer = validTargetsArray[targetIndex];
-
-            System.out.println("Select a hero from " + targetPlayer.getName() + "'s board to DESTROY:");
             int heroIndex = GameChoice.selectHeroCard(targetPlayer);
 
             if (heroIndex != -1) {
+                // Fetch reference for the discard pile
+                HeroCard heroToDestroy = targetPlayer.getHeroCard(heroIndex);
+
+                // Logic based on your comment about Index 1 vs Index 0
+                boolean removed;
                 try {
-                    // 🛠️ แก้ไขตามคอมเมนต์คุณ: ถ้า selectHeroCard ส่งค่าเริ่มที่ 1 มา ต้องลบ 1
-                    // ผมใส่ try-catch กันเหนียวไว้ให้ ถ้า error มันจะลองไม่ลบ 1 แทน (เผื่อโค้ด GameChoice ปรับแก้ไปแล้ว)
-                    targetPlayer.removeHeroCard(heroIndex - 1);
-                } catch (IndexOutOfBoundsException e) {
-                    targetPlayer.removeHeroCard(heroIndex);
+                    removed = targetPlayer.removeHeroCard(heroIndex - 1);
+                } catch (Exception e) {
+                    removed = targetPlayer.removeHeroCard(heroIndex);
                 }
 
-                System.out.println("A hero from " + targetPlayer.getName() + " has been destroyed!");
+                if (removed && heroToDestroy != null) {
+                    GameEngine.deck.discardCard(heroToDestroy);
+                    System.out.println("🪓 Ragnarok claimed " + heroToDestroy.getName() + "!");
+                }
 
-                // 🛠️ อัปเดตหน้าจอทันทีเมื่อการ์ดหายไป
-                try {
-                    gui.BoardView.refresh();
-                } catch (Exception e) {}
+                try { gui.BoardView.refresh(); } catch (Exception e) {}
             }
         }
     }

@@ -5,7 +5,17 @@ import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import gui.board.StatusBar;
 
+/**
+ * Represents the "Battle Fury" Magic Card.
+ * <p>
+ * I've been told I have a... temper.
+ * Effect: +2 to all of your rolls until the end of your turn.
+ */
 public class BattleFury extends MagicCard {
+
+    /**
+     * Constructs a new Battle Fury with its identity and effect text.
+     */
     public BattleFury() {
         super(
                 "Battle Fury",
@@ -19,21 +29,20 @@ public class BattleFury extends MagicCard {
         System.out.println("🧪 " + player.getName() + " unleashes Battle Fury!");
         System.out.println("✨ All rolls get +2 bonus until the end of turn.");
 
-        // 1. เพิ่มโบนัสการทอยให้กับตัวแปร rollBonus ในคลาส Player
-        // เราใช้ += เพื่อให้มันทับซ้อนกับบัฟอื่นได้ (เช่น ถ้า Ornn บัฟอยู่แล้ว +5 แล้วกินยานี้อีก +2 ก็จะเป็น +7)
         int currentBonus = player.getRollBonus();
         player.setRollBonus(currentBonus + 2);
 
-        // 2. Refresh GUI เพื่อให้หน้าจอแสดงสถานะใหม่ (ถ้ามี Label บอกโบนัส)
         try {
             gui.BoardView.refresh();
         } catch (Exception e) {
             // ignore if GUI not running
         }
-        if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-            player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+
+        if (player.getOwnedLeader().getUnitClass() == UnitClass.Mage) {
+            player.drawRandomCard();
             StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
         }
+
         return true;
     }
 }

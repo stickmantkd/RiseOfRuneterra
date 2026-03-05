@@ -4,8 +4,20 @@ import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 
+/**
+ * Represents the "Jinx" Hero Card.
+ * <p>
+ * <b>Ability: Get Excited!</b><br>
+ * Requirement: Roll 10+<br>
+ * Effect: Draw cards until the player's hand contains exactly 7 cards.
+ * <p>
+ * <i>Jinx thrives on chaos; the fewer cards you have, the more powerful this ability becomes.</i>
+ */
 public class Jinx extends HeroCard {
 
+    /**
+     * Constructs Jinx with her base stats and chaotic flavor text.
+     */
     public Jinx(){
         super(
                 "Jinx",
@@ -16,29 +28,41 @@ public class Jinx extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Get Excited! ability.
+     * <p>
+     * Logic Flow:
+     * 1. Check current hand size.
+     * 2. Compare with the target threshold (7 cards).
+     * 3. Calculate the deficit and execute sequential draws via player.drawRandomCard().
+     * * @param player The player who activated Jinx's ability.
+     */
     @Override
     public void useAbility(Player player) {
-        System.out.println(this.getName() + " uses their ability! (DRAW cards until you have 7 in your hand)");
+        System.out.println("🚀 " + this.getName() + " is getting excited!");
 
-        // 1. เช็คจำนวนการ์ดบนมือปัจจุบัน
+        // 1. Check current resource state
         int currentHandSize = player.getCardsInHand().size();
         int targetHandSize = 7;
 
-        // 2. ถ้ามี 7 ใบหรือมากกว่าอยู่แล้ว ก็ไม่ต้องจั่วเพิ่ม
+        // 2. Early exit if the hand is already full or overflowing
         if (currentHandSize >= targetHandSize) {
-            System.out.println(player.getName() + " already has " + currentHandSize + " cards. No cards drawn.");
+            System.out.println("💥 " + player.getName() + " already has " + currentHandSize + " cards. No cards drawn.");
             return;
         }
 
-        // 3. คำนวณว่าต้องจั่วเพิ่มกี่ใบ
+        // 3. Calculation Phase
         int cardsToDraw = targetHandSize - currentHandSize;
-        System.out.println(player.getName() + " has " + currentHandSize + " cards. Drawing " + cardsToDraw + " more cards...");
+        System.out.println("🔥 " + player.getName() + " has " + currentHandSize + " cards. Drawing " + cardsToDraw + " more...");
 
-        // 4. ทำการจั่วการ์ดตามจำนวนที่ขาด
+        // 4. Execution Phase: Refill the hand
         for (int i = 0; i < cardsToDraw; i++) {
             player.drawRandomCard();
         }
 
-        System.out.println("SUCCESS! " + player.getName() + " now has " + player.getCardsInHand().size() + " cards in hand.");
+        System.out.println("✅ SUCCESS! " + player.getName() + " now has " + player.getCardsInHand().size() + " cards in hand.");
+
+        // Refresh GUI to show the new hand
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 }

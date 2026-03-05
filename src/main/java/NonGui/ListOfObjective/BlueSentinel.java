@@ -11,11 +11,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Blue Sentinel" Objective Card.
+ * <p>
+ * The Crest of Insight grants you ultimate clarity and magical prowess.
+ * Requirement: Requires at least 1 Hero and 1 Support.
+ * Prize: Each time you roll for a Hero card's effect, +1 to your roll.
+ * Punishment: DISCARD 2 cards.
+ */
 public class BlueSentinel extends Objective {
+
+    /**
+     * Constructs a new Blue Sentinel objective with its requirements and penalties.
+     */
     public BlueSentinel() {
-        super("Blue Sentinel",
+        super(
+                "Blue Sentinel",
                 "The Crest of Insight grants you ultimate clarity and magical prowess.",
-                8, 12);
+                8,
+                12
+        );
         setRequirementDescription("Requires at least 1 Hero and 1 Support.");
         setPrizeDescription("Each time you roll for a Hero card's effect, +1 to your roll.");
         setPunishmentDescription("DISCARD 2 cards.");
@@ -23,7 +38,6 @@ public class BlueSentinel extends Objective {
 
     @Override
     public boolean canTry(Player player) {
-        // เช็คว่ามี Support อย่างน้อย 1 ตัวบนบอร์ดไหม
         boolean hasSupport = false;
         int heroCount = 0;
 
@@ -35,14 +49,12 @@ public class BlueSentinel extends Objective {
                 }
             }
         }
-        // ต้องมีฮีโร่อย่างน้อย 1 ตัว และหนึ่งในนั้นต้องเป็น Support
         return heroCount >= 1 && hasSupport;
     }
 
     @Override
     public void grantPrize(Player player) {
         StatusBar.showMessage("Slayed Blue Sentinel! " + getPrizeDescription());
-        // มอบโบนัสถาวร +1 สำหรับการทอยสกิลฮีโร่
         player.addPermanentAbilityBonus(1);
     }
 
@@ -50,7 +62,6 @@ public class BlueSentinel extends Objective {
     public void grantPunishment(Player player) {
         StatusBar.showMessage("Crushed by the stone golem! " + getPunishmentDescription());
 
-        // บังคับทิ้งการ์ด 2 ใบ (ใช้ Loop เรียก ChoiceDialog)
         for (int i = 0; i < 2; i++) {
             if (player.getCardsInHand().isEmpty()) break;
 
