@@ -5,8 +5,6 @@ import NonGui.BaseEntity.Objective;
 import NonGui.BaseEntity.Player;
 import gui.board.StatusBar;
 
-import static NonGui.GameUtils.GameplayUtils.*;
-
 public class BaronNashor extends Objective {
     //constructors
     public BaronNashor() {
@@ -33,11 +31,11 @@ public class BaronNashor extends Objective {
     //functions
     @Override
     public void grantPrize(Player player) {
-        player.DrawRandomCard();
-        player.DrawRandomCard();
-        player.DrawRandomCard();
-        player.DrawRandomCard();
-        player.DrawRandomCard();
+        player.drawRandomCard();
+        player.drawRandomCard();
+        player.drawRandomCard();
+        player.drawRandomCard();
+        player.drawRandomCard();
     }
     @Override
     public void grantPunishment(Player player) {

@@ -52,6 +52,6 @@ public class Caitlyn extends HeroCard {
 
         // 4. จั่วการ์ด 1 ใบ (ทำงานเสมอไม่ว่าจะได้ทำลายฮีโร่หรือไม่)
         System.out.println(player.getName() + " draws 1 card.");
-        player.DrawRandomCard();
+        player.drawRandomCard();
     }
 }

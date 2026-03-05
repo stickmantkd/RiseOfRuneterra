@@ -92,13 +92,13 @@ public class HowlingGale extends MagicCard {
                 System.out.println("🌪️ SWOOSH! " + itemToReturn.getName() + " returned to " + targetPlayer.getName() + "'s hand.");
 
                 // 5. DRAW (ผู้ร่ายจั่วการ์ด 1 ใบ)
-                player.DrawRandomCard();
+                player.drawRandomCard();
                 System.out.println("✨ " + player.getName() + " drew a card from the wind.");
 
                 // Refresh GUI
                 try { gui.BoardView.refresh(); } catch (Exception e) {}
                 if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-                    player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+                    player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
                     StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
                 }
                 return true;

@@ -47,7 +47,7 @@ public class Akali extends HeroCard {
 
             // 3. ถ้าเข้าเงื่อนไข (มี Assassin และ มีการ์ดบนมือให้ขโมย)
             if (hasAssassin) {
-                if (targetPlayer.HandIsEmpty()) {
+                if (targetPlayer.handIsEmpty()) {
                     System.out.println(targetPlayer.getName() + " has an Assassin, but no cards in hand to steal!");
                 } else {
                     // หาจำนวนการ์ดบนมือเป้าหมาย เพื่อนำมาสุ่ม index

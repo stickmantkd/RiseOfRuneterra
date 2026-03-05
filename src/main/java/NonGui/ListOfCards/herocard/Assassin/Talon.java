@@ -32,7 +32,7 @@ public class Talon extends HeroCard {
         // 1. หาเป้าหมายที่สามารถดึงการ์ดได้ (ต้องไม่ใช่ตัวเอง และต้องมีการ์ดบนมืออย่างน้อย 1 ใบ)
         ArrayList<Player> validTargetsList = new ArrayList<>();
         for (Player p : players) {
-            if (p != player && !p.HandIsEmpty()) {
+            if (p != player && !p.handIsEmpty()) {
                 validTargetsList.add(p);
             }
         }

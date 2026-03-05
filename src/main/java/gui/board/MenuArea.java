@@ -17,10 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import static gui.GameUI.endTurn;
@@ -111,7 +107,7 @@ public class MenuArea extends VBox {
 
         playButton.setOnAction(e -> {
             Player current = GameEngine.getCurrentPlayer();
-            if (!current.HandIsEmpty()) {
+            if (!current.handIsEmpty()) {
                 int handIndex = GameChoice.selectCardsInHand(current);
                 if (handIndex >= 0) GameEngine.playCard(current, handIndex);
             }

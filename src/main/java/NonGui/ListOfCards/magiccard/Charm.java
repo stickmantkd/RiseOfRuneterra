@@ -7,7 +7,6 @@ import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine; // เพิ่มการเรียกใช้เพื่อเช็คจำนวนผู้เล่น
 import gui.board.StatusBar;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Alert;
 
@@ -141,7 +140,7 @@ public class Charm extends MagicCard {
                 // สั่ง Refresh จอทันที
                 try { gui.BoardView.refresh(); } catch (Exception e) {}
                 if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-                    player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+                    player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
                     StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
                 }
                 return true;

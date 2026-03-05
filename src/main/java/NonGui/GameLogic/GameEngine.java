@@ -99,7 +99,7 @@ public class GameEngine {
             return;
         }
 
-        player.DrawRandomCard();
+        player.drawRandomCard();
         player.decreaseActionPoint(1);
 
         System.out.println(player.getName() + " drew a card.");
@@ -108,7 +108,7 @@ public class GameEngine {
 
     public static void playCard(Player player, int handIndex) {
         if (!isGameActive) return;
-        if (player.HandIsEmpty()) return;
+        if (player.handIsEmpty()) return;
         if (player.getActionPoint() < 1) {
             System.out.println(player.getName() + " has no action points left!");
             return;

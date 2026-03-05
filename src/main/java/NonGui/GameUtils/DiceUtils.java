@@ -142,7 +142,7 @@ public class DiceUtils {
         if (owner != null) {
             if (!success && card.getItem() instanceof TearOfTheGoddess) {
                 System.out.println("💧 Tear of the Goddess: Drawing a card...");
-                owner.DrawRandomCard();
+                owner.drawRandomCard();
             } else if (success && card.getItem() instanceof DarkSeal) {
                 System.out.println("🪙 Cursed Doubloon: Success! Now pay the price...");
                 handleCursedDiscard(owner);

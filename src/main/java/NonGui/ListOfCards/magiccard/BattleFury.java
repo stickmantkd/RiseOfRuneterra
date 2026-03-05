@@ -31,7 +31,7 @@ public class BattleFury extends MagicCard {
             // ignore if GUI not running
         }
         if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-            player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+            player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
             StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
         }
         return true;

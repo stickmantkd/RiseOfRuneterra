@@ -36,7 +36,7 @@ public class Jinx extends HeroCard {
 
         // 4. ทำการจั่วการ์ดตามจำนวนที่ขาด
         for (int i = 0; i < cardsToDraw; i++) {
-            player.DrawRandomCard();
+            player.drawRandomCard();
         }
 
         System.out.println("SUCCESS! " + player.getName() + " now has " + player.getCardsInHand().size() + " cards in hand.");

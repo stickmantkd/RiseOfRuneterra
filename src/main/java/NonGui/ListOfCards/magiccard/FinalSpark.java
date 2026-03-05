@@ -118,7 +118,7 @@ public class FinalSpark extends MagicCard {
                 // Refresh หน้าจอ
                 try { gui.BoardView.refresh(); } catch (Exception e) {}
                 if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-                    player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+                    player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
                     StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
                 }
                 return true;

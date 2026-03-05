@@ -30,7 +30,7 @@ public class PickACard extends MagicCard {
         // ==========================================
         System.out.println(player.getName() + " draws 3 cards...");
         for (int i = 0; i < 3; i++) {
-            player.DrawRandomCard();
+            player.drawRandomCard();
         }
 
         // Refresh จอทันทีเพื่อให้ผู้เล่นเห็นการ์ดใหม่ก่อนเลือกทิ้ง
@@ -80,7 +80,7 @@ public class PickACard extends MagicCard {
         // Refresh อีกรอบหลังทิ้งเสร็จ
         try { gui.BoardView.refresh(); } catch (Exception e) {}
         if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
-            player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+            player.drawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
             StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
         }
         return true;

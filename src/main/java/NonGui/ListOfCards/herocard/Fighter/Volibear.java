@@ -52,7 +52,7 @@ public class Volibear extends HeroCard {
 
         // 3. บังคับเป้าหมายทิ้งการ์ด 2 ใบ
         for (int i = 0; i < 2; i++) {
-            if (targetPlayer.HandIsEmpty()) {
+            if (targetPlayer.handIsEmpty()) {
                 System.out.println(targetPlayer.getName() + " has no more cards in hand!");
                 break;
             }

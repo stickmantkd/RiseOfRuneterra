@@ -34,8 +34,8 @@ public class Ezreal extends HeroCard {
         int initialHandSize = player.getCardsInHand().size();
 
         // 1. จั่วการ์ด 2 ใบ
-        player.DrawRandomCard();
-        player.DrawRandomCard();
+        player.drawRandomCard();
+        player.drawRandomCard();
 
         int newHandSize = player.getCardsInHand().size();
         ArrayList<BaseCard> drawnCards = new ArrayList<>();

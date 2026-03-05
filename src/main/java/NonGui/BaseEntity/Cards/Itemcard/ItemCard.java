@@ -61,7 +61,7 @@ public abstract class ItemCard extends ActionCard {
         }
 
         if(player.getOwnedLeader().getUnitClass() == UnitClass.Assassin){
-            player.DrawRandomCard();
+            player.drawRandomCard();
         }
 
         // 3. ใส่ไอเทมให้ฮีโร่ และคืนค่ากลับไปบอกว่าร่ายสำเร็จไหม
