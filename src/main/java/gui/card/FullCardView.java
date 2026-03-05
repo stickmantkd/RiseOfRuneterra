@@ -27,7 +27,7 @@ public class FullCardView {
         Stage stage = new Stage();
 
         // Load cached image (high resolution but reused)
-        Image img = ImageCache.get(cardPath(card.getType(), card.getName()), FULL_W, FULL_H);
+        Image img = ImageCache.get(cardPath(card.getType(), card.getName()));
 
         StackPane imagePane;
 

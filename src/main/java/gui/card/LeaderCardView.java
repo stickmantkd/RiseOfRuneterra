@@ -45,7 +45,7 @@ public class LeaderCardView extends StackPane {
     }
 
     private void buildThumbnail() {
-        Image img = ImageCache.get(leaderPath(leader.getName()), LEADER_W, LEADER_H);
+        Image img = ImageCache.get(leaderPath(leader.getName()));
 
         if (img != null) {
             ImageView iv = new ImageView(img);
@@ -73,7 +73,7 @@ public class LeaderCardView extends StackPane {
 
     private void showFullLeaderWindow() {
         Stage stage = new Stage();
-        Image img = ImageCache.get(leaderPath(leader.getName()), FULL_LEADER_W, FULL_LEADER_H);
+        Image img = ImageCache.get(leaderPath(leader.getName()));
 
         StackPane imagePane;
         if (img != null) {

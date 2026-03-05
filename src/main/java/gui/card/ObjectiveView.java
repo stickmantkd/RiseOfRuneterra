@@ -48,7 +48,7 @@ public class ObjectiveView extends StackPane {
 
     private void buildThumbnail() {
 
-        Image img = ImageCache.get(objectivePath(objective.getName()), OBJ_THUMB_W, OBJ_THUMB_H);
+        Image img = ImageCache.get(objectivePath(objective.getName()));
 
         if (img != null) {
 
@@ -94,7 +94,7 @@ public class ObjectiveView extends StackPane {
 
         Stage stage = new Stage();
 
-        Image img = ImageCache.get(objectivePath(objective.getName()), OBJ_FULL_W, OBJ_FULL_H);
+        Image img = ImageCache.get(objectivePath(objective.getName()));
 
         StackPane imagePane;
 

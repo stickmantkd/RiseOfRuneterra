@@ -7,14 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Singleton image cache — every PNG is loaded only once per size.
- * Prevents repeated disk I/O and keeps JavaFX memory usage stable.
+
+ High quality image cache.
+
+ Images are loaded once at original resolution and reused everywhere.
+
+ JavaFX GPU handles scaling so thumbnails stay sharp.
  */
 public final class ImageCache {
 
     private static final Map<String, Image> CACHE = new HashMap<>();
 
-    // ── Standard dimensions ─────────────────────────────────────────────
+// ── Standard sizes used by UI ─────────────────────────────────
 
     public static final double THUMB_W = 75;
     public static final double THUMB_H = 105;
@@ -39,73 +43,60 @@ public final class ImageCache {
 
     private ImageCache() {}
 
-    // ── Main cache loader ───────────────────────────────────────────────
+// ── Main loader ───────────────────────────────────────────────
 
     /**
-     * Load an image at a specific render size.
-     * The same (path + size) image is only loaded once.
+
+     Loads an image once at full resolution.
+
+     All UI elements reuse the same image object.
      */
-    public static Image get(String resourcePath, double w, double h) {
+    public static Image get(String resourcePath) {
 
-        String key = resourcePath + "@" + (int) w + "x" + (int) h;
-
-        if (CACHE.containsKey(key)) {
-            return CACHE.get(key);
+        if (CACHE.containsKey(resourcePath)) {
+            return CACHE.get(resourcePath);
         }
 
         URL url = ImageCache.class.getResource(resourcePath);
 
         if (url == null) {
-            CACHE.put(key, null);
+            CACHE.put(resourcePath, null);
             return null;
         }
 
         Image img = new Image(
                 url.toExternalForm(),
-                w,
-                h,
-                false,  // preserveRatio
-                true,   // smooth scaling
-                false   // backgroundLoading (load immediately)
+                0,
+                0,
+                true, // preserve ratio
+                true, // smooth scaling
+                false // load immediately
         );
 
-        CACHE.put(key, img);
+        CACHE.put(resourcePath, img);
 
         return img;
     }
 
-    /**
-     * Load image at original resolution.
-     */
-    public static Image get(String resourcePath) {
-        return get(resourcePath, 0, 0);
-    }
-
-    // ── Path helpers ────────────────────────────────────────────────────
+// ── Path builders ─────────────────────────────────────────────
 
     public static String cardPath(String type, String name) {
         return "/card/base/" + type.toLowerCase() + "/"
-                + name.replaceAll("\\s+", "") + ".png";
+                + name.replaceAll("\s+", "") + ".png";
     }
 
     public static String leaderPath(String name) {
-        return "/card/leader/" + name.replaceAll("\\s+", "") + ".png";
+        return "/card/leader/" + name.replaceAll("\s+", "") + ".png";
     }
 
     public static String objectivePath(String name) {
-        return "/card/objective/" + name.replaceAll("\\s+", "") + ".png";
+        return "/card/objective/" + name.replaceAll("\s+", "") + ".png";
     }
 
     public static String itemPath(String name) {
-        return "/card/base/item card/" + name.replaceAll("\\s+", "") + ".png";
+        return "/card/base/item card/" + name.replaceAll("\s+", "") + ".png";
     }
 
-    // ── Cache control ───────────────────────────────────────────────────
-
-    /**
-     * Clears the entire cache.
-     * Useful when restarting the game to free memory.
-     */
     public static void clear() {
         CACHE.clear();
     }
