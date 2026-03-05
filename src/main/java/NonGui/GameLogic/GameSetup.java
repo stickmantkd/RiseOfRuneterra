@@ -77,8 +77,8 @@ public class GameSetup {
             p.setOwnedLeader(leaders.get(i));
 
             // Give each player 2 heroes
-            p.addHeroCard(new Shaco());
-            p.addHeroCard(new Akali());
+            //p.addHeroCard(new Shaco());
+            //p.addHeroCard(new Akali());
 
             // Optionally give cards in hand
             /*
