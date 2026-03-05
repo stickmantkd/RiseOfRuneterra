@@ -36,11 +36,15 @@ public class ChallengeUtils {
             boolean wantsToPlay = askChallengeCard(challenger, challengedPlayer, card);
             if (!wantsToPlay) continue;
 
-            for(BaseCard challengersCard : challenger.getCardsInHand()){
-                if(challengersCard instanceof ChallengeCard){
-                    challenger.removeCardFromHand(challengersCard);
+            // ✅ FIX: safe removal using iterator
+            for (java.util.Iterator<BaseCard> it = challenger.getCardsInHand().iterator(); it.hasNext();) {
+                BaseCard challengersCard = it.next();
+                if (challengersCard instanceof ChallengeCard) {
+                    it.remove(); // safe removal
+                    break;       // remove only ONE challenge card
                 }
             }
+
             ChallengeView view = new ChallengeView(challenger, challengedPlayer, card);
             view.show();
 
