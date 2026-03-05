@@ -15,9 +15,9 @@ public class FreljordianYeti extends Objective {
     public FreljordianYeti() {
         super("Freljordian Yeti",
                 "A massive, relentless beast from the Howling Abyss.", 8, 12);
-        setRequirementDescription("7- | Requires at least 1 Hero and 1 Marksman.");
+        setRequirementDescription("Requires at least 1 Hero and 1 Marksman.");
         setPrizeDescription("8+ | Each time you DRAW an Item card, you may play it immediately.");
-        setPunishmentDescription("DISCARD 2 cards.");
+        setPunishmentDescription("7- | DISCARD 2 cards.");
     }
 
     @Override

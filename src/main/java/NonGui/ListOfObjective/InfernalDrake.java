@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 public class InfernalDrake extends Objective {
     public InfernalDrake() {
         super("Infernal Drake", "The flames of war fuel your power and destruction.", 8, 12);
-        setRequirementDescription("7- | Requires at least 1 Hero and 1 Fighter.");
+        setRequirementDescription("Requires at least 1 Hero and 1 Fighter.");
         setPrizeDescription("8+ | Each time you roll for a Challenge card, +1 to your roll.");
-        setPunishmentDescription("DISCARD 2 cards.");
+        setPunishmentDescription("7- | DISCARD 2 cards.");
     }
 
     @Override

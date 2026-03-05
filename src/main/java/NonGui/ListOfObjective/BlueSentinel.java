@@ -16,9 +16,9 @@ public class BlueSentinel extends Objective {
         super("Blue Sentinel",
                 "The Crest of Insight grants you ultimate clarity and magical prowess.",
                 8, 12);
-        setRequirementDescription("7- | Requires at least 1 Hero and 1 Support.");
+        setRequirementDescription("Requires at least 1 Hero and 1 Support.");
         setPrizeDescription("8+ | Each time you roll for a Hero card's effect, +1 to your roll.");
-        setPunishmentDescription("DISCARD 2 cards.");
+        setPunishmentDescription("7- | DISCARD 2 cards.");
     }
 
     @Override
