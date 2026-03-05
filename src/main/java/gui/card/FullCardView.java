@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import static gui.card.ImageCache.*;
+
 public class FullCardView {
 
     private final BaseCard card;
@@ -21,96 +23,103 @@ public class FullCardView {
         this.card = card;
     }
 
-    // Return Stage instead of void
     public Stage show() {
         Stage stage = new Stage();
 
-        double fullWidth = 200;
-        double fullHeight = 280;
+        // Image is loaded at full display size via the cache — same image object
+        // is returned on every subsequent call (e.g. rapid repeated clicks).
+        Image img = ImageCache.get(cardPath(card.getType(), card.getName()), FULL_W, FULL_H);
 
-        // Build resource path
-        String resourcePath = "/card/base/" + card.getType().toLowerCase() + "/"
-                + card.getName().replaceAll("\\s+", "") + ".png";
-        java.net.URL resource = getClass().getResource(resourcePath);
-
-        HBox imageBox;
-        if (resource != null) {
-            ImageView cardImage = new ImageView(new Image(resource.toExternalForm()));
-            cardImage.setFitWidth(fullWidth);
-            cardImage.setFitHeight(fullHeight);
-            cardImage.setPreserveRatio(false);
-            imageBox = new HBox(cardImage);
+        StackPane imagePane;
+        if (img != null) {
+            ImageView iv = new ImageView(img);
+            iv.setFitWidth(FULL_W);
+            iv.setFitHeight(FULL_H);
+            iv.setPreserveRatio(false);
+            iv.setSmooth(true);
+            imagePane = new StackPane(iv);
         } else {
-            Rectangle rect = new Rectangle(fullWidth, fullHeight, Color.WHITESMOKE);
-            rect.setStroke(Color.BLACK);
+            Rectangle rect = new Rectangle(FULL_W, FULL_H, Color.web("#1c0d00"));
+            rect.setStroke(Color.web("#8B6914"));
             rect.setStrokeWidth(2);
-            imageBox = new HBox(rect);
+            Label ph = new Label(card.getName());
+            ph.setStyle("-fx-font-family: 'Georgia'; -fx-font-size: 13; -fx-text-fill: #C8A870;");
+            ph.setWrapText(true);
+            ph.setMaxWidth(FULL_W - 16);
+            imagePane = new StackPane(rect, ph);
         }
-        imageBox.setAlignment(Pos.CENTER);
+        imagePane.setAlignment(Pos.CENTER);
 
-        // Top info box
-        Label typeLabel = new Label(card.getType());
-        typeLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: white;");
-        typeLabel.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        // ── Info panel ──────────────────────────────────────────────────────
+
+        Label typeLabel = new Label(card.getType().toUpperCase());
+        typeLabel.setStyle(
+                "-fx-font-family: 'Georgia'; -fx-font-size: 12; -fx-font-weight: bold;" +
+                        "-fx-text-fill: #FFD700; -fx-padding: 4 0 4 0;"
+        );
+        typeLabel.setBackground(new Background(new BackgroundFill(
+                Color.web("#2e1800"), CornerRadii.EMPTY, Insets.EMPTY)));
         typeLabel.setMaxWidth(Double.MAX_VALUE);
         typeLabel.setAlignment(Pos.CENTER);
 
         Label nameLabel = new Label(card.getName());
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
+        nameLabel.setStyle(
+                "-fx-font-family: 'Georgia'; -fx-font-weight: bold; -fx-font-size: 15; -fx-text-fill: #F5DEB3;");
         nameLabel.setWrapText(true);
 
         Label flavorLabel = new Label(card.getFlavorText());
-        flavorLabel.setStyle("-fx-font-size: 12; -fx-text-fill: gray;");
+        flavorLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #8a7050; -fx-font-style: italic;");
         flavorLabel.setWrapText(true);
 
-        VBox topInfoContent = new VBox(5, typeLabel, nameLabel, flavorLabel);
-        topInfoContent.setAlignment(Pos.TOP_CENTER);
-        topInfoContent.setPadding(new Insets(10));
-        topInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
+        VBox topInfo = new VBox(5, typeLabel, nameLabel, flavorLabel);
+        topInfo.setPadding(new Insets(10));
+        topInfo.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #2e1800, #1c0d00);" +
+                        "-fx-border-color: #5a3a10; -fx-border-width: 0 0 1 0;");
 
-        // Bottom info box
         Label abilityLabel = new Label(card.getAbilityDescription());
-        abilityLabel.setStyle("-fx-font-size: 12;");
+        abilityLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #C8A870; -fx-font-family: 'Georgia';");
         abilityLabel.setWrapText(true);
 
-        StackPane bottomInfoContent = new StackPane();
+        StackPane bottomInfo = new StackPane();
         VBox abilityBox = new VBox(abilityLabel);
         abilityBox.setAlignment(Pos.TOP_LEFT);
-        bottomInfoContent.getChildren().add(abilityBox);
+        bottomInfo.getChildren().add(abilityBox);
 
         if (card instanceof HeroCard hero) {
             Label classLabel = new Label("Class: " + hero.getUnitClass());
-            classLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: black;");
+            classLabel.setStyle(
+                    "-fx-font-family: 'Georgia'; -fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #FFD700;");
             StackPane.setAlignment(classLabel, Pos.BOTTOM_RIGHT);
-            bottomInfoContent.getChildren().add(classLabel);
+            bottomInfo.getChildren().add(classLabel);
 
             if (hero.getItem() != null) {
-                Label itemLabel = new Label("Equipped: " + hero.getItem().getName());
-                itemLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: darkgreen;");
+                Label itemLabel = new Label("⚔ Equipped: " + hero.getItem().getName());
+                itemLabel.setStyle(
+                        "-fx-font-family: 'Georgia'; -fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #50C878;");
                 StackPane.setAlignment(itemLabel, Pos.BOTTOM_LEFT);
-                bottomInfoContent.getChildren().add(itemLabel);
+                bottomInfo.getChildren().add(itemLabel);
             }
         }
 
-        bottomInfoContent.setPadding(new Insets(10));
-        bottomInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
-        VBox.setVgrow(bottomInfoContent, Priority.ALWAYS);
+        bottomInfo.setPadding(new Insets(10));
+        bottomInfo.setStyle("-fx-background-color: linear-gradient(to bottom, #1c0d00, #120800);");
+        VBox.setVgrow(bottomInfo, Priority.ALWAYS);
 
-        VBox innerInfo = new VBox(0, topInfoContent, bottomInfoContent);
-        innerInfo.setAlignment(Pos.TOP_LEFT);
-        innerInfo.setStyle("-fx-border-color: black; -fx-border-width: 1;");
+        VBox infoPanel = new VBox(0, topInfo, bottomInfo);
+        infoPanel.setStyle("-fx-border-color: #5a3a10; -fx-border-width: 1;");
 
-        HBox root = new HBox(0, imageBox, innerInfo);
-        root.setAlignment(Pos.CENTER);
+        HBox root = new HBox(0, imagePane, infoPanel);
+        root.setStyle("-fx-background-color: #1a0a00;");
 
-        Scene scene = new Scene(root, 480, 280);
+        Scene scene = new Scene(root, 480, (int) FULL_H);
+        scene.setFill(Color.web("#1a0a00"));
 
         stage.setTitle(card.getName());
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
+        stage.setResizable(false);
         stage.show();
-
-        // Return the stage so CardView can position other windows relative to it
         return stage;
     }
 }

@@ -2,7 +2,7 @@ package NonGui.GameLogic;
 
 import NonGui.BaseEntity.*;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.ListOfCards.itemcard.CurseItem.VoidBinding;
+import NonGui.ListOfCards.itemcard.CurseItem.AbyssalMask;
 import gui.BoardView;
 
 import static NonGui.GameLogic.GameSetup.*;
@@ -78,7 +78,7 @@ public class GameEngine {
         for (HeroCard hero : next.getOwnedHero()) {
             if (hero != null) {
                 // ถ้าติด Void Binding ให้เป็น false ตลอดไปจนกว่าจะถอดออก
-                if (hero.getItem() instanceof VoidBinding) {
+                if (hero.getItem() instanceof AbyssalMask) {
                     hero.setCanUseAbility(false);
                 } else {
                     hero.setCanUseAbility(true);

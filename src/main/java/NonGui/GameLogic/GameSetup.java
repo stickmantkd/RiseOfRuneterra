@@ -24,9 +24,9 @@ import NonGui.ListOfCards.herocard.Tank.Ornn;
 import NonGui.ListOfCards.itemcard.BuffItem.BlueBuff;
 import NonGui.ListOfCards.itemcard.BuffItem.TearOfTheGoddess;
 import NonGui.ListOfCards.itemcard.ChangeClass.*;
-import NonGui.ListOfCards.itemcard.CurseItem.CursedDoubloon;
-import NonGui.ListOfCards.itemcard.CurseItem.SnakesEmbrace;
-import NonGui.ListOfCards.itemcard.CurseItem.VoidBinding;
+import NonGui.ListOfCards.itemcard.CurseItem.DarkSeal;
+import NonGui.ListOfCards.itemcard.CurseItem.FrozenHeart;
+import NonGui.ListOfCards.itemcard.CurseItem.AbyssalMask;
 import NonGui.ListOfCards.magiccard.*;
 import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
@@ -148,9 +148,9 @@ public class GameSetup {
         for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new RecurveBow());}
         for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new SerratedDirk());}
         //CurseItem
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new CursedDoubloon());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new SnakesEmbrace());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new VoidBinding());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new DarkSeal());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FrozenHeart());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new AbyssalMask());}
         //BuffItem
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BlueBuff());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}

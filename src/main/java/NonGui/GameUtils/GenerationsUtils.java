@@ -2,8 +2,8 @@ package NonGui.GameUtils;
 
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Objective;
-import NonGui.ListOfCards.itemcard.BuffItem.BlueBuff;
-import NonGui.ListOfCards.itemcard.CurseItem.SnakesEmbrace;
+import NonGui.ListOfCards.itemcard.BlueBuff;
+import NonGui.ListOfCards.itemcard.SnakesEmbrace;
 import NonGui.ListOfCards.herocard.Maskman.Ezreal;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
