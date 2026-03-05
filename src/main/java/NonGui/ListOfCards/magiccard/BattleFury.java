@@ -8,7 +8,7 @@ import gui.board.StatusBar;
 public class BattleFury extends MagicCard {
     public BattleFury() {
         super(
-                "Elixir of Sorcery",
+                "Battle Fury",
                 "I've been told I have a... temper.",
                 "+2 to all of your rolls until the end of your turn."
         );
