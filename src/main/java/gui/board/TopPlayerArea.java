@@ -3,6 +3,7 @@ package gui.board;
 import NonGui.BaseEntity.Player;
 import gui.card.CardView;
 import gui.card.LeaderCardView;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,57 +18,56 @@ import javafx.stage.Stage;
 import javafx.collections.ListChangeListener;
 
 public class TopPlayerArea extends HBox {
-    private TilePane seeMoreGrid;   // grid for "See More" window
-    private Stage seeMoreStage;     // window reference
+    private TilePane seeMoreGrid;
+    private Stage seeMoreStage;
     private final Player player;
-    private final HBox handRow;     // inline hand row
+    private final HBox handRow;
 
     public TopPlayerArea(Player player) {
-        super(20);
+        super(16);
         this.player = player;
 
         setPrefSize(900, 144);
         setMinSize(900, 144);
         setAlignment(Pos.CENTER);
+        setPadding(new Insets(8, 14, 8, 14));
 
-        // Background for this area
-        BackgroundFill areaFill = new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, null);
-        setBackground(new Background(areaFill));
+        setStyle(
+                Theme.TOP_BG +
+                        "-fx-border-color: #2a4060; -fx-border-width: 0 0 2 0;"
+        );
 
-        // Player name label
-        Label nameLabel = new Label(player.getName());
-        nameLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: black;");
-        nameLabel.setAlignment(Pos.CENTER_LEFT);
+        Label nameLabel = new Label("👑 " + player.getName());
+        nameLabel.setStyle(Theme.NAME_LABEL);
 
-        // Leader card
         LeaderCardView leaderCard = new LeaderCardView(player.getOwnedLeader(), player);
 
-        // Player cards (show only up to 5)
-        handRow = new HBox(5);
+        handRow = new HBox(6);
         handRow.setAlignment(Pos.CENTER);
         updateHandRow();
 
-        // See More button (only if > 5 cards)
         Button seeMore = null;
         if (player.getCardsInHand().size() > 5) {
-            seeMore = new Button("See More");
-            seeMore.setOnAction(e -> openSeeMoreWindow(areaFill));
+            seeMore = createSeeMoreButton();
         }
 
-        // Layout: name label on the left, then leader card, then hand row, then optional button
         if (seeMore != null) {
             getChildren().addAll(nameLabel, leaderCard, handRow, seeMore);
         } else {
             getChildren().addAll(nameLabel, leaderCard, handRow);
         }
 
-        // Listen for changes in the hand and auto-update
         player.getCardsInHand().addListener((ListChangeListener.Change<?> change) -> {
             updateHandRow();
-            if (seeMoreGrid != null) {
-                updateSeeMoreGrid();
-            }
+            if (seeMoreGrid != null) updateSeeMoreGrid();
         });
+    }
+
+    private Button createSeeMoreButton() {
+        Button btn = new Button("▼ More");
+        btn.setStyle(Theme.SEE_MORE_BUTTON);
+        btn.setOnAction(e -> openSeeMoreWindow());
+        return btn;
     }
 
     private void updateHandRow() {
@@ -78,18 +78,19 @@ public class TopPlayerArea extends HBox {
         }
     }
 
-    private void openSeeMoreWindow(BackgroundFill areaFill) {
+    private void openSeeMoreWindow() {
         seeMoreGrid = new TilePane();
         seeMoreGrid.setHgap(10);
         seeMoreGrid.setVgap(10);
         seeMoreGrid.setAlignment(Pos.CENTER);
-        seeMoreGrid.setBackground(new Background(areaFill));
-
-        updateSeeMoreGrid(); // initial fill
+        seeMoreGrid.setPadding(new Insets(14));
+        seeMoreGrid.setStyle("-fx-background-color: linear-gradient(to bottom, #0d1f2d, #162840);");
+        updateSeeMoreGrid();
 
         seeMoreStage = new Stage();
         seeMoreStage.setAlwaysOnTop(true);
-        Scene scene = new Scene(seeMoreGrid, 600, 400);
+        Scene scene = new Scene(seeMoreGrid, 620, 420);
+        scene.setFill(Color.web("#0d1f2d"));
         seeMoreStage.setTitle(player.getName() + "'s Hand");
         seeMoreStage.setScene(scene);
         seeMoreStage.show();

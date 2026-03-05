@@ -4,62 +4,75 @@ import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Player;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.DialogPane;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModifierView {
 
-    // Show modifier card selection dialog
+    private static final String DIALOG_STYLE =
+            "-fx-background-color: linear-gradient(to bottom, #1c0d00, #2e1800);" +
+                    "-fx-font-family: 'Georgia';";
+
     public static int selectModifierCard(Player actingPlayer, Player targetPlayer) {
         List<String> options = new ArrayList<>();
         List<Integer> handIndexes = new ArrayList<>();
 
-        options.add("0 : Pass");
+        options.add("Pass");
 
         for (int i = 0; i < actingPlayer.getCardsInHand().size(); i++) {
             BaseCard card = actingPlayer.getCardsInHand().get(i);
             if (card instanceof ModifierCard) {
-                options.add((handIndexes.size() + 1) + " : " + card.getName());
+                options.add(card.getName());
                 handIndexes.add(i);
             }
         }
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
-        dialog.setTitle("Modifier Phase");
-
-        // Layout exactly as requested
+        dialog.setTitle("⚡ Modifier Phase");
         dialog.setHeaderText(
-                actingPlayer.getName() + "\n" +
-                        "Do you want to modify " + targetPlayer.getName() + "'s roll\n" +
+                actingPlayer.getName() + " — Modify " + targetPlayer.getName() + "'s roll?\n" +
                         "Current roll: " + targetPlayer.getCurrentRoll()
         );
-        dialog.setContentText("Cards:");
+        dialog.setContentText("Select a modifier card:");
+        styleDialog(dialog.getDialogPane());
 
         String result = dialog.showAndWait().orElse(null);
-        if (result == null) return -1;
+        if (result == null || result.equals("Pass")) return -1;
 
-        int choice = Integer.parseInt(result.split(" ")[0]);
-        if (choice == 0) return -1; // Pass
-
-        return handIndexes.get(choice - 1);
+        int choiceIndex = options.indexOf(result) - 1; // minus "Pass"
+        return handIndexes.get(choiceIndex);
     }
 
-    // Show modifier effect choice (+ or -)
     public static int selectModifierEffect(ModifierCard modifier) {
         List<String> options = List.of(
-                "1 : Give + " + modifier.getPositiveModifier() + " to a roll",
-                "2 : Give - " + modifier.getNegativeModifier() + " to a roll"
+                "➕  +" + modifier.getPositiveModifier() + "  to a roll",
+                "➖  −" + modifier.getNegativeModifier() + "  to a roll"
         );
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
-        dialog.setTitle("Modifier Effect");
-        dialog.setHeaderText("Choose an effect");
-        dialog.setContentText("Options:");
+        dialog.setTitle("⚡ Modifier Effect");
+        dialog.setHeaderText("Choose an effect for  " + modifier.getName());
+        dialog.setContentText("Effect:");
+        styleDialog(dialog.getDialogPane());
 
         String result = dialog.showAndWait().orElse(null);
         if (result == null) return -1;
 
-        return Integer.parseInt(result.split(" ")[0]) - 1;
+        return options.indexOf(result); // 0 = positive, 1 = negative
+    }
+
+    private static void styleDialog(DialogPane dp) {
+        dp.setStyle(DIALOG_STYLE);
+        // Style header label if accessible
+        javafx.scene.Node header = dp.lookup(".header-panel");
+        if (header != null) {
+            header.setStyle("-fx-background-color: #2e1800;");
+        }
+        javafx.scene.Node headerLabel = dp.lookup(".header-panel .label");
+        if (headerLabel instanceof javafx.scene.control.Label l) {
+            l.setStyle("-fx-text-fill: #FFD700; -fx-font-family: 'Georgia'; -fx-font-size: 13;");
+        }
     }
 }

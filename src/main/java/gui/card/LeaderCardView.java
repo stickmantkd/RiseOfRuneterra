@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -17,16 +18,15 @@ import javafx.stage.Stage;
 public class LeaderCardView extends StackPane {
 
     private final LeaderCard leader;
-    private final Player owner; // NEW: reference to player
+    private final Player owner;
 
     public LeaderCardView(LeaderCard leader, Player owner) {
         this.leader = leader;
         this.owner = owner;
 
-        double thumbWidth = 90;
+        double thumbWidth  = 90;
         double thumbHeight = 126;
 
-        // Build resource path from leader name
         String resourcePath = "/card/leader/" + leader.getName().replaceAll("\\s+", "") + ".png";
         java.net.URL resource = getClass().getResource(resourcePath);
 
@@ -34,109 +34,127 @@ public class LeaderCardView extends StackPane {
             ImageView thumbnail = new ImageView(new Image(resource.toExternalForm()));
             thumbnail.setFitWidth(thumbWidth);
             thumbnail.setFitHeight(thumbHeight);
-            thumbnail.setPreserveRatio(false); // stretch to fill
-            getChildren().add(thumbnail);
-        } else {
-            // Blank card with border and fill
-            Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.LIGHTBLUE);
-            rect.setStroke(Color.BLACK);
-            rect.setStrokeWidth(1);
+            thumbnail.setPreserveRatio(false);
 
-            // Add leader name label
+            Rectangle border = new Rectangle(thumbWidth, thumbHeight);
+            border.setFill(Color.TRANSPARENT);
+            border.setStroke(Color.web("#FFD700"));
+            border.setStrokeWidth(2);
+            border.setArcWidth(4);
+            border.setArcHeight(4);
+
+            getChildren().addAll(thumbnail, border);
+        } else {
+            Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.web("#1a0a00"));
+            rect.setStroke(Color.web("#FFD700"));
+            rect.setStrokeWidth(2);
+            rect.setArcWidth(4);
+            rect.setArcHeight(4);
+
             Label nameLabel = new Label(leader.getName());
-            nameLabel.setTextFill(Color.BLACK);
-            nameLabel.setStyle("-fx-font-size: 10; -fx-font-weight: bold;");
+            nameLabel.setStyle(
+                    "-fx-font-family: 'Georgia'; -fx-font-size: 9; -fx-font-weight: bold;" +
+                            "-fx-text-fill: #FFD700;"
+            );
             nameLabel.setWrapText(true);
             nameLabel.setAlignment(Pos.CENTER);
 
             StackPane textPane = new StackPane(nameLabel);
             textPane.setPrefSize(thumbWidth, thumbHeight);
-
             getChildren().addAll(rect, textPane);
         }
 
         setAlignment(Pos.CENTER);
+        setCursor(javafx.scene.Cursor.HAND);
 
-        // Click to show full leader card AND objectives window
+        // Hover glow
+        DropShadow glow = new DropShadow(14, Color.web("#FFD700"));
+        glow.setSpread(0.4);
+        setOnMouseEntered(e -> { setEffect(glow); setScaleX(1.06); setScaleY(1.06); });
+        setOnMouseExited(e  -> { setEffect(null);  setScaleX(1.0);  setScaleY(1.0);  });
+
         setOnMouseClicked(e -> {
             showFullLeaderWindow();
-            if (owner != null) {
-                showOwnedObjectivesWindow(owner);
-            }
+            if (owner != null) showOwnedObjectivesWindow(owner);
         });
     }
 
     private void showFullLeaderWindow() {
         Stage stage = new Stage();
 
-        double fullWidth = 240;
+        double fullWidth  = 240;
         double fullHeight = 336;
 
         String resourcePath = "/card/leader/" + leader.getName().replaceAll("\\s+", "") + ".png";
         java.net.URL resource = getClass().getResource(resourcePath);
 
-        HBox imageBox;
+        StackPane imagePane;
         if (resource != null) {
             ImageView leaderImage = new ImageView(new Image(resource.toExternalForm()));
             leaderImage.setFitWidth(fullWidth);
             leaderImage.setFitHeight(fullHeight);
-            leaderImage.setPreserveRatio(false); // stretch to fill
-            imageBox = new HBox(leaderImage);
+            leaderImage.setPreserveRatio(false);
+            imagePane = new StackPane(leaderImage);
         } else {
-            Rectangle rect = new Rectangle(fullWidth, fullHeight, Color.LIGHTBLUE);
-            rect.setStroke(Color.BLACK);
+            Rectangle rect = new Rectangle(fullWidth, fullHeight, Color.web("#1a0a00"));
+            rect.setStroke(Color.web("#FFD700"));
             rect.setStrokeWidth(2);
-            imageBox = new HBox(rect);
+            imagePane = new StackPane(rect);
         }
-        imageBox.setAlignment(Pos.CENTER);
+        imagePane.setAlignment(Pos.CENTER);
 
-        // Top info box: type + name + flavor
-        Label typeLabel = new Label("Leader Card");
-        typeLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: white;");
-        typeLabel.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        Label typeLabel = new Label("LEADER CARD");
+        typeLabel.setStyle(
+                "-fx-font-family: 'Georgia'; -fx-font-size: 12; -fx-font-weight: bold;" +
+                        "-fx-text-fill: #FFD700; -fx-padding: 4 0 4 0;"
+        );
+        typeLabel.setBackground(new Background(new BackgroundFill(Color.web("#2e1800"), CornerRadii.EMPTY, Insets.EMPTY)));
         typeLabel.setMaxWidth(Double.MAX_VALUE);
         typeLabel.setAlignment(Pos.CENTER);
 
         Label nameLabel = new Label(leader.getName());
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
+        nameLabel.setStyle(
+                "-fx-font-family: 'Georgia'; -fx-font-weight: bold; -fx-font-size: 15; -fx-text-fill: #F5DEB3;"
+        );
         nameLabel.setWrapText(true);
 
         Label flavorLabel = new Label(leader.getFlavorText());
-        flavorLabel.setStyle("-fx-font-size: 12; -fx-text-fill: gray;");
+        flavorLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #8a7050; -fx-font-style: italic;");
         flavorLabel.setWrapText(true);
 
-        VBox topInfoContent = new VBox(5, typeLabel, nameLabel, flavorLabel);
-        topInfoContent.setAlignment(Pos.TOP_CENTER);
-        topInfoContent.setPadding(new Insets(10));
-        topInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
+        VBox topInfo = new VBox(5, typeLabel, nameLabel, flavorLabel);
+        topInfo.setPadding(new Insets(10));
+        topInfo.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #2e1800, #1c0d00);" +
+                        "-fx-border-color: #5a3a10; -fx-border-width: 0 0 1 0;"
+        );
 
-        // Bottom info box: ability + class
         Label abilityLabel = new Label("Ability: " + leader.getAbilityDescription());
-        abilityLabel.setStyle("-fx-font-size: 12;");
+        abilityLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #C8A870; -fx-font-family: 'Georgia';");
         abilityLabel.setWrapText(true);
 
         Label classLabel = new Label("Class: " + leader.getUnitClass());
-        classLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: black;");
+        classLabel.setStyle(
+                "-fx-font-family: 'Georgia'; -fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #FFD700;"
+        );
 
-        StackPane bottomInfoContent = new StackPane();
+        StackPane bottomInfo = new StackPane();
         VBox abilityBox = new VBox(abilityLabel);
         abilityBox.setAlignment(Pos.TOP_LEFT);
-
         StackPane.setAlignment(classLabel, Pos.BOTTOM_RIGHT);
-        bottomInfoContent.getChildren().addAll(abilityBox, classLabel);
+        bottomInfo.getChildren().addAll(abilityBox, classLabel);
+        bottomInfo.setPadding(new Insets(10));
+        bottomInfo.setStyle("-fx-background-color: linear-gradient(to bottom, #1c0d00, #120800);");
+        VBox.setVgrow(bottomInfo, Priority.ALWAYS);
 
-        bottomInfoContent.setPadding(new Insets(10));
-        bottomInfoContent.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
-        VBox.setVgrow(bottomInfoContent, Priority.ALWAYS);
+        VBox innerInfo = new VBox(0, topInfo, bottomInfo);
+        innerInfo.setStyle("-fx-border-color: #5a3a10; -fx-border-width: 1;");
 
-        VBox innerInfo = new VBox(0, topInfoContent, bottomInfoContent);
-        innerInfo.setAlignment(Pos.TOP_LEFT);
-        innerInfo.setStyle("-fx-border-color: black; -fx-border-width: 1;");
-
-        HBox root = new HBox(0, imageBox, innerInfo);
-        root.setAlignment(Pos.CENTER);
+        HBox root = new HBox(0, imagePane, innerInfo);
+        root.setStyle("-fx-background-color: #1a0a00;");
 
         Scene scene = new Scene(root, 520, 336);
+        scene.setFill(Color.web("#1a0a00"));
 
         stage.setTitle(leader.getName());
         stage.setScene(scene);
@@ -144,31 +162,38 @@ public class LeaderCardView extends StackPane {
         stage.show();
     }
 
-    // NEW: show objectives window
     private void showOwnedObjectivesWindow(Player player) {
         Stage stage = new Stage();
-        HBox root = new HBox(10);
+        HBox root = new HBox(12);
         root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(16));
+        root.setStyle("-fx-background-color: linear-gradient(to bottom, #1c0d00, #2e1800);");
 
         Objective[] objs = player.getOwnedObjectives();
         for (int i = 0; i < 3; i++) {
             if (objs[i] != null) {
                 root.getChildren().add(new ObjectiveView(objs[i], i));
             } else {
-                Rectangle blank = new Rectangle(150, 210, Color.LIGHTGRAY);
-                blank.setStroke(Color.BLACK);
+                StackPane blank = new StackPane();
+                Rectangle r = new Rectangle(150, 210, Color.web("#1a0a00"));
+                r.setStroke(Color.web("#5a3a10"));
+                r.setStrokeWidth(1.5);
+                r.setArcWidth(4);
+                r.setArcHeight(4);
+                Label empty = new Label("Empty Slot");
+                empty.setStyle("-fx-font-family: 'Georgia'; -fx-font-size: 10; -fx-text-fill: #5a3a10;");
+                blank.getChildren().addAll(r, empty);
                 root.getChildren().add(blank);
             }
         }
 
-        Scene scene = new Scene(root, 500, 250);
-        stage.setTitle(player.getName() + " Objectives");
+        Scene scene = new Scene(root, 530, 270);
+        scene.setFill(Color.web("#1c0d00"));
+        stage.setTitle(player.getName() + " — Objectives");
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
         stage.show();
     }
 
-    public LeaderCard getLeader() {
-        return leader;
-    }
+    public LeaderCard getLeader() { return leader; }
 }
