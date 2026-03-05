@@ -8,6 +8,7 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,12 @@ public class ModifierView {
         DialogPane dp = dialog.getDialogPane();
         styleDialog(dp);
 
+        // Shift dialog to the right when shown
+        dialog.setOnShown(e -> {
+            Stage stage = (Stage) dp.getScene().getWindow();
+            stage.setX(stage.getX() + stage.getWidth() * 1.5);
+        });
+
         String result = dialog.showAndWait().orElse(null);
         if (result == null || result.equals("Pass")) return -1;
 
@@ -65,6 +72,12 @@ public class ModifierView {
 
         DialogPane dp = dialog.getDialogPane();
         styleDialog(dp);
+
+        // Shift dialog to the right when shown
+        dialog.setOnShown(e -> {
+            Stage stage = (Stage) dp.getScene().getWindow();
+            stage.setX(stage.getX() + stage.getWidth() * 1.5);
+        });
 
         String result = dialog.showAndWait().orElse(null);
         if (result == null) return -1;

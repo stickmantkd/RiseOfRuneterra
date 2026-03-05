@@ -39,6 +39,7 @@ public class ChallengeUtils {
             for(BaseCard challengersCard : challenger.getCardsInHand()){
                 if(challengersCard instanceof ChallengeCard){
                     challenger.removeCardFromHand(challengersCard);
+                    break;
                 }
             }
             ChallengeView view = new ChallengeView(challenger, challengedPlayer, card);
