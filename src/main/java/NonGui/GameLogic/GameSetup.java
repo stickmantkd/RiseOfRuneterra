@@ -28,7 +28,7 @@ import NonGui.ListOfCards.itemcard.CurseItem.DarkSeal;
 import NonGui.ListOfCards.itemcard.CurseItem.FrozenHeart;
 import NonGui.ListOfCards.itemcard.CurseItem.AbyssalMask;
 import NonGui.ListOfCards.magiccard.*;
-import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
+import NonGui.ListOfCards.modifiercard.*;
 import NonGui.ListOfLeader.*;
 import NonGui.ListOfObjective.*;
 
@@ -161,7 +161,11 @@ public class GameSetup {
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new HowlingGale());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new PickACard());}
         //Modifier
-        for(int i=0;i<25;i++){GameEngine.deck.addToDeck(new ElixirOfWrath());}
+        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new Deny());}
+        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new FlashFreeze());}
+        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new ForDemacia());}
+        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new ShapedStone());}
+        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new TwinDisciplines());}
         //Challenge
         for(int i=0;i<15;i++){GameEngine.deck.addToDeck(new ChallengeCard());}
 
