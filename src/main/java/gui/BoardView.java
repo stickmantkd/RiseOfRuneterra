@@ -42,12 +42,13 @@ public class BoardView extends GridPane {
 
         for (int i = 0; i < GameEngine.players.length; i++) {
             Player p = GameEngine.players[i];
-            Region playerArea = switch (i) {
-                case 0 -> new TopPlayerArea(p);
-                case 1 -> new RightPlayerArea(p);
-                case 2 -> new BottomPlayerArea(p);
-                case 3 -> new LeftPlayerArea(p);
-                default -> null;
+            Region playerArea;
+            switch (i) {
+                case 0 -> playerArea = new TopPlayerArea(p);
+                case 1 -> playerArea = new RightPlayerArea(p);
+                case 2 -> playerArea = new BottomPlayerArea(p);
+                case 3 -> playerArea = new LeftPlayerArea(p);
+                default -> playerArea = null;
             };
 
             if (i == GameEngine.getCurrentPlayerIndex()) {

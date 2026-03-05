@@ -88,7 +88,8 @@ public class ModifierView {
 
         // Header text
         Node headerLabel = dp.lookup(".header-panel .label");
-        if (headerLabel instanceof Label l) {
+        if (headerLabel instanceof Label) {
+            Label l = (Label) headerLabel;
             l.setStyle(
                     "-fx-text-fill: #FFD700;" +
                             "-fx-font-family: 'Georgia';" +
@@ -98,7 +99,8 @@ public class ModifierView {
 
         // Content text
         Node contentLabel = dp.lookup(".content .label");
-        if (contentLabel instanceof Label l) {
+        if (contentLabel instanceof Label) {
+            Label l = (Label) contentLabel;
             l.setStyle(
                     "-fx-text-fill: white;" +
                             "-fx-font-family: 'Georgia';" +
@@ -108,7 +110,8 @@ public class ModifierView {
 
         // List view styling
         Node listView = dp.lookup(".list-view");
-        if (listView instanceof ListView<?> lv) {
+        if (listView instanceof ListView<?>) {
+            ListView<?> lv = (ListView<?>) listView;
             lv.setStyle(
                     "-fx-control-inner-background: #1c0d00;" +
                             "-fx-text-fill: white;" +

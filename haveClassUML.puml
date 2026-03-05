@@ -1,0 +1,61 @@
+@startuml
+enum NonGui.BaseEntity.Properties.UnitClass {
++  Assassin
++  Fighter
++  Mage
++  Maskman
++  Support
++  Tank
+}
+
+interface NonGui.BaseEntity.Properties.haveClass {
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
+}
+
+abstract class NonGui.BaseEntity.Cards.HeroCard.HeroCard {
+- UnitClass heroClass
+- ItemCard item
+- boolean canUseAbility
+- int rollTarget
+- Player owner
++ boolean playCard(Player)
++ boolean equipItem(ItemCard)
++ boolean unEquipItem()
++ boolean tryUseAbility(Player)
++ {abstract}void useAbility(Player)
++ ItemCard getItem()
++ void setItem(ItemCard)
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
++ boolean canUseAbility()
++ void setCanUseAbility(boolean)
++ int getRollTarget()
++ void setRollTarget(int)
++ Player getOwner()
++ void setOwner(Player)
+}
+
+
+class NonGui.BaseEntity.LeaderCard {
+- String name
+- String flavorText
+- UnitClass leaderClass
+- String abilityDescription
++ String getName()
++ void setName(String)
++ String getFlavorText()
++ void setFlavorText(String)
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
++ String getAbilityDescription()
++ void setAbilityDescription(String)
+}
+
+
+
+
+NonGui.BaseEntity.Properties.haveClass <|.. NonGui.BaseEntity.Cards.HeroCard.HeroCard
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.HeroCard.HeroCard
+NonGui.BaseEntity.Properties.haveClass <|.. NonGui.BaseEntity.LeaderCard
+@enduml

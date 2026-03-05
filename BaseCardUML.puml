@@ -1,0 +1,33 @@
+@startuml
+abstract class NonGui.BaseEntity.BaseCard {
+- String name
+- String flavorText
+- String abilityDescription
+- String type
+~ <<Create>> BaseCard(String,String,String,String)
++ String toString()
++ String getName()
++ void setName(String)
++ String getFlavorText()
++ void setFlavorText(String)
++ String getAbilityDescription()
++ void setAbilityDescription(String)
++ String getType()
++ void setType(String)
+}
+
+
+abstract class NonGui.BaseEntity.TriggerCard {
++ <<Create>> TriggerCard(String,String,String,String)
+}
+
+abstract class NonGui.BaseEntity.ActionCard {
++ <<Create>> ActionCard(String,String,String,String)
++ {abstract}boolean playCard(Player)
+}
+
+
+
+NonGui.BaseEntity.BaseCard <|-- NonGui.BaseEntity.TriggerCard
+NonGui.BaseEntity.BaseCard <|-- NonGui.BaseEntity.ActionCard
+@enduml

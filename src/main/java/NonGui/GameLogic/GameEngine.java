@@ -116,16 +116,17 @@ public class GameEngine {
 
         BaseCard selectedCard = player.getCardInHand(handIndex);
 
-        if (!(selectedCard instanceof ActionCard action)) {
+        if (!(selectedCard instanceof ActionCard)) {
             System.out.println("Invalid action: You can't play a Trigger card.");
             player.addCardToHand(selectedCard); // put back
             return;
         }
 
-        boolean success = action.playCard(player);
+        ActionCard actionCard = (ActionCard) selectedCard;
+        boolean success = actionCard.playCard(player);
 
         if (!success) {
-            if (selectedCard instanceof NonGui.BaseEntity.Cards.HeroCard.HeroCard) {
+            if (selectedCard instanceof HeroCard) {
                 System.out.println("Play blocked by challenge. Card discarded.");
                 player.decreaseActionPoint(1);
             } else {

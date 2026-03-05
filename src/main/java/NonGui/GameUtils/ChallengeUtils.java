@@ -22,7 +22,7 @@ import static NonGui.GameLogic.GameEngine.players;
 public class ChallengeUtils {
 
     public static boolean resolveChallenge(int challengedPlayerIndex, Player challengedPlayer, BaseCard card) {
-        if (challengedPlayer.isUnchallengeable() || (card instanceof ItemCard && challengedPlayer.isUnchallengeable())) {
+        if (challengedPlayer.isUnchallengeable()) {
             System.out.println("✨ [BRAUM EFFECT] " + challengedPlayer.getName() + " is Unbreakable! This card cannot be challenged.");
             return false;
         }
@@ -36,15 +36,11 @@ public class ChallengeUtils {
             boolean wantsToPlay = askChallengeCard(challenger, challengedPlayer, card);
             if (!wantsToPlay) continue;
 
-            // ✅ FIX: safe removal using iterator
-            for (java.util.Iterator<BaseCard> it = challenger.getCardsInHand().iterator(); it.hasNext();) {
-                BaseCard challengersCard = it.next();
-                if (challengersCard instanceof ChallengeCard) {
-                    it.remove(); // safe removal
-                    break;       // remove only ONE challenge card
+            for(BaseCard challengersCard : challenger.getCardsInHand()){
+                if(challengersCard instanceof ChallengeCard){
+                    challenger.removeCardFromHand(challengersCard);
                 }
             }
-
             ChallengeView view = new ChallengeView(challenger, challengedPlayer, card);
             view.show();
 
@@ -67,10 +63,11 @@ public class ChallengeUtils {
                 GameEngine.deck.discardCard(card);
                 return true;
             } else {
-                if (card instanceof HeroCard hero) {
+                if (card instanceof HeroCard) {
                     HeroCard[] ownedHero = challengedPlayer.getOwnedHero();
                     for (int j = 0; j < ownedHero.length; j++) {
                         if (ownedHero[j] == null) {
+                            HeroCard hero = (HeroCard) card;
                             ownedHero[j] = hero;
                             hero.setOwner(challengedPlayer);
                             challengedPlayer.setOwnedHero(ownedHero);

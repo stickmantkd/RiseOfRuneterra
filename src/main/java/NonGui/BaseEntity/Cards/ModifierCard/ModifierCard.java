@@ -25,11 +25,17 @@ public class ModifierCard extends TriggerCard {
     // Function
     public int useModifier() {
         int selectedEffect = selectModifierEffect(this);
-        return switch (selectedEffect) {
-            case 0 -> positiveModifier;
-            case 1 -> negativeModifier;
-            default -> 0;
-        };
+        switch(selectedEffect) {
+            case 0 -> {
+                return positiveModifier;
+            }
+            case 1 -> {
+                return negativeModifier;
+            }
+            default -> {
+                return  0;
+            }
+        }
     }
 
     // Getters and Setters
