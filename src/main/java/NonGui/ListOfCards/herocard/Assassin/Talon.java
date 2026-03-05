@@ -19,7 +19,7 @@ public class Talon extends HeroCard {
         super(
                 "Talon",
                 "Live by the blade, die by the blade.",
-                "Cutthroat: Roll 6+. Pull a card from another player's hand.",
+                "Cutthroat: Roll 6+. Pull up to 2 cards and DISCARD 1",
                 UnitClass.Assassin,
                 6
         );
