@@ -46,15 +46,25 @@ public class GenerationsUtils {
      * @return A new instance of a BaseCard (Item, Magic, or Hero).
      */
     public static BaseCard generateRandomCard(){
-        // currently just draw a minion/item for prototyping
+        //currently just draw a minion
         int rand = new Random().nextInt(5);
-        return switch (rand) {
-            case 0 -> new BlueBuff();
-            case 1 -> new FrozenHeart();
-            case 2 -> new HowlingGale();
-            case 3 -> new PickACard();
-            default -> new Ezreal();
-        };
+        switch (rand) {
+            case 0 -> {
+                return new BlueBuff();
+            }
+            case 1 -> {
+                return new FrozenHeart();
+            }
+            case 2 -> {
+                return new HowlingGale();
+            }
+            case 3 -> {
+                return new PickACard();
+            }
+            default -> {
+                return new Ezreal();
+            }
+        }
     }
 
     /**

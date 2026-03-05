@@ -4,7 +4,6 @@ import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -18,15 +17,19 @@ import javafx.stage.Stage;
 import static gui.card.ImageCache.*;
 
 /**
- * Represents a graphical thumbnail view of a card in the game.
+ * A graphical thumbnail representation of a game card.
  * <p>
- * Handles rendering the card's image, applying hover animations, and responding
- * to click events to display the full-sized card (and its equipped item, if any).
+ * CardView handles hover animations, gold-bordered thumbnails, and
+ * item overlays for Hero cards. When clicked, it triggers a {@link FullCardView}
+ * to show detailed information.
+ * * @author GeminiCollaborator
  */
 public class CardView extends StackPane {
 
-    // --- Shared Effects ---
+    // --- Shared Visual Constants ---
     private static final DropShadow HOVER_GLOW = new DropShadow(12, Color.web("#FFD700"));
+    private static final String FONT_GEORGIA = "Georgia";
+    private static final double HOVER_SCALE = 1.08;
 
     static {
         HOVER_GLOW.setSpread(0.3);
@@ -35,37 +38,37 @@ public class CardView extends StackPane {
     private final BaseCard card;
 
     /**
-     * Constructs a new CardView thumbnail.
-     *
-     * @param card      The base card data to represent.
-     * @param handIndex The index of this card in the player's hand (can be used for specific game logic).
+     * Constructs a thumbnail view for a card.
+     * * @param card      The card data to display.
+     * @param handIndex The position in hand (use -1 if the card is on the board).
      */
     public CardView(BaseCard card, int handIndex) {
         this.card = card;
 
+        setupBaseLayout();
         buildThumbnail();
+        setupInteraction();
+    }
 
-        // Sizing and layout setup
+    /**
+     * Configures dimensions, alignment, and basic styling for the StackPane.
+     */
+    private void setupBaseLayout() {
         setPrefSize(THUMB_W, THUMB_H);
         setMaxSize(THUMB_W, THUMB_H);
         setAlignment(Pos.CENTER);
         setCursor(Cursor.HAND);
-
-        // GPU cache for smoother scaling animations
-        setCache(true);
-        setCacheHint(CacheHint.SPEED);
-
-        setupEventHandlers();
     }
 
     /**
-     * Initializes mouse interaction events (hover glow, scaling, and clicking).
+     * Defines mouse enter, exit, and click behaviors.
      */
-    private void setupEventHandlers() {
+    private void setupInteraction() {
+        // Hover Effects
         setOnMouseEntered(e -> {
             setEffect(HOVER_GLOW);
-            setScaleX(1.08);
-            setScaleY(1.08);
+            setScaleX(HOVER_SCALE);
+            setScaleY(HOVER_SCALE);
         });
 
         setOnMouseExited(e -> {
@@ -74,21 +77,23 @@ public class CardView extends StackPane {
             setScaleY(1.0);
         });
 
+        // Click Logic: Shows full card view (and item view if equipped)
         setOnMouseClicked(e -> {
-            Stage heroStage = new FullCardView(card).show();
+            Stage mainStage = new FullCardView(card).show();
 
-            // If it's a HeroCard with an equipped item, show the item side-by-side
+            // If it's a Hero with an item, pop up the item detail next to it
             if (card instanceof HeroCard hero && hero.getItem() != null) {
                 Stage itemStage = new FullCardView(hero.getItem()).show();
-                itemStage.setX(heroStage.getX() + heroStage.getWidth() + 10);
-                itemStage.setY(heroStage.getY());
+
+                // Position item stage to the right of the hero stage
+                itemStage.setX(mainStage.getX() + mainStage.getWidth() + 10);
+                itemStage.setY(mainStage.getY());
             }
         });
     }
 
     /**
-     * Builds the visual representation of the card.
-     * Tries to load the card image; if it fails, falls back to a text label.
+     * Fetches the image from cache and assembles the visual layers of the card.
      */
     private void buildThumbnail() {
         Image img = ImageCache.get(cardPath(card.getType(), card.getName()));
@@ -99,23 +104,20 @@ public class CardView extends StackPane {
             iv.setFitHeight(THUMB_H);
             iv.setPreserveRatio(false);
             iv.setSmooth(true);
-            iv.setCache(true);
 
-            getChildren().addAll(iv, goldBorder(THUMB_W, THUMB_H, 2, 4));
+            getChildren().addAll(iv, createGoldBorder(THUMB_W, THUMB_H, 2, 4));
 
-            // Overlay item icon if the hero has an item equipped
+            // Overlay item icon if hero has equipment
             if (card instanceof HeroCard hero && hero.getItem() != null) {
                 addItemOverlay(hero.getItem());
             }
         } else {
-            addFallbackLabel();
+            addFallbackDisplay();
         }
     }
 
     /**
-     * Adds a smaller item overlay to the bottom right of the hero card thumbnail.
-     *
-     * @param item The item card currently equipped by the hero.
+     * Adds a small square icon in the bottom-right corner if an item is equipped.
      */
     private void addItemOverlay(ItemCard item) {
         Image img = ImageCache.get(itemPath(item.getName()));
@@ -125,8 +127,6 @@ public class CardView extends StackPane {
         iv.setFitWidth(ITEM_W);
         iv.setFitHeight(ITEM_H);
         iv.setPreserveRatio(false);
-        iv.setSmooth(true);
-        iv.setCache(true);
 
         Rectangle border = new Rectangle(ITEM_W, ITEM_H, Color.TRANSPARENT);
         border.setStroke(Color.web("#FFD700"));
@@ -143,9 +143,9 @@ public class CardView extends StackPane {
     }
 
     /**
-     * Creates a textual fallback UI when the card image cannot be found in the system.
+     * Displays a text-based placeholder if the card image asset is missing.
      */
-    private void addFallbackLabel() {
+    private void addFallbackDisplay() {
         Rectangle bg = new Rectangle(THUMB_W, THUMB_H, Color.web("#1c0d00"));
         bg.setStroke(Color.web("#8B6914"));
         bg.setStrokeWidth(1.5);
@@ -154,11 +154,7 @@ public class CardView extends StackPane {
 
         Label lbl = new Label(card.getName());
         lbl.setTextFill(Color.web("#C8A870"));
-        lbl.setStyle(
-                "-fx-font-family: 'Georgia'; " +
-                        "-fx-font-size: 9; " +
-                        "-fx-font-weight: bold;"
-        );
+        lbl.setStyle("-fx-font-family: '" + FONT_GEORGIA + "'; -fx-font-size: 9; -fx-font-weight: bold;");
         lbl.setWrapText(true);
         lbl.setAlignment(Pos.CENTER);
         lbl.setMaxWidth(THUMB_W - 8);
@@ -167,30 +163,19 @@ public class CardView extends StackPane {
     }
 
     /**
-     * A shared utility factory for creating a gold border around cards and items.
-     *
-     * @param w       The width of the border.
-     * @param h       The height of the border.
-     * @param strokeW The stroke width.
-     * @param arc     The corner radius arc.
-     * @return A transparent Rectangle with a gold stroke.
+     * Helper factory for creating consistent gold borders across different card types.
      */
-    static Rectangle goldBorder(double w, double h, double strokeW, double arc) {
+    static Rectangle createGoldBorder(double w, double h, double strokeW, double arc) {
         Rectangle r = new Rectangle(w, h, Color.TRANSPARENT);
         r.setStroke(Color.web("#8B6914"));
         r.setStrokeWidth(strokeW);
         r.setArcWidth(arc);
         r.setArcHeight(arc);
         r.setMouseTransparent(true);
-
         return r;
     }
 
-    /**
-     * Gets the base card data associated with this view.
-     *
-     * @return The underlying BaseCard instance.
-     */
+    /** @return The base card data associated with this view. */
     public BaseCard getCard() {
         return card;
     }

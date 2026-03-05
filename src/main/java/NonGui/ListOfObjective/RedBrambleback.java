@@ -32,8 +32,8 @@ public class RedBrambleback extends Objective {
                 12
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Tank.");
-        setPrizeDescription("Each time you DRAW a Modifier card, you may reveal it and DRAW a second card.");
-        setPunishmentDescription("DISCARD 2 cards.");
+        setPrizeDescription("8+ | Each time you DRAW a Modifier card, you may reveal it and DRAW a second card.");
+        setPunishmentDescription("7- | DISCARD 2 cards.");
     }
 
     @Override

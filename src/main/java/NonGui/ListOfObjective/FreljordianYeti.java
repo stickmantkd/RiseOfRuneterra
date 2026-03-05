@@ -32,8 +32,8 @@ public class FreljordianYeti extends Objective {
                 12
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Marksman.");
-        setPrizeDescription("Each time you DRAW an Item card, you may play it immediately.");
-        setPunishmentDescription("DISCARD 2 cards.");
+        setPrizeDescription("8+ | Each time you DRAW an Item card, you may play it immediately.");
+        setPunishmentDescription("7- | DISCARD 2 cards.");
     }
 
     @Override

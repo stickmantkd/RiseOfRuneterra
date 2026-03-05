@@ -32,8 +32,8 @@ public class InfernalDrake extends Objective {
                 12
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Fighter.");
-        setPrizeDescription("Each time you roll for a Challenge card, +1 to your roll.");
-        setPunishmentDescription("DISCARD 2 cards.");
+        setPrizeDescription("8+ | Each time you roll for a Challenge card, +1 to your roll.");
+        setPunishmentDescription("7- | DISCARD 2 cards.");
     }
 
     @Override

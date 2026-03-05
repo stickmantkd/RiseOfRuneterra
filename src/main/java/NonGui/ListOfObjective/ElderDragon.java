@@ -27,8 +27,8 @@ public class ElderDragon extends Objective {
                 12
         );
         setRequirementDescription("Requires at least 4 Hero cards on your board.");
-        setPrizeDescription("MAX Action Points +1 (Permanent).");
-        setPunishmentDescription("Sacrifice (DISCARD) 1 of your Hero cards.");
+        setPrizeDescription("11+ | MAX Action Points +1 (Permanent).");
+        setPunishmentDescription("10- | Sacrifice (DISCARD) 1 of your Hero cards.");
     }
 
     @Override

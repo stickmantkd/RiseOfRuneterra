@@ -8,30 +8,44 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides the graphical interface dialogs for the Modifier Phase.
+ * Handles the visual interface for the Modifier Phase.
+ * Provides styled dialogs for players to interrupt or enhance rolls using Modifier cards.
  * <p>
- * This class handles displaying options for a player to select a Modifier card from their hand
- * and choose whether to apply its positive or negative effect to a roll.
+ * This class uses JavaFX ChoiceDialogs with custom CSS lookups to maintain
+ * the game's dark fantasy aesthetic.
+ * * @author GeminiCollaborator
  */
 public class ModifierView {
 
-    // --- Styles ---
+    // --- Style Constants ---
     private static final String DIALOG_STYLE =
             "-fx-background-color: linear-gradient(to bottom, #1c0d00, #2e1800);" +
                     "-fx-font-family: 'Georgia';";
 
+    private static final String HEADER_BG = "-fx-background-color: #2e1800;";
+    private static final String TEXT_GOLD = "-fx-text-fill: #FFD700; -fx-font-family: 'Georgia'; -fx-font-size: 13px;";
+    private static final String TEXT_WHITE = "-fx-text-fill: white; -fx-font-family: 'Georgia'; -fx-font-size: 12px;";
+
+    private static final String LIST_VIEW_STYLE =
+            "-fx-control-inner-background: #1c0d00;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-family: 'Georgia';" +
+                    "-fx-selection-bar: #FFD700;" +
+                    "-fx-selection-bar-text: black;";
+
     /**
-     * Opens a dialog for the acting player to select a modifier card to play against a target's roll.
+     * Prompts the acting player to select a Modifier card from their hand to apply
+     * to a target's roll.
      *
-     * @param actingPlayer The player who is deciding to play a modifier card.
+     * @param actingPlayer The player who may play a modifier.
      * @param targetPlayer The player whose roll is being modified.
-     * @return The index of the selected modifier card in the acting player's hand,
-     * or -1 if the player chooses to "Pass" or closes the dialog.
+     * @return The index of the selected card in the acting player's hand, or -1 if they "Pass".
      */
     public static int selectModifierCard(Player actingPlayer, Player targetPlayer) {
         List<String> options = new ArrayList<>();
@@ -39,6 +53,7 @@ public class ModifierView {
 
         options.add("Pass");
 
+        // Filter hand for Modifier cards only
         for (int i = 0; i < actingPlayer.getCardsInHand().size(); i++) {
             BaseCard card = actingPlayer.getCardsInHand().get(i);
             if (card instanceof ModifierCard) {
@@ -50,26 +65,32 @@ public class ModifierView {
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle("⚡ Modifier Phase");
         dialog.setHeaderText(
-                actingPlayer.getName() + " — Modify " + targetPlayer.getName() + "'s roll?\n" +
-                        "Current roll: " + targetPlayer.getCurrentRoll()
+                String.format("%s — Modify %s's roll?\nCurrent roll: %d",
+                        actingPlayer.getName(), targetPlayer.getName(), targetPlayer.getCurrentRoll())
         );
         dialog.setContentText("Select a modifier card:");
 
-        styleDialog(dialog.getDialogPane());
+        DialogPane dp = dialog.getDialogPane();
+        styleDialog(dp);
+        adjustDialogPosition(dialog, dp);
 
         String result = dialog.showAndWait().orElse(null);
-        if (result == null || result.equals("Pass")) return -1;
 
-        // Calculate the actual index in the player's hand (compensating for the "Pass" option)
+        if (result == null || result.equals("Pass")) {
+            return -1;
+        }
+
+        // Calculate correct index (subtracting 1 because of the "Pass" option at index 0)
         int choiceIndex = options.indexOf(result) - 1;
         return handIndexes.get(choiceIndex);
     }
 
     /**
-     * Opens a dialog for the player to choose between the positive and negative effect of a modifier card.
+     * Prompts the player to choose whether to use the positive or negative effect
+     * of a specific Modifier card.
      *
      * @param modifier The modifier card being played.
-     * @return 0 for the positive effect, 1 for the negative effect, or -1 if canceled.
+     * @return 0 for Positive effect, 1 for Negative effect, or -1 if cancelled.
      */
     public static int selectModifierEffect(ModifierCard modifier) {
         List<String> options = List.of(
@@ -79,61 +100,61 @@ public class ModifierView {
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle("⚡ Modifier Effect");
-        dialog.setHeaderText("Choose an effect for  " + modifier.getName());
-        dialog.setContentText("Effect:");
+        dialog.setHeaderText("Choose an effect for " + modifier.getName());
+        dialog.setContentText("Select desired outcome:");
 
-        styleDialog(dialog.getDialogPane());
+        DialogPane dp = dialog.getDialogPane();
+        styleDialog(dp);
+        adjustDialogPosition(dialog, dp);
 
         String result = dialog.showAndWait().orElse(null);
         if (result == null) return -1;
 
-        return options.indexOf(result); // 0 = positive, 1 = negative
+        return options.indexOf(result);
     }
 
     /**
-     * Applies a custom dark fantasy theme to a standard JavaFX DialogPane.
-     *
-     * @param dp The DialogPane to be styled.
+     * Applies custom CSS styles to the DialogPane to match the game theme.
+     * Utilizes .lookup() to find internal JavaFX nodes.
      */
     private static void styleDialog(DialogPane dp) {
         dp.setStyle(DIALOG_STYLE);
+        dp.applyCss();
+        dp.layout();
 
-        // Style header panel background
+        // 1. Header Styling
         Node header = dp.lookup(".header-panel");
         if (header != null) {
-            header.setStyle("-fx-background-color: #2e1800;");
+            header.setStyle(HEADER_BG);
         }
 
-        // Style header label text
         Node headerLabel = dp.lookup(".header-panel .label");
-        if (headerLabel instanceof Label l) {
-            l.setStyle(
-                    "-fx-text-fill: #FFD700; " +
-                            "-fx-font-family: 'Georgia'; " +
-                            "-fx-font-size: 13;"
-            );
+        if (headerLabel instanceof Label) {
+            headerLabel.setStyle(TEXT_GOLD);
         }
 
-        // Style content text (the "Select a modifier card:" label)
+        // 2. Content Styling
         Node contentLabel = dp.lookup(".content .label");
-        if (contentLabel instanceof Label l) {
-            l.setStyle(
-                    "-fx-text-fill: white; " +
-                            "-fx-font-family: 'Georgia'; " +
-                            "-fx-font-size: 12;"
-            );
+        if (contentLabel instanceof Label) {
+            contentLabel.setStyle(TEXT_WHITE);
         }
 
-        // Style choice list items
+        // 3. ListView Styling (The dropdown list)
         Node listView = dp.lookup(".list-view");
-        if (listView instanceof ListView<?> lv) {
-            lv.setStyle(
-                    "-fx-control-inner-background: #1c0d00; " +
-                            "-fx-text-fill: white; " +
-                            "-fx-font-family: 'Georgia'; " +
-                            "-fx-selection-bar: #FFD700; " +
-                            "-fx-selection-bar-text: black;"
-            );
+        if (listView instanceof ListView<?>) {
+            listView.setStyle(LIST_VIEW_STYLE);
         }
+    }
+
+    /**
+     * Shifts the dialog to the right side of the screen to avoid obscuring
+     * the center of the game board.
+     */
+    private static void adjustDialogPosition(ChoiceDialog<String> dialog, DialogPane dp) {
+        dialog.setOnShown(e -> {
+            Stage stage = (Stage) dp.getScene().getWindow();
+            // Offset to the right to keep board visibility
+            stage.setX(stage.getX() + stage.getWidth() * 1.5);
+        });
     }
 }

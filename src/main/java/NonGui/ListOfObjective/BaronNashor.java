@@ -26,8 +26,8 @@ public class BaronNashor extends Objective {
                 12
         );
         setRequirementDescription("have 3 Heroes");
-        setPrizeDescription("drawn 5 cards");
-        setPunishmentDescription("Sacrifice 1 Heroes");
+        setPrizeDescription("10+ | drawn 5 cards");
+        setPunishmentDescription("9- | Sacrifice 1 Heroes");
     }
 
     @Override

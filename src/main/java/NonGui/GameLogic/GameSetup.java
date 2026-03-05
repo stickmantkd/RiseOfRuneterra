@@ -1,36 +1,21 @@
 package NonGui.GameLogic;
 
-import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.Player;
-import NonGui.ListOfCards.herocard.Assassin.Akali;
-import NonGui.ListOfCards.herocard.Assassin.Shaco;
-import NonGui.ListOfCards.herocard.Assassin.Talon;
-import NonGui.ListOfCards.herocard.Fighter.Fiora;
-import NonGui.ListOfCards.herocard.Fighter.Olaf;
-import NonGui.ListOfCards.herocard.Fighter.Volibear;
-import NonGui.ListOfCards.herocard.Mage.Veigar;
-import NonGui.ListOfCards.herocard.Mage.Zilean;
-import NonGui.ListOfCards.herocard.Mage.Zoe;
-import NonGui.ListOfCards.herocard.Maskman.Caitlyn;
-import NonGui.ListOfCards.herocard.Maskman.Ezreal;
-import NonGui.ListOfCards.herocard.Maskman.Jinx;
-import NonGui.ListOfCards.herocard.Support.Bard;
-import NonGui.ListOfCards.herocard.Support.Neeko;
-import NonGui.ListOfCards.herocard.Support.TahmKench;
-import NonGui.ListOfCards.herocard.Tank.Braum;
-import NonGui.ListOfCards.herocard.Tank.Nautilus;
-import NonGui.ListOfCards.herocard.Tank.Ornn;
-import NonGui.ListOfCards.itemcard.BuffItem.BlueBuff;
-import NonGui.ListOfCards.itemcard.BuffItem.TearOfTheGoddess;
+import NonGui.ListOfCards.herocard.Assassin.*;
+import NonGui.ListOfCards.herocard.Fighter.*;
+import NonGui.ListOfCards.herocard.Mage.*;
+import NonGui.ListOfCards.herocard.Maskman.*;
+import NonGui.ListOfCards.herocard.Support.*;
+import NonGui.ListOfCards.herocard.Tank.*;
+import NonGui.ListOfCards.itemcard.BuffItem.*;
 import NonGui.ListOfCards.itemcard.ChangeClass.*;
-import NonGui.ListOfCards.itemcard.CurseItem.DarkSeal;
-import NonGui.ListOfCards.itemcard.CurseItem.FrozenHeart;
-import NonGui.ListOfCards.itemcard.CurseItem.AbyssalMask;
+import NonGui.ListOfCards.itemcard.CurseItem.*;
 import NonGui.ListOfCards.magiccard.*;
 import NonGui.ListOfCards.modifiercard.*;
 import NonGui.ListOfLeader.*;
 import NonGui.ListOfObjective.*;
+import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,22 +25,20 @@ import static NonGui.GameLogic.GameEngine.*;
 import static NonGui.GameUtils.GenerationsUtils.drawObjective;
 
 /**
- * Utility class responsible for setting up the initial state of the game.
- * Handles player creation, leader assignment, deck building, and objective initialization.
+ * Handles the initial setup of the game state.
+ * This class is responsible for creating players, assigning leaders,
+ * and populating both the main deck and the objective deck.
+ * * @author GeminiCollaborator
  */
 public class GameSetup {
 
-    // ==========================================
-    // Player Initialization
-    // ==========================================
-
     /**
-     * Initializes the 4 players for the game.
-     * Assigns them names, shuffles and assigns unique Leader cards,
-     * and sets up their initial state.
+     * Initializes all players for the game session.
+     * Sets up names, shuffles and assigns unique Leader cards,
+     * and prepares the player objects in the global engine.
      */
     public static void initializePlayer() {
-        // Step 1: create a list of all leaders
+        // Step 1: Create a list of all available leaders
         List<LeaderCard> leaders = new ArrayList<>();
         leaders.add(new Zed());
         leaders.add(new Teemo());
@@ -64,56 +47,27 @@ public class GameSetup {
         leaders.add(new Garen());
         leaders.add(new Darius());
 
-        // Step 2: shuffle the list for randomness
+        // Step 2: Shuffle for randomness
         Collections.shuffle(leaders);
 
-        // Step 3: assign each player
+        // Step 3: Initialize each player slot
         for (int i = 0; i < players.length; i++) {
-            // --- GUI popup for player name ---
-            /*
-            TextInputDialog dialog = new TextInputDialog("Player " + (i + 1));
-            dialog.setTitle("Enter Player Name");
-            dialog.setHeaderText("Setup Player " + (i + 1));
-            dialog.setContentText("Please enter the player's name:");
-
-            Optional<String> result = dialog.showAndWait();
-            String playerName = result.orElse("Player " + (i + 1));
-            */
-
-            // --- Uncomment this block for preset names (testing) ---
-            String playerName = "TestPlayer" + (i + 1);
-
+            // Note: GUI Dialogs can be integrated here later.
+            String playerName = "Player " + (i + 1);
             Player p = new Player(playerName);
 
-            // Assign a random leader (unique because we shuffled)
+            // Assign a unique leader from the shuffled list
             p.setOwnedLeader(leaders.get(i));
-
-            // Give each player 2 heroes
-            //p.addHeroCard(new Shaco());
-            //p.addHeroCard(new Akali());
-
-            // Optionally give cards in hand
-            /*
-            p.addCardToHand(new Fiora());
-            p.addCardToHand(new BFSword());
-            p.addCardToHand(new ChallengeCard());
-            p.addCardToHand(new ElixirOfWrath());
-             */
 
             players[i] = p;
         }
     }
 
-    // ==========================================
-    // Objective Initialization
-    // ==========================================
-
     /**
-     * Initializes the central objectives on the board.
-     * Populates the ObjectiveDeck, shuffles it, and draws the first 3 visible objectives.
+     * Populates the Objective Deck with legendary monsters and bosses,
+     * shuffles them, and draws the initial three objectives for the board.
      */
     public static void initializeObjective() {
-
         objectiveDeck.addToDeck(new BaronNashor());
         objectiveDeck.addToDeck(new BlueSentinel());
         objectiveDeck.addToDeck(new FreljordianYeti());
@@ -125,86 +79,117 @@ public class GameSetup {
 
         objectiveDeck.shuffle();
 
-        objectives[0] = drawObjective();
-        objectives[1] = drawObjective();
-        objectives[2] = drawObjective();
-
+        // Draw initial 3 objectives for the center of the board
+        for (int i = 0; i < 3; i++) {
+            objectives[i] = drawObjective();
+        }
     }
 
-    // ==========================================
-    // Deck Initialization
-    // ==========================================
-
     /**
-     * Builds the main game deck.
-     * Adds copies of Hero cards, Item cards, Magic cards, Modifier cards,
-     * and Challenge cards to the deck, then shuffles them.
+     * Fills the main Game Deck with all card types: Heroes, Items, Magic,
+     * Modifiers, and Challenges. Shuffles the deck after population.
      */
     public static void initializeDeck() {
-        // Fill the deck with starting cards
+        // --- 1. HERO CARDS (2 of each) ---
+        addHeroesToDeck();
 
-        // --- Heroes ---
-        //Assassin
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Akali());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Shaco());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Talon());}
-        //Fighter
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Fiora());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Olaf());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Volibear());}
-        //Mage
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Veigar());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Zilean());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Zoe());}
-        //Maskman
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Caitlyn());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Ezreal());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Jinx());}
-        //Support
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Bard());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Neeko());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TahmKench());}
-        //Tank
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Braum());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Nautilus());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Ornn());}
+        // --- 2. ITEM CARDS ---
+        addItemsToDeck();
 
-        // --- Items ---
-        //ChangeClass
-        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new BFSword());}
-        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new ForbiddenIdol());}
-        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new GiantsBelt());}
-        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new NeedlesslyLargeRod());}
-        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new RecurveBow());}
-        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new SerratedDirk());}
-        //CurseItem
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new DarkSeal());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FrozenHeart());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new AbyssalMask());}
-        //BuffItem
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BlueBuff());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
+        // --- 3. MAGIC CARDS (3 of each) ---
+        addMagicToDeck();
 
-        // --- Magic ---
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Charm());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BattleFury());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FinalSpark());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new HowlingGale());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new PickACard());}
+        // --- 4. MODIFIER CARDS (5 of each) ---
+        addModifiersToDeck();
 
-        // --- Modifiers ---
-        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new Deny());}
-        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new FlashFreeze());}
-        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new ForDemacia());}
-        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new ShapedStone());}
-        for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new TwinDisciplines());}
+        // --- 5. CHALLENGE CARDS (15 cards) ---
+        for (int i = 0; i < 15; i++) {
+            GameEngine.deck.addToDeck(new ChallengeCard());
+        }
 
-        // --- Challenge ---
-        for(int i=0;i<15;i++){GameEngine.deck.addToDeck(new ChallengeCard());}
-
-        // Shuffle the deck
+        // Finalize deck
         Collections.shuffle(GameEngine.deck.getGameDeck());
-
         System.out.println("Deck initialized with " + GameEngine.deck.getGameDeck().size() + " cards.");
+    }
+
+    /**
+     * Helper to add Hero cards by class.
+     */
+    private static void addHeroesToDeck() {
+        for (int i = 0; i < 2; i++) {
+            // Assassins
+            GameEngine.deck.addToDeck(new Akali());
+            GameEngine.deck.addToDeck(new Shaco());
+            GameEngine.deck.addToDeck(new Talon());
+            // Fighters
+            GameEngine.deck.addToDeck(new Fiora());
+            GameEngine.deck.addToDeck(new Olaf());
+            GameEngine.deck.addToDeck(new Volibear());
+            // Mages
+            GameEngine.deck.addToDeck(new Veigar());
+            GameEngine.deck.addToDeck(new Zilean());
+            GameEngine.deck.addToDeck(new Zoe());
+            // Marksmen
+            GameEngine.deck.addToDeck(new Caitlyn());
+            GameEngine.deck.addToDeck(new Ezreal());
+            GameEngine.deck.addToDeck(new Jinx());
+            // Support
+            GameEngine.deck.addToDeck(new Bard());
+            GameEngine.deck.addToDeck(new Neeko());
+            GameEngine.deck.addToDeck(new TahmKench());
+            // Tanks
+            GameEngine.deck.addToDeck(new Braum());
+            GameEngine.deck.addToDeck(new Nautilus());
+            GameEngine.deck.addToDeck(new Ornn());
+        }
+    }
+
+    /**
+     * Helper to add Item cards (Class Change, Curse, and Buff).
+     */
+    private static void addItemsToDeck() {
+        // Change Class (1 of each)
+        GameEngine.deck.addToDeck(new BFSword());
+        GameEngine.deck.addToDeck(new ForbiddenIdol());
+        GameEngine.deck.addToDeck(new GiantsBelt());
+        GameEngine.deck.addToDeck(new NeedlesslyLargeRod());
+        GameEngine.deck.addToDeck(new RecurveBow());
+        GameEngine.deck.addToDeck(new SerratedDirk());
+
+        for (int i = 0; i < 2; i++) {
+            // Curse Items
+            GameEngine.deck.addToDeck(new DarkSeal());
+            GameEngine.deck.addToDeck(new FrozenHeart());
+            GameEngine.deck.addToDeck(new AbyssalMask());
+            // Buff Items
+            GameEngine.deck.addToDeck(new BlueBuff());
+            GameEngine.deck.addToDeck(new TearOfTheGoddess());
+        }
+    }
+
+    /**
+     * Helper to add Magic cards.
+     */
+    private static void addMagicToDeck() {
+        for (int i = 0; i < 3; i++) {
+            GameEngine.deck.addToDeck(new Charm());
+            GameEngine.deck.addToDeck(new BattleFury());
+            GameEngine.deck.addToDeck(new FinalSpark());
+            GameEngine.deck.addToDeck(new HowlingGale());
+            GameEngine.deck.addToDeck(new PickACard());
+        }
+    }
+
+    /**
+     * Helper to add Modifier cards.
+     */
+    private static void addModifiersToDeck() {
+        for (int i = 0; i < 5; i++) {
+            GameEngine.deck.addToDeck(new Deny());
+            GameEngine.deck.addToDeck(new FlashFreeze());
+            GameEngine.deck.addToDeck(new ForDemacia());
+            GameEngine.deck.addToDeck(new ShapedStone());
+            GameEngine.deck.addToDeck(new TwinDisciplines());
+        }
     }
 }
