@@ -2,12 +2,11 @@ package NonGui.GameUtils;
 
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Properties.UnitClass;
-import NonGui.ListOfCards.itemcard.BlueBuff;
-import NonGui.ListOfCards.itemcard.CursedDoubloon;
-import NonGui.ListOfCards.itemcard.SnakesEmbrace;
+import NonGui.ListOfCards.itemcard.BuffItem.BlueBuff;
+import NonGui.ListOfCards.itemcard.CurseItem.CursedDoubloon;
+import NonGui.ListOfCards.itemcard.CurseItem.SnakesEmbrace;
 import NonGui.BaseEntity.Player;
-import NonGui.ListOfCards.itemcard.TearOfTheGoddess;
-import gui.board.StatusBar;
+import NonGui.ListOfCards.itemcard.BuffItem.TearOfTheGoddess;
 
 import java.util.Random;
 

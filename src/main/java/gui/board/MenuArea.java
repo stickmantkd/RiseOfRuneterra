@@ -135,24 +135,8 @@ public class MenuArea extends VBox {
 
     // --- Deck Window ---
     private void openDeckWindow() {
-        deckGrid = new TilePane();
-        deckGrid.setHgap(10);
-        deckGrid.setVgap(10);
-        deckGrid.setAlignment(Pos.CENTER);
-        deckGrid.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        updateDeckGrid(); // initial fill
-
-        deckStage = new Stage();
-        deckStage.setAlwaysOnTop(true);
-        deckStage.setTitle("Game Deck");
-        deckStage.setScene(new Scene(deckGrid, 600, 400));
-        deckStage.show();
-
-        // Listen for changes in deck
-        GameEngine.deck.getGameDeck().addListener((ListChangeListener.Change<?> change) -> {
-            updateDeckGrid();
-        });
+        gui.board.DeckView deckView = new gui.board.DeckView();
+        deckView.show();
     }
 
     private void updateDeckGrid() {
