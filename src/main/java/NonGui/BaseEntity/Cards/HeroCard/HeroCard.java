@@ -4,13 +4,13 @@ import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.ActionCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
-import NonGui.BaseEntity.Properties.haveClass;
+import NonGui.BaseEntity.Properties.HaveClass;
 import NonGui.GameLogic.GameEngine;
 import NonGui.GameUtils.ChallengeUtils;
 import NonGui.GameUtils.DiceUtils;
 import NonGui.ListOfCards.itemcard.CurseItem.AbyssalMask;
 
-public abstract class HeroCard extends ActionCard implements haveClass {
+public abstract class HeroCard extends ActionCard implements HaveClass {
     private UnitClass heroClass;
     private ItemCard item;
     private boolean canUseAbility;
