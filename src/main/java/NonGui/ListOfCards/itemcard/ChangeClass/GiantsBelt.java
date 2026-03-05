@@ -5,7 +5,7 @@ import NonGui.BaseEntity.Properties.UnitClass;
 
 public class GiantsBelt extends ClassChangingItemCard {
     public GiantsBelt() {
-        super("Giant's Belt",
+        super("Giants Belt",
                 "A belt that once held the trousers of a mountain giant.",
                 "Change class to Tank",
                 UnitClass.Tank

@@ -15,7 +15,7 @@ public class Shaco extends HeroCard {
         super(
                 "Shaco",
                 "The joke's on you!",
-                "Deceive: Roll 7+. STEAL an Item card equipped to another player's Hero.",
+                "Deceive: Roll 9+. STEAL an Item card equipped to another player's Hero.",
                 UnitClass.Assassin,
                 9
         );
