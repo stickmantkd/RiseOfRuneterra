@@ -97,7 +97,7 @@ public class ObjectiveView extends StackPane {
             iv.setSmooth(true);
             iv.setCache(true); // GPU cache for better performance
 
-            getChildren().addAll(iv, CardView.goldBorder(OBJ_THUMB_W, OBJ_THUMB_H, 2, 4));
+            getChildren().addAll(iv, CardView.createGoldBorder(OBJ_THUMB_W, OBJ_THUMB_H, 2, 4));
         } else {
             Rectangle rect = new Rectangle(OBJ_THUMB_W, OBJ_THUMB_H, Color.web("#1a0a00"));
             rect.setStroke(Color.web("#8B6914"));
