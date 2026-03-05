@@ -2,10 +2,12 @@ package gui.board;
 
 import NonGui.GameLogic.GameEngine;
 import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.Objective;
 import NonGui.GameUtils.DiceUtils;
 import NonGui.GameLogic.GameChoice;
 import gui.BoardView;
 import gui.card.CardView;
+import gui.card.ObjectiveView;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,8 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 
 import static gui.GameUI.endTurn;
 
@@ -29,6 +29,8 @@ public class MenuArea extends VBox {
     private Stage deckStage;
     private TilePane discardGrid;
     private Stage discardStage;
+    private TilePane objectiveDeckGrid;   // ✅ new
+    private Stage objectiveDeckStage;     // ✅ new
     private boolean gameOver;
 
     public MenuArea() {
@@ -113,8 +115,12 @@ public class MenuArea extends VBox {
         Button seeDiscardButton = new Button("See Discard Pile");
         seeDiscardButton.setOnAction(e -> openDiscardWindow());
 
+        // ✅ New: See Objective Deck button
+        Button seeObjectiveDeckButton = new Button("See Objective Deck");
+        seeObjectiveDeckButton.setOnAction(e -> openObjectiveDeckWindow());
+
         getChildren().addAll(menuLabel, turnLabel, drawButton, playButton, abilityButton,
-                objectiveButton, diceButton, seeDeckButton, seeDiscardButton);
+                objectiveButton, diceButton, seeDeckButton, seeDiscardButton, seeObjectiveDeckButton);
     }
 
     // --- Helper to update turn info ---
@@ -184,6 +190,37 @@ public class MenuArea extends VBox {
         discardGrid.getChildren().clear();
         for (int i = 0; i < GameEngine.deck.getDiscardPile().size(); i++) {
             discardGrid.getChildren().add(new CardView(GameEngine.deck.getDiscardPile().get(i), i));
+        }
+    }
+
+    // --- Objective Deck Window ---
+    private void openObjectiveDeckWindow() {
+        objectiveDeckGrid = new TilePane();
+        objectiveDeckGrid.setHgap(10);
+        objectiveDeckGrid.setVgap(10);
+        objectiveDeckGrid.setAlignment(Pos.CENTER);
+        objectiveDeckGrid.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        updateObjectiveDeckGrid(); // initial fill
+
+        objectiveDeckStage = new Stage();
+        objectiveDeckStage.setAlwaysOnTop(true);
+        objectiveDeckStage.setTitle("Objective Deck");
+        objectiveDeckStage.setScene(new Scene(objectiveDeckGrid, 600, 400));
+        objectiveDeckStage.show();
+
+        // Listen for changes in objective deck
+        GameEngine.objectiveDeck.getObjectiveDeck().addListener((ListChangeListener.Change<?> change) -> {
+            updateObjectiveDeckGrid();
+        });
+    }
+
+    private void updateObjectiveDeckGrid() {
+        if (objectiveDeckGrid == null) return;
+        objectiveDeckGrid.getChildren().clear();
+        for (int i = 0; i < GameEngine.objectiveDeck.getObjectiveDeck().size(); i++) {
+            Objective obj = GameEngine.objectiveDeck.getObjectiveDeck().get(i);
+            objectiveDeckGrid.getChildren().add(new ObjectiveView(obj, i));
         }
     }
 }

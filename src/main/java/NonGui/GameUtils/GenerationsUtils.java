@@ -9,17 +9,23 @@ import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
 import NonGui.ListOfCards.magiccard.HowlingGale;
 import NonGui.ListOfCards.magiccard.PickACard;
-import NonGui.ListOfObjective.BaronNashor;
-import NonGui.ListOfObjective.TestObjective;
 
 import java.util.Random;
 
+import static NonGui.GameLogic.GameEngine.objectiveDeck;
+
 
 public class GenerationsUtils {
-    public static Objective generateRandomObjective(){
-        //To be implemented
-        return (new TestObjective());
+    public static Objective drawObjective() {
+        if (objectiveDeck.isDeckEmpty()) {
+            System.out.println("No objectives left in the deck!");
+            return null;
+        }
+        // ✅ Always draw from the top of the deck (index 0)
+        return objectiveDeck.getObjectiveDeck().removeFirst();
     }
+
+
 
     public static BaseCard generateRandomCard(){
         //currently just draw a minion

@@ -4,7 +4,9 @@ import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
+import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
+import gui.board.StatusBar;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Alert;
 
@@ -95,6 +97,10 @@ public class HowlingGale extends MagicCard {
 
                 // Refresh GUI
                 try { gui.BoardView.refresh(); } catch (Exception e) {}
+                if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
+                    player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+                    StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
+                }
                 return true;
             }
         }

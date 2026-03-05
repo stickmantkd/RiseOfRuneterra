@@ -2,6 +2,8 @@ package NonGui.ListOfCards.magiccard;
 
 import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.Properties.UnitClass;
+import gui.board.StatusBar;
 
 public class ElixirOfSorcery extends MagicCard {
     public ElixirOfSorcery() {
@@ -28,7 +30,10 @@ public class ElixirOfSorcery extends MagicCard {
         } catch (Exception e) {
             // ignore if GUI not running
         }
-
+        if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
+            player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+            StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
+        }
         return true;
     }
 }

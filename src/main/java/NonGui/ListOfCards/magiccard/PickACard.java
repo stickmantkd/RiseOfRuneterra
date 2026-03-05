@@ -3,7 +3,9 @@ package NonGui.ListOfCards.magiccard;
 import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.BaseCard;
+import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
+import gui.board.StatusBar;
 import javafx.scene.control.ChoiceDialog;
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +79,10 @@ public class PickACard extends MagicCard {
 
         // Refresh อีกรอบหลังทิ้งเสร็จ
         try { gui.BoardView.refresh(); } catch (Exception e) {}
-
+        if(player.getOwnedLeader().getUnitClass() == UnitClass.Mage){
+            player.DrawRandomCard(); // สั่งจั่วเพิ่ม 1 ใบ
+            StatusBar.showMessage("Mage Leader: Magic used! Drawing an extra card.");
+        }
         return true;
     }
 }

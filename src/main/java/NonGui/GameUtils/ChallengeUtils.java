@@ -3,7 +3,9 @@ package NonGui.GameUtils;
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
 import gui.ChallengeView;
 
@@ -12,7 +14,7 @@ import static NonGui.GameLogic.GameEngine.players;
 public class ChallengeUtils {
 
     public static boolean resolveChallenge(int challengedPlayerIndex, Player challengedPlayer, BaseCard card) {
-        if (challengedPlayer.isUnchallengeable()) {
+        if (challengedPlayer.isUnchallengeable() || (card instanceof ItemCard && challengedPlayer.isUnchallengeable())) {
             System.out.println("✨ [BRAUM EFFECT] " + challengedPlayer.getName() + " is Unbreakable! This card cannot be challenged.");
             // คืนค่า false เพื่อบอกว่า "ไม่โดนบล็อก" (ให้ร่ายการ์ดผ่านฉลุย)
             return false;
@@ -33,8 +35,8 @@ public class ChallengeUtils {
             view.show();
 
             // Rolls automatically trigger modifier phase
-            int challengerRoll = DiceUtils.getRoll(challenger);
-            int challengedRoll = DiceUtils.getRoll(challengedPlayer);
+            int challengerRoll = DiceUtils.rollForChallenge(challenger);
+            int challengedRoll = DiceUtils.rollForChallenge(challengedPlayer);
 
             challenger.setCurrentRoll(challengerRoll);
             challengedPlayer.setCurrentRoll(challengedRoll);

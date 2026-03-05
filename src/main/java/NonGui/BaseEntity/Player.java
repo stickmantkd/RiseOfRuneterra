@@ -3,8 +3,10 @@ package NonGui.BaseEntity;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import NonGui.BaseEntity.Cards.MagicCard.MagicCard;
+import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
+import gui.board.StatusBar;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,6 +36,12 @@ public class Player {
     private int permanentAbilityBonus = 0; // โบนัสถาวรจากการปราบ Blue Sentinel
     private boolean canPlayItemInstantly = false;
     private boolean canPlayMagicInstantly = false;
+    private int permanentChallengeBonus = 0; // โบนัสถาวรสำหรับการ Challenge
+    // เพิ่มใน Player.java
+    private boolean itemUnchallengeable = false;
+
+    // เพิ่มใน Player.java
+    private boolean hasRedBuff = false;
 
     // NEW: reactive property for current roll
     private final IntegerProperty currentRoll = new SimpleIntegerProperty(-1);
@@ -99,6 +107,16 @@ public class Player {
                     GameEngine.deck.discardCard(card);
                 }
             });
+        }
+
+        if (this.hasRedBuff && card instanceof ModifierCard) {
+            System.out.println("🔥 Red Buff Triggered! Revealed Modifier: " + card.getName());
+
+            StatusBar.showMessage("Red Buff: You drew a Modifier! Drawing an extra card...");
+
+            // จั่วใบที่สองเพิ่มทันที
+            this.DrawRandomCard();
+            // หมายเหตุ: การ Reveal ในแบบ GUI คือการเด้ง Notification หรือโชว์การ์ดนั้นครู่หนึ่ง
         }
     }
 
@@ -314,5 +332,14 @@ public class Player {
 
     public boolean isCanPlayMagicInstantly() { return canPlayMagicInstantly; }
     public void setCanPlayMagicInstantly(boolean value) { this.canPlayMagicInstantly = value; }
+
+    public int getPermanentChallengeBonus() { return permanentChallengeBonus; }
+    public void addPermanentChallengeBonus(int amount) { this.permanentChallengeBonus += amount; }
+
+    public boolean isHasRedBuff() { return hasRedBuff; }
+    public void setHasRedBuff(boolean value) { this.hasRedBuff = value; }
+
+    public boolean isItemUnchallengeable() { return itemUnchallengeable; }
+    public void setItemUnchallengeable(boolean value) { this.itemUnchallengeable = value; }
 
 }

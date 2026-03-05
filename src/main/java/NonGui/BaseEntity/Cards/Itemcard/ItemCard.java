@@ -3,6 +3,7 @@ package NonGui.BaseEntity.Cards.Itemcard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.ActionCard;
 import NonGui.BaseEntity.Player;
+import NonGui.BaseEntity.Properties.UnitClass;
 
 import static NonGui.GameLogic.GameChoice.selectHeroCard;
 import static NonGui.GameLogic.GameChoice.selectPlayer;
@@ -57,6 +58,10 @@ public abstract class ItemCard extends ActionCard {
 
         if (selectedHero == null) {
             return false;
+        }
+
+        if(player.getOwnedLeader().getUnitClass() == UnitClass.Assassin){
+            player.DrawRandomCard();
         }
 
         // 3. ใส่ไอเทมให้ฮีโร่ และคืนค่ากลับไปบอกว่าร่ายสำเร็จไหม
