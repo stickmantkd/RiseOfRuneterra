@@ -4,6 +4,8 @@ import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,102 +14,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import static gui.card.ImageCache.*;
+
 public class CardView extends StackPane {
 
+    // One shared DropShadow object reused by every CardView instance.
+    // DropShadow is read-only after construction so sharing is safe.
+    private static final DropShadow HOVER_GLOW = new DropShadow(12, Color.web("#FFD700"));
+    static { HOVER_GLOW.setSpread(0.3); }
+
     private final BaseCard card;
-    private final int handIndex;
 
     public CardView(BaseCard card, int handIndex) {
         this.card = card;
-        this.handIndex = handIndex;
+        buildThumbnail();
 
-        double thumbWidth  = 75;
-        double thumbHeight = 105;
-
-        String resourcePath = "/card/base/" + card.getType().toLowerCase() + "/"
-                + card.getName().replaceAll("\\s+", "") + ".png";
-        java.net.URL resource = getClass().getResource(resourcePath);
-
-        if (resource != null) {
-            ImageView thumbnail = new ImageView(new Image(resource.toExternalForm()));
-            thumbnail.setFitWidth(thumbWidth);
-            thumbnail.setFitHeight(thumbHeight);
-            thumbnail.setPreserveRatio(false);
-
-            // Gold border rectangle
-            Rectangle border = new Rectangle(thumbWidth, thumbHeight);
-            border.setFill(Color.TRANSPARENT);
-            border.setStroke(Color.web("#8B6914"));
-            border.setStrokeWidth(2);
-            border.setArcWidth(4);
-            border.setArcHeight(4);
-
-            getChildren().addAll(thumbnail, border);
-
-            // Item overlay (bottom-right)
-            if (card instanceof HeroCard hero && hero.getItem() != null) {
-                ItemCard item = hero.getItem();
-                String itemPath = "/card/base/item card/" + item.getName().replaceAll("\\s+", "") + ".png";
-                java.net.URL itemRes = getClass().getResource(itemPath);
-                if (itemRes != null) {
-                    ImageView itemThumb = new ImageView(new Image(itemRes.toExternalForm()));
-                    itemThumb.setFitWidth(26);
-                    itemThumb.setFitHeight(36);
-                    itemThumb.setPreserveRatio(false);
-
-                    Rectangle itemBorder = new Rectangle(26, 36, Color.TRANSPARENT);
-                    itemBorder.setStroke(Color.web("#FFD700"));
-                    itemBorder.setStrokeWidth(1.5);
-                    itemBorder.setArcWidth(3);
-                    itemBorder.setArcHeight(3);
-
-                    StackPane itemPane = new StackPane(itemBorder, itemThumb);
-                    itemPane.setPrefSize(26, 36);
-                    StackPane.setAlignment(itemPane, Pos.BOTTOM_RIGHT);
-                    getChildren().add(itemPane);
-                }
-            }
-        } else {
-            // Fallback: styled blank card
-            Rectangle rect = new Rectangle(thumbWidth, thumbHeight, Color.web("#1c0d00"));
-            rect.setStroke(Color.web("#8B6914"));
-            rect.setStrokeWidth(1.5);
-            rect.setArcWidth(4);
-            rect.setArcHeight(4);
-
-            javafx.scene.control.Label nameLabel = new javafx.scene.control.Label(card.getName());
-            nameLabel.setTextFill(Color.web("#C8A870"));
-            nameLabel.setStyle("-fx-font-family: 'Georgia'; -fx-font-size: 9; -fx-font-weight: bold;");
-            nameLabel.setWrapText(true);
-            nameLabel.setAlignment(Pos.CENTER);
-            nameLabel.setMaxWidth(thumbWidth - 8);
-
-            StackPane textPane = new StackPane(nameLabel);
-            textPane.setPrefSize(thumbWidth, thumbHeight);
-
-            getChildren().addAll(rect, textPane);
-        }
-
-        setPrefSize(thumbWidth, thumbHeight);
+        setPrefSize(THUMB_W, THUMB_H);
+        setMaxSize(THUMB_W, THUMB_H);
         setAlignment(Pos.CENTER);
-        setCursor(javafx.scene.Cursor.HAND);
+        setCursor(Cursor.HAND);
 
-        // Hover glow effect
-        DropShadow glow = new DropShadow(12, Color.web("#FFD700"));
-        glow.setSpread(0.3);
+        setOnMouseEntered(e -> { setEffect(HOVER_GLOW); setScaleX(1.08); setScaleY(1.08); });
+        setOnMouseExited(e  -> { setEffect(null);        setScaleX(1.0);  setScaleY(1.0);  });
 
-        setOnMouseEntered(e -> {
-            setEffect(glow);
-            setScaleX(1.08);
-            setScaleY(1.08);
-        });
-        setOnMouseExited(e -> {
-            setEffect(null);
-            setScaleX(1.0);
-            setScaleY(1.0);
-        });
-
-        // Click: show full card(s)
         setOnMouseClicked(e -> {
             Stage heroStage = new FullCardView(card).show();
             if (card instanceof HeroCard hero && hero.getItem() != null) {
@@ -116,6 +45,78 @@ public class CardView extends StackPane {
                 itemStage.setY(heroStage.getY());
             }
         });
+    }
+
+    private void buildThumbnail() {
+        // Image is fetched from cache (or loaded once and cached) at thumbnail
+        // size so the decoder never allocates a full-res buffer for a 75x105 view.
+        Image img = ImageCache.get(cardPath(card.getType(), card.getName()), THUMB_W, THUMB_H);
+
+        if (img != null) {
+            ImageView iv = new ImageView(img);
+            iv.setFitWidth(THUMB_W);
+            iv.setFitHeight(THUMB_H);
+            iv.setPreserveRatio(false);
+            iv.setSmooth(true);
+
+            getChildren().addAll(iv, goldBorder(THUMB_W, THUMB_H, 2, 4));
+
+            if (card instanceof HeroCard hero && hero.getItem() != null) {
+                addItemOverlay(hero.getItem());
+            }
+        } else {
+            addFallbackLabel();
+        }
+    }
+
+    private void addItemOverlay(ItemCard item) {
+        Image img = ImageCache.get(itemPath(item.getName()), ITEM_W, ITEM_H);
+        if (img == null) return;
+
+        ImageView iv = new ImageView(img);
+        iv.setFitWidth(ITEM_W);
+        iv.setFitHeight(ITEM_H);
+        iv.setPreserveRatio(false);
+
+        Rectangle border = new Rectangle(ITEM_W, ITEM_H, Color.TRANSPARENT);
+        border.setStroke(Color.web("#FFD700"));
+        border.setStrokeWidth(1.5);
+        border.setArcWidth(3);
+        border.setArcHeight(3);
+        border.setMouseTransparent(true);
+
+        StackPane overlay = new StackPane(iv, border);
+        overlay.setPrefSize(ITEM_W, ITEM_H);
+        StackPane.setAlignment(overlay, Pos.BOTTOM_RIGHT);
+        getChildren().add(overlay);
+    }
+
+    private void addFallbackLabel() {
+        Rectangle bg = new Rectangle(THUMB_W, THUMB_H, Color.web("#1c0d00"));
+        bg.setStroke(Color.web("#8B6914"));
+        bg.setStrokeWidth(1.5);
+        bg.setArcWidth(4);
+        bg.setArcHeight(4);
+
+        Label lbl = new Label(card.getName());
+        lbl.setTextFill(Color.web("#C8A870"));
+        lbl.setStyle("-fx-font-family: 'Georgia'; -fx-font-size: 9; -fx-font-weight: bold;");
+        lbl.setWrapText(true);
+        lbl.setAlignment(Pos.CENTER);
+        lbl.setMaxWidth(THUMB_W - 8);
+
+        getChildren().addAll(bg, lbl);
+    }
+
+    /** Shared factory for the thin gold border overlay used on every card. */
+    static Rectangle goldBorder(double w, double h, double strokeW, double arc) {
+        Rectangle r = new Rectangle(w, h, Color.TRANSPARENT);
+        r.setStroke(Color.web("#8B6914"));
+        r.setStrokeWidth(strokeW);
+        r.setArcWidth(arc);
+        r.setArcHeight(arc);
+        r.setMouseTransparent(true);
+        return r;
     }
 
     public BaseCard getCard() { return card; }

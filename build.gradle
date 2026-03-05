@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'progmeth_2025_1'
@@ -23,8 +24,16 @@ javafx {
 }
 
 application {
-    mainClass = 'gui.GameUI'
+    mainClass = 'gui.Launcher'
     applicationDefaultJvmArgs = [
             '--enable-native-access=javafx.graphics',
     ]
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'gui.Launcher'
+        )
+    }
 }
