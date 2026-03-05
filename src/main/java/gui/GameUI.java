@@ -113,9 +113,27 @@ public class GameUI extends Application {
                         "-fx-font-family: 'Georgia';"
         );
 
+        // Force CSS/layout so lookup nodes exist
+        dp.applyCss();
+        dp.layout();
+
+// Header text (🏆 player claims victory)
         Label header = (Label) dp.lookup(".header-panel .label");
         if (header != null) {
-            header.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 16; -fx-font-weight: bold;");
+            header.setStyle(
+                    "-fx-text-fill: black;" +
+                            "-fx-font-size: 16px;" +
+                            "-fx-font-weight: bold;"
+            );
+        }
+
+        // Content text (A legend is born...)
+        Label content = (Label) dp.lookup(".content.label");
+        if (content != null) {
+            content.setStyle(
+                    "-fx-text-fill: #FFD700;" +
+                            "-fx-font-size: 13px;"
+            );
         }
 
         ButtonType restartBtn = new ButtonType("⚔  Play Again", ButtonBar.ButtonData.OK_DONE);
