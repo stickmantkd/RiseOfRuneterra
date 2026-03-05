@@ -32,7 +32,6 @@ import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
 import NonGui.ListOfObjective.*;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -157,7 +156,7 @@ public class GameSetup {
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
         //Magic
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Charm());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new ElixirOfSorcery());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BattleFury());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FinalSpark());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new HowlingGale());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new PickACard());}

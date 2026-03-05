@@ -5,18 +5,18 @@ import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import gui.board.StatusBar;
 
-public class ElixirOfSorcery extends MagicCard {
-    public ElixirOfSorcery() {
+public class BattleFury extends MagicCard {
+    public BattleFury() {
         super(
                 "Elixir of Sorcery",
-                "True power comes to those who drink deep.",
+                "I've been told I have a... temper.",
                 "+2 to all of your rolls until the end of your turn."
         );
     }
 
     @Override
     public boolean playCard(Player player) {
-        System.out.println("🧪 " + player.getName() + " drinks Elixir of Sorcery!");
+        System.out.println("🧪 " + player.getName() + " unleashes Battle Fury!");
         System.out.println("✨ All rolls get +2 bonus until the end of turn.");
 
         // 1. เพิ่มโบนัสการทอยให้กับตัวแปร rollBonus ในคลาส Player
