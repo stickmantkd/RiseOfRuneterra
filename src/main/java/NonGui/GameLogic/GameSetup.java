@@ -5,12 +5,29 @@ import NonGui.BaseEntity.LeaderCard;
 import NonGui.BaseEntity.Player;
 import NonGui.ListOfCards.herocard.Assassin.Akali;
 import NonGui.ListOfCards.herocard.Assassin.Shaco;
+import NonGui.ListOfCards.herocard.Assassin.Talon;
 import NonGui.ListOfCards.herocard.Fighter.Fiora;
+import NonGui.ListOfCards.herocard.Fighter.Olaf;
+import NonGui.ListOfCards.herocard.Fighter.Volibear;
+import NonGui.ListOfCards.herocard.Mage.Veigar;
+import NonGui.ListOfCards.herocard.Mage.Zilean;
+import NonGui.ListOfCards.herocard.Mage.Zoe;
+import NonGui.ListOfCards.herocard.Maskman.Caitlyn;
+import NonGui.ListOfCards.herocard.Maskman.Ezreal;
+import NonGui.ListOfCards.herocard.Maskman.Jinx;
 import NonGui.ListOfCards.herocard.Support.Bard;
+import NonGui.ListOfCards.herocard.Support.Neeko;
+import NonGui.ListOfCards.herocard.Support.TahmKench;
+import NonGui.ListOfCards.herocard.Tank.Braum;
+import NonGui.ListOfCards.herocard.Tank.Nautilus;
 import NonGui.ListOfCards.herocard.Tank.Ornn;
-import NonGui.ListOfCards.itemcard.*;
-import NonGui.ListOfCards.magiccard.ElixirOfSorcery;
-import NonGui.ListOfCards.magiccard.FinalSpark;
+import NonGui.ListOfCards.itemcard.BuffItem.BlueBuff;
+import NonGui.ListOfCards.itemcard.BuffItem.TearOfTheGoddess;
+import NonGui.ListOfCards.itemcard.ChangeClass.*;
+import NonGui.ListOfCards.itemcard.CurseItem.CursedDoubloon;
+import NonGui.ListOfCards.itemcard.CurseItem.SnakesEmbrace;
+import NonGui.ListOfCards.itemcard.CurseItem.VoidBinding;
+import NonGui.ListOfCards.magiccard.*;
 import NonGui.ListOfCards.modifiercard.ElixirOfWrath;
 import NonGui.ListOfLeader.*;
 import NonGui.ListOfObjective.*;
@@ -97,38 +114,56 @@ public class GameSetup {
 
     public static void initializeDeck() {
         // Fill the deck with starting cards
-        //for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Fiora());}
-        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new BlueBuff());}
-        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new ChallengeCard());}
-        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new FinalSpark());}
-        for(int i=0;i<10;i++){GameEngine.deck.addToDeck(new ElixirOfWrath());}
-        //GameEngine.deck.addToDeck(new ElixirOfWrath(),20);
-        //GameEngine.deck.addToDeck(new Charm(),20);
-        //GameEngine.deck.addToDeck(new FinalSpark(),20);
-        //GameEngine.deck.addToDeck(new HowlingGale(),20);
-        //GameEngine.deck.addToDeck(new PickACard(),20);
-        //GameEngine.deck.addToDeck(new BlueBuff(),20);
-        //for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
-        //GameEngine.deck.addToDeck(new CursedDoubloon(),20);
-        //GameEngine.deck.addToDeck(new VoidBinding(),20);
-        //GameEngine.deck.addToDeck(new Ezreal(),10);
-        //GameEngine.deck.addToDeck(new Akali(),10);
-        //GameEngine.deck.addToDeck(new Shaco(),15);
-        //GameEngine.deck.addToDeck(new Olaf(),15);
-        //GameEngine.deck.addToDeck(new Volibear(),5);
-        //GameEngine.deck.addToDeck(new Bard(),15);
-        //GameEngine.deck.addToDeck(new Neeko(),5);
-        //GameEngine.deck.addToDeck(new TahmKench(),5);
-        //GameEngine.deck.addToDeck(new Caitlyn(),5);
-        //GameEngine.deck.addToDeck(new Jinx(),5);
-        //GameEngine.deck.addToDeck(new Veigar(),10);
-        //GameEngine.deck.addToDeck(new Zilean(),15);
-        //GameEngine.deck.addToDeck(new Zoe(),10);
-        //GameEngine.deck.addToDeck(new Braum(),15);
-        //GameEngine.deck.addToDeck(new Nautilus(),15);
-        //for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Ornn());}
-        for(int i=0;i<20;i++){GameEngine.deck.addToDeck(new Bard());}
-        //GameEngine.deck.addToDeck(new Talon(),10);
+        //hero
+        //Assassin
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Akali());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Shaco());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Talon());}
+        //Fighter
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Fiora());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Olaf());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Volibear());}
+        //Mage
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Veigar());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Zilean());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Zoe());}
+        //Maskman
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Caitlyn());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Ezreal());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Jinx());}
+        //Support
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Bard());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Neeko());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TahmKench());}
+        //Tank
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Braum());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Nautilus());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Ornn());}
+        //item
+        //ChangeClass
+        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new BFSword());}
+        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new ForbiddenIdol());}
+        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new GiantsBelt());}
+        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new NeedlesslyLargeRod());}
+        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new RecurveBow());}
+        for(int i=0;i<1;i++){GameEngine.deck.addToDeck(new SerratedDirk());}
+        //CurseItem
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new CursedDoubloon());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new SnakesEmbrace());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new VoidBinding());}
+        //BuffItem
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BlueBuff());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
+        //Magic
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Charm());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BattleFury());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FinalSpark());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new HowlingGale());}
+        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new PickACard());}
+        //Modifier
+        for(int i=0;i<25;i++){GameEngine.deck.addToDeck(new ElixirOfWrath());}
+        //Challenge
+        for(int i=0;i<15;i++){GameEngine.deck.addToDeck(new ChallengeCard());}
 
         // Shuffle the deck
         Collections.shuffle(GameEngine.deck.getGameDeck());
