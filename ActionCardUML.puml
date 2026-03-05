@@ -1,0 +1,66 @@
+@startuml
+abstract class NonGui.BaseEntity.Cards.MagicCard.MagicCard {
++ <<Create>> MagicCard(String,String,String)
++ {abstract}boolean playCard(Player)
+}
+
+abstract class NonGui.BaseEntity.Cards.HeroCard.HeroCard {
+- UnitClass heroClass
+- ItemCard item
+- boolean canUseAbility
+- int rollTarget
+- Player owner
++ <<Create>> HeroCard()
++ <<Create>> HeroCard(String,String,String,UnitClass,int)
++ boolean playCard(Player)
++ boolean equipItem(ItemCard)
++ boolean unEquipItem()
++ boolean tryUseAbility(Player)
++ {abstract}void useAbility(Player)
++ ItemCard getItem()
++ void setItem(ItemCard)
++ UnitClass getUnitClass()
++ void setUnitClass(UnitClass)
++ boolean canUseAbility()
++ void setCanUseAbility(boolean)
++ int getRollTarget()
++ void setRollTarget(int)
++ Player getOwner()
++ void setOwner(Player)
+}
+
+
+class NonGui.BaseEntity.Cards.Itemcard.ClassChangingItemCard {
+- UnitClass oldClass
+- UnitClass newClass
++ <<Create>> ClassChangingItemCard(String,String,String,UnitClass)
++ void onEquip(HeroCard)
++ void onUnEquip(HeroCard)
++ UnitClass getOldClass()
++ void setOldClass(UnitClass)
++ UnitClass getNewClass()
++ void setNewClass(UnitClass)
+}
+
+
+abstract class NonGui.BaseEntity.Cards.Itemcard.ItemCard {
++ <<Create>> ItemCard(String,String,String)
++ boolean playCard(Player)
++ {abstract}void onEquip(HeroCard)
++ {abstract}void onUnEquip(HeroCard)
+}
+
+abstract class NonGui.BaseEntity.ActionCard {
++ <<Create>> ActionCard(String,String,String,String)
++ {abstract}boolean playCard(Player)
+}
+
+
+
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.MagicCard.MagicCard
+NonGui.BaseEntity.Properties.haveClass <|.. NonGui.BaseEntity.Cards.HeroCard.HeroCard
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.HeroCard.HeroCard
+NonGui.BaseEntity.Cards.Itemcard.ItemCard <|-- NonGui.BaseEntity.Cards.Itemcard.ClassChangingItemCard
+NonGui.BaseEntity.ActionCard <|-- NonGui.BaseEntity.Cards.Itemcard.ItemCard
+NonGui.BaseEntity.BaseCard <|-- NonGui.BaseEntity.ActionCard
+@enduml

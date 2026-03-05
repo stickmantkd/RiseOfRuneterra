@@ -155,11 +155,11 @@ public class GameSetup {
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BlueBuff());}
         for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new TearOfTheGoddess());}
         //Magic
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new Charm());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new BattleFury());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new FinalSpark());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new HowlingGale());}
-        for(int i=0;i<2;i++){GameEngine.deck.addToDeck(new PickACard());}
+        for(int i=0;i<3;i++){GameEngine.deck.addToDeck(new Charm());}
+        for(int i=0;i<3;i++){GameEngine.deck.addToDeck(new BattleFury());}
+        for(int i=0;i<3;i++){GameEngine.deck.addToDeck(new FinalSpark());}
+        for(int i=0;i<3;i++){GameEngine.deck.addToDeck(new HowlingGale());}
+        for(int i=0;i<3;i++){GameEngine.deck.addToDeck(new PickACard());}
         //Modifier
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new Deny());}
         for(int i=0;i<5;i++){GameEngine.deck.addToDeck(new FlashFreeze());}

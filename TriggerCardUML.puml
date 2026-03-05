@@ -1,0 +1,29 @@
+@startuml
+abstract class NonGui.BaseEntity.TriggerCard {
++ <<Create>> TriggerCard(String,String,String,String)
+}
+
+class NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard {
++ <<Create>> ChallengeCard()
++ void trigger(Player,Player)
+}
+
+class NonGui.BaseEntity.Cards.ModifierCard.ModifierCard {
+- int positiveModifier
+- int negativeModifier
++ <<Create>> ModifierCard()
++ <<Create>> ModifierCard(String,String,int,int)
++ int useModifier()
++ int getPositiveModifier()
++ void setPositiveModifier(int)
++ int getNegativeModifier()
++ void setNegativeModifier(int)
+}
+
+
+
+
+NonGui.BaseEntity.BaseCard <|-- NonGui.BaseEntity.TriggerCard
+NonGui.BaseEntity.TriggerCard <|-- NonGui.BaseEntity.Cards.ChallengeCard.ChallengeCard
+NonGui.BaseEntity.TriggerCard <|-- NonGui.BaseEntity.Cards.ModifierCard.ModifierCard
+@enduml
