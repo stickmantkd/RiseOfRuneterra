@@ -16,9 +16,9 @@ public class ElderDragon extends Objective {
     public ElderDragon() {
         super("Elder Dragon",
                 "The Aspect of Dragon transcends all, granting absolute authority.",
-                10, 12);
-        setRequirementDescription("Requires at least 4 Hero cards on your board.");
-        setPrizeDescription("MAX Action Points +1 (Permanent).");
+                11, 12);
+        setRequirementDescription("10- | Requires at least 4 Hero cards on your board.");
+        setPrizeDescription("11+ | MAX Action Points +1 (Permanent).");
         setPunishmentDescription("Sacrifice (DISCARD) 1 of your Hero cards.");
     }
 

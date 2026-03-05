@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class RiftHerald extends Objective {
     public RiftHerald() {
         super("Rift Herald", "Shelly is ready to charge and shatter their defenses.", 8, 12);
-        setRequirementDescription("Requires at least 1 Hero and 1 Assassin.");
-        setPrizeDescription("Item cards you play cannot be challenged.");
+        setRequirementDescription("7- | Requires at least 1 Hero and 1 Assassin.");
+        setPrizeDescription("8+ |  cards you play cannot be challenged.");
         setPunishmentDescription("DISCARD 2 cards.");
     }
 

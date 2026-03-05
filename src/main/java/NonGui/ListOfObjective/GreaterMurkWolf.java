@@ -15,8 +15,8 @@ public class GreaterMurkWolf extends Objective {
     public GreaterMurkWolf() {
         super("Greater Murk Wolf",
                 "A vicious, two-headed apex predator stalking the jungle.", 8, 12);
-        setRequirementDescription("Requires at least 1 Hero and 1 Mage.");
-        setPrizeDescription("Each time you DRAW a Magic card, you may play it immediately.");
+        setRequirementDescription("7- | Requires at least 1 Hero and 1 Mage.");
+        setPrizeDescription("8+ | Each time you DRAW a Magic card, you may play it immediately.");
         setPunishmentDescription("DISCARD 2 cards.");
     }
 

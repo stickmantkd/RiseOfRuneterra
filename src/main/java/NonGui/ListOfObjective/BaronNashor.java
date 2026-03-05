@@ -14,8 +14,8 @@ public class BaronNashor extends Objective {
                 "His barony is rather small. Just large enough to accommodate only him, really.",
                 10,12);
         setRequirementDescription("have 3 Heroes");
-        setPrizeDescription("drawn 5 cards");
-        setPunishmentDescription("Sacrifice 1 Heroes");
+        setPrizeDescription("9- | drawn 5 cards");
+        setPunishmentDescription("10+ | Sacrifice 1 Heroes");
     }
 
     @Override
