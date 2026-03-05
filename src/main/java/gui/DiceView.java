@@ -1,6 +1,5 @@
 package gui;
 
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,146 +13,211 @@ import javafx.scene.text.Text;
 
 public class DiceView {
 
-    // ── Public entry points ──────────────────────────────────────────────────
-
-    public static void showDiceRoll(int dice1, int dice2) {
-        new Thread(() -> {
-            try {
-                DiceWidgets w = new DiceWidgets();
-
-                Platform.runLater(() -> BoardView.showOverlay(w.overlay));
-
-                // Animate
-                for (int i = 0; i < 14; i++) {
-                    final int t1 = (int)(Math.random() * 6) + 1;
-                    final int t2 = (int)(Math.random() * 6) + 1;
-                    Platform.runLater(() -> {
-                        w.faceText1.setText(diceFace(t1));
-                        w.faceText2.setText(diceFace(t2));
-                    });
-                    Thread.sleep(80);
-                }
-
-                // Final result
-                Platform.runLater(() -> {
-                    w.faceText1.setText(diceFace(dice1));
-                    w.faceText2.setText(diceFace(dice2));
-                    w.resultLabel.setText("Total: " + (dice1 + dice2));
-                    w.resultLabel.setVisible(true);
-                });
-
-                Thread.sleep(1800);
-                Platform.runLater(BoardView::clearOverlay);
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
-    }
-
-    public static void showAbilityRoll(int dice1, int dice2, int total, HeroCard card) {
-        new Thread(() -> {
-            try {
-                DiceWidgets w = new DiceWidgets();
-
-                Platform.runLater(() -> BoardView.showOverlay(w.overlay));
-
-                for (int i = 0; i < 14; i++) {
-                    final int t1 = (int)(Math.random() * 6) + 1;
-                    final int t2 = (int)(Math.random() * 6) + 1;
-                    Platform.runLater(() -> {
-                        w.faceText1.setText(diceFace(t1));
-                        w.faceText2.setText(diceFace(t2));
-                    });
-                    Thread.sleep(80);
-                }
-
-                Platform.runLater(() -> {
-                    w.faceText1.setText(diceFace(dice1));
-                    w.faceText2.setText(diceFace(dice2));
-                });
-
-                Thread.sleep(900);
-
-                String resultText = buildAbilityResultText(dice1, dice2, total, card);
-                Platform.runLater(() -> {
-                    w.resultLabel.setText(resultText);
-                    w.resultLabel.setVisible(true);
-                });
-
-                Thread.sleep(1800);
-                Platform.runLater(BoardView::clearOverlay);
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
-    }
-
-    // ── Private helpers ──────────────────────────────────────────────────────
+    // ── Public entry points ───────────────────────────────────────────────────
 
     /**
-     * Build the dice overlay. Returns a holder object with references to the
-     * mutable text nodes so the animation thread can update them.
+     * Basic roll (getRoll / rollForChallenge).
+     *
+     * @param dice1     first die value (1–6)
+     * @param dice2     second die value (1–6)
+     * @param breakdown full formula string, e.g. "3 + 5  +2 (Fighter)  = 10"
      */
+    public static void showDiceRoll(int dice1, int dice2, String breakdown) {
+        new Thread(() -> {
+            try {
+                DiceWidgets w = new DiceWidgets(false);
+                Platform.runLater(() -> BoardView.showOverlay(w.overlay));
+
+                animateDice(w, dice1, dice2);
+
+                // Show breakdown
+                Platform.runLater(() -> {
+                    w.breakdownLabel.setText(breakdown);
+                    w.breakdownLabel.setVisible(true);
+                });
+
+                Thread.sleep(2000);
+                Platform.runLater(BoardView::clearOverlay);
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
+    /**
+     * Ability roll — also shows target score and success/fail badge.
+     *
+     * @param dice1       first die value
+     * @param dice2       second die value
+     * @param breakdown   full formula string built by DiceUtils
+     * @param total       final total after all bonuses
+     * @param targetScore the score the hero needs to reach
+     */
+    public static void showAbilityRoll(int dice1, int dice2,
+                                       String breakdown, int total, int targetScore) {
+        new Thread(() -> {
+            try {
+                DiceWidgets w = new DiceWidgets(true);
+                Platform.runLater(() -> BoardView.showOverlay(w.overlay));
+
+                animateDice(w, dice1, dice2);
+
+                // Brief pause so the player can see the final dice faces
+                Thread.sleep(600);
+
+                boolean success = total >= targetScore;
+
+                Platform.runLater(() -> {
+                    w.breakdownLabel.setText(breakdown);
+                    w.breakdownLabel.setVisible(true);
+
+                    // Target line
+                    w.targetLabel.setText("Target: " + targetScore);
+                    w.targetLabel.setVisible(true);
+
+                    // Success / fail badge
+                    if (success) {
+                        w.resultBadge.setText("✔  SUCCESS");
+                        w.resultBadge.setStyle(SUCCESS_BADGE_STYLE);
+                    } else {
+                        w.resultBadge.setText("✘  FAILED");
+                        w.resultBadge.setStyle(FAIL_BADGE_STYLE);
+                    }
+                    w.resultBadge.setVisible(true);
+                });
+
+                Thread.sleep(2200);
+                Platform.runLater(BoardView::clearOverlay);
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
+    // ── Backwards-compatible overloads (called from legacy code) ─────────────
+
+    /** Legacy overload — no breakdown text. */
+    public static void showDiceRoll(int dice1, int dice2) {
+        showDiceRoll(dice1, dice2, dice1 + " + " + dice2 + "  =  " + (dice1 + dice2));
+    }
+
+    // ── Styles ────────────────────────────────────────────────────────────────
+
+    private static final String BREAKDOWN_STYLE =
+            "-fx-font-family: 'Georgia'; -fx-font-size: 14; -fx-font-weight: bold;" +
+                    "-fx-text-fill: #FFD700;" +
+                    "-fx-effect: dropshadow(gaussian, #FF8C00, 5, 0.5, 0, 0);";
+
+    private static final String TARGET_STYLE =
+            "-fx-font-family: 'Georgia'; -fx-font-size: 12;" +
+                    "-fx-text-fill: #C8A870;";
+
+    private static final String SUCCESS_BADGE_STYLE =
+            "-fx-font-family: 'Georgia'; -fx-font-size: 16; -fx-font-weight: bold;" +
+                    "-fx-text-fill: #50C878;" +
+                    "-fx-effect: dropshadow(gaussian, #50C878, 8, 0.6, 0, 0);";
+
+    private static final String FAIL_BADGE_STYLE =
+            "-fx-font-family: 'Georgia'; -fx-font-size: 16; -fx-font-weight: bold;" +
+                    "-fx-text-fill: #E05050;" +
+                    "-fx-effect: dropshadow(gaussian, #E05050, 8, 0.6, 0, 0);";
+
+    // ── Widget builder ────────────────────────────────────────────────────────
+
     private static class DiceWidgets {
         final StackPane overlay;
-        final Text faceText1;
-        final Text faceText2;
-        final Label resultLabel;
+        final Text      faceText1;
+        final Text      faceText2;
+        final Label     breakdownLabel;  // "d1 + d2  +bonus  = total"
+        final Label     targetLabel;     // "Target: N"  (ability rolls only)
+        final Label     resultBadge;     // "✔ SUCCESS" / "✘ FAILED"  (ability rolls only)
 
-        DiceWidgets() {
+        DiceWidgets(boolean abilityMode) {
             // Dim backdrop
-            Rectangle backdrop = new Rectangle(900, 480, Color.color(0, 0, 0, 0.72));
+            Rectangle backdrop = new Rectangle(900, 480, Color.color(0, 0, 0, 0.75));
 
-            // --- Dice 1 ---
-            faceText1 = new Text("⚀");
+            // Dice faces
+            faceText1 = new Text(diceFace(1));
             faceText1.setStyle("-fx-font-size: 52;");
-
-            StackPane die1 = buildDieFace(faceText1);
-
-            // --- Dice 2 ---
-            faceText2 = new Text("⚀");
+            faceText2 = new Text(diceFace(1));
             faceText2.setStyle("-fx-font-size: 52;");
 
-            StackPane die2 = buildDieFace(faceText2);
-
-            // Row of dice
-            HBox diceRow = new HBox(28, die1, die2);
+            HBox diceRow = new HBox(28, buildDieFace(faceText1), buildDieFace(faceText2));
             diceRow.setAlignment(Pos.CENTER);
 
-            // Result line
-            resultLabel = new Label();
-            resultLabel.setStyle(
-                    "-fx-font-family: 'Georgia';" +
-                            "-fx-font-size: 20;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-text-fill: #FFD700;" +
-                            "-fx-effect: dropshadow(gaussian, #FF8C00, 6, 0.6, 0, 0);"
-            );
-            resultLabel.setVisible(false);
+            // Decorative separator under dice
+            Rectangle sep = new Rectangle(220, 1);
+            sep.setFill(Color.web("#8B6914", 0.6));
 
-            // Panel container
-            VBox panel = new VBox(18, diceRow, resultLabel);
+            // Breakdown label (always shown)
+            breakdownLabel = new Label();
+            breakdownLabel.setStyle(BREAKDOWN_STYLE);
+            breakdownLabel.setWrapText(true);
+            breakdownLabel.setMaxWidth(300);
+            breakdownLabel.setAlignment(Pos.CENTER);
+            breakdownLabel.setVisible(false);
+
+            // Target + badge (ability mode only)
+            targetLabel = new Label();
+            targetLabel.setStyle(TARGET_STYLE);
+            targetLabel.setVisible(false);
+
+            resultBadge = new Label();
+            resultBadge.setVisible(false);
+
+            // Build panel content
+            VBox panel;
+            if (abilityMode) {
+                panel = new VBox(12, diceRow, sep, breakdownLabel, targetLabel, resultBadge);
+            } else {
+                panel = new VBox(14, diceRow, sep, breakdownLabel);
+            }
             panel.setAlignment(Pos.CENTER);
-            panel.setPadding(new Insets(30, 40, 30, 40));
+            panel.setPadding(new Insets(26, 36, 26, 36));
             panel.setStyle(
                     "-fx-background-color: linear-gradient(to bottom, #1c0d00, #2e1800, #1c0d00);" +
                             "-fx-border-color: #8B6914; -fx-border-width: 2;" +
                             "-fx-border-radius: 10; -fx-background-radius: 10;" +
-                            "-fx-effect: dropshadow(gaussian, #000000, 20, 0.8, 0, 0);"
+                            "-fx-effect: dropshadow(gaussian, #000000, 24, 0.8, 0, 0);"
             );
-            panel.setMaxSize(280, 200);
+            panel.setMaxWidth(340);
 
             overlay = new StackPane(backdrop, panel);
             overlay.setAlignment(Pos.CENTER);
         }
     }
 
+    // ── Shared animation ──────────────────────────────────────────────────────
+
+    /** Runs the shuffle animation then lands on the real values. */
+    private static void animateDice(DiceWidgets w, int finalD1, int finalD2)
+            throws InterruptedException {
+        // Fast shuffle
+        for (int i = 0; i < 14; i++) {
+            final int t1 = (int)(Math.random() * 6) + 1;
+            final int t2 = (int)(Math.random() * 6) + 1;
+            Platform.runLater(() -> {
+                w.faceText1.setText(diceFace(t1));
+                w.faceText2.setText(diceFace(t2));
+            });
+            Thread.sleep(75);
+        }
+        // Land on real values
+        Platform.runLater(() -> {
+            w.faceText1.setText(diceFace(finalD1));
+            w.faceText2.setText(diceFace(finalD2));
+        });
+        Thread.sleep(300); // brief settle pause before showing results
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private static StackPane buildDieFace(Text faceText) {
         Rectangle face = new Rectangle(100, 100);
-        face.setFill(Color.web("#f8f0d8"));          // parchment white
-        face.setStroke(Color.web("#8B6914"));         // gold border
+        face.setFill(Color.web("#f8f0d8"));
+        face.setStroke(Color.web("#8B6914"));
         face.setStrokeWidth(3);
         face.setArcWidth(14);
         face.setArcHeight(14);
@@ -164,7 +228,6 @@ public class DiceView {
         return pane;
     }
 
-    /** Return a Unicode die-face character for value 1–6. */
     private static String diceFace(int val) {
         return switch (val) {
             case 1 -> "⚀";
@@ -175,15 +238,5 @@ public class DiceView {
             case 6 -> "⚅";
             default -> "🎲";
         };
-    }
-
-    private static String buildAbilityResultText(int dice1, int dice2, int total, HeroCard card) {
-        if (card.getItem() instanceof NonGui.ListOfCards.itemcard.BlueBuff) {
-            return dice1 + " + " + dice2 + " + 2  =  " + total;
-        } else if (card.getItem() instanceof NonGui.ListOfCards.itemcard.SnakesEmbrace) {
-            return dice1 + " + " + dice2 + " − 2  =  " + total;
-        } else {
-            return dice1 + " + " + dice2 + "  =  " + total;
-        }
     }
 }

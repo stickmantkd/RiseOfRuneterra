@@ -2,8 +2,8 @@ package NonGui.GameUtils;
 
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Objective;
-import NonGui.ListOfCards.itemcard.BlueBuff;
-import NonGui.ListOfCards.itemcard.SnakesEmbrace;
+import NonGui.ListOfCards.itemcard.BuffItem.BlueBuff;
+import NonGui.ListOfCards.itemcard.CurseItem.FrozenHeart;
 import NonGui.ListOfCards.herocard.Maskman.Ezreal;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.BaseEntity.LeaderCard;
@@ -32,7 +32,7 @@ public class GenerationsUtils {
         int rand = new Random().nextInt(5);
         return switch (rand) {
             case 0 -> new BlueBuff();
-            case 1 -> new SnakesEmbrace();
+            case 1 -> new FrozenHeart();
             case 2 -> new HowlingGale();
             case 3 -> new PickACard();
             default -> new Ezreal();

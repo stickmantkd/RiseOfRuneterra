@@ -8,8 +8,7 @@ import NonGui.BaseEntity.Properties.haveClass;
 import NonGui.GameLogic.GameEngine;
 import NonGui.GameUtils.ChallengeUtils;
 import NonGui.GameUtils.DiceUtils;
-
-import static NonGui.GameUtils.DiceUtils.rollForAbility;
+import NonGui.ListOfCards.itemcard.CurseItem.AbyssalMask;
 
 public abstract class HeroCard extends ActionCard implements haveClass {
     private UnitClass heroClass;
@@ -94,7 +93,7 @@ public abstract class HeroCard extends ActionCard implements haveClass {
     // Ability handling
     public boolean tryUseAbility(Player player) {
         // 🌌 [จุดที่ต้องเพิ่ม] ถ้าใส่ Void Binding ให้คืนค่า false ทันที!
-        if (this.getItem() instanceof NonGui.ListOfCards.itemcard.CurseItem.VoidBinding) {
+        if (this.getItem() instanceof AbyssalMask) {
             System.out.println("🌌 " + this.getName() + " is bound by the Void! Ability is sealed.");
             return false;
         }

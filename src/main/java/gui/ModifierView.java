@@ -65,14 +65,31 @@ public class ModifierView {
 
     private static void styleDialog(DialogPane dp) {
         dp.setStyle(DIALOG_STYLE);
-        // Style header label if accessible
+
+        // Style header panel background
         javafx.scene.Node header = dp.lookup(".header-panel");
         if (header != null) {
             header.setStyle("-fx-background-color: #2e1800;");
         }
+
+        // Style header label text
         javafx.scene.Node headerLabel = dp.lookup(".header-panel .label");
         if (headerLabel instanceof javafx.scene.control.Label l) {
             l.setStyle("-fx-text-fill: #FFD700; -fx-font-family: 'Georgia'; -fx-font-size: 13;");
+        }
+
+        // Style content text (the "Select a modifier card:" label)
+        javafx.scene.Node contentLabel = dp.lookup(".content .label");
+        if (contentLabel instanceof javafx.scene.control.Label l) {
+            l.setStyle("-fx-text-fill: white; -fx-font-family: 'Georgia'; -fx-font-size: 12;");
+        }
+
+        // Style choice list items
+        javafx.scene.Node listView = dp.lookup(".list-view");
+        if (listView instanceof javafx.scene.control.ListView<?> lv) {
+            lv.setStyle("-fx-control-inner-background: #1c0d00; -fx-text-fill: white; "
+                    + "-fx-font-family: 'Georgia'; -fx-selection-bar: #FFD700; "
+                    + "-fx-selection-bar-text: black;");
         }
     }
 }
