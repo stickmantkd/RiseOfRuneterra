@@ -69,7 +69,7 @@ public class GameSetup {
             */
 
             // --- Uncomment this block for preset names (testing) ---
-            String playerName = "TestPlayer" + (i + 1);
+            String playerName = "Player" + (i + 1);
 
             Player p = new Player(playerName);
 
