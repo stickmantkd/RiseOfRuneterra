@@ -2,19 +2,31 @@ package NonGui.ListOfCards.herocard.Tank;
 
 import NonGui.BaseEntity.BaseCard;
 import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-// ⚠️ ตรวจสอบ Path ของ ModifierCard ในโปรเจกต์คุณด้วยนะครับ
 import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
 import NonGui.BaseEntity.Player;
 import NonGui.BaseEntity.Properties.UnitClass;
 import NonGui.GameLogic.GameEngine;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Nautilus" Hero Card.
+ * <p>
+ * <b>Ability: Dredge Line</b><br>
+ * Requirement: Roll 6+<br>
+ * Effect: Search the discard pile for a Modifier card and add it to your hand.
+ * <p>
+ * <i>Nautilus reaches into the depths of the discard pile to recover essential tactical modifiers.</i>
+ */
 public class Nautilus extends HeroCard {
+
+    /**
+     * Constructs Nautilus with his base stats and deep-sea flavor text.
+     */
     public Nautilus() {
         super(
                 "Nautilus",
@@ -25,61 +37,69 @@ public class Nautilus extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Dredge Line ability.
+     * <p>
+     * Logic Flow:
+     * 1. Scans the global discard pile for instances of ModifierCard.
+     * 2. If none are found, informs the player via an Alert.
+     * 3. If found, displays a ChoiceDialog for the player to select one.
+     * 4. Transfers the selected card from the discard pile to the player's hand.
+     * * @param player The player who activated Nautilus's ability.
+     */
     @Override
     public void useAbility(Player player) {
         System.out.println("⚓ Nautilus uses Dredge Line!");
 
-        // 1. ดึงกองทิ้งจาก GameEngine (ซึ่งเป็น ObservableList)
-        // แล้วกรองหาเฉพาะ Modifier
+        // 1. Fetch and filter discard pile for Modifiers
         List<BaseCard> availableModifiers = GameEngine.deck.getDiscardPile().stream()
                 .filter(card -> card instanceof ModifierCard)
                 .collect(Collectors.toList());
 
-        // 2. ถ้าไม่มี Modifier ในกองทิ้งเลย
+        // 2. Empty state handling
         if (availableModifiers.isEmpty()) {
             System.out.println("🌊 The depths are empty... (No Modifier cards in discard pile)");
-            // แจ้งเตือนผู้เล่นสักนิดว่าไม่มีของให้เก็บ
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                    javafx.scene.control.Alert.AlertType.INFORMATION,
+            Alert alert = new Alert(
+                    Alert.AlertType.INFORMATION,
                     "No Modifier cards found in the discard pile!",
                     javafx.scene.control.ButtonType.OK
             );
+            alert.setTitle("Dredge Line");
+            alert.setHeaderText(null);
             alert.showAndWait();
             return;
         }
 
-        // 3. เตรียมชื่อการ์ดสำหรับแสดงใน ChoiceDialog
+        // 3. UI Setup for selection
         List<String> options = availableModifiers.stream()
                 .map(BaseCard::getName)
                 .collect(Collectors.toList());
 
-        // 4. แสดง ChoiceDialog
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle("Nautilus Ability: Dredge Line");
-        dialog.setHeaderText("Select a Modifier card to retrieve");
+        dialog.setHeaderText("Select a Modifier card to retrieve from the depths");
         dialog.setContentText("Choose your card:");
 
         Optional<String> result = dialog.showAndWait();
 
-        // 5. ดำเนินการย้ายการ์ด
+        // 4. Data Transfer logic
+
         if (result.isPresent()) {
             String selectedName = result.get();
 
-            // หาใบที่ชื่อตรงกันในลิสต์ที่เรากรองไว้
             BaseCard pickedCard = availableModifiers.stream()
                     .filter(c -> c.getName().equals(selectedName))
                     .findFirst()
                     .orElse(null);
 
             if (pickedCard != null) {
-                // ลบออกจากกองทิ้งของ Deck
+                // Transfer card
                 GameEngine.deck.getDiscardPile().remove(pickedCard);
-                // เพิ่มเข้ามือผู้เล่น
                 player.addCardToHand(pickedCard);
 
-                System.out.println("⚓ Nautilus dragged " + pickedCard.getName() + " back to " + player.getName() + "'s hand!");
+                System.out.println("⚓ Nautilus dragged " + pickedCard.getName() + " back to surface!");
 
-                // Refresh GUI
+                // Synchronize View
                 try {
                     gui.BoardView.refresh();
                 } catch (Exception e) {}

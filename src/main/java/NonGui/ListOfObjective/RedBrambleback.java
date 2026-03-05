@@ -11,10 +11,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Red Brambleback" Objective Card.
+ * <p>
+ * The Crest of Cinders empowers your strikes with burning fury.
+ * Requirement: Requires at least 1 Hero and 1 Tank.
+ * Prize: Each time you DRAW a Modifier card, you may reveal it and DRAW a second card.
+ * Punishment: DISCARD 2 cards.
+ */
 public class RedBrambleback extends Objective {
+
+    /**
+     * Constructs a new Red Brambleback objective with its requirements and penalties.
+     */
     public RedBrambleback() {
-        super("Red Brambleback",
-                "The Crest of Cinders empowers your strikes with burning fury.", 8, 12);
+        super(
+                "Red Brambleback",
+                "The Crest of Cinders empowers your strikes with burning fury.",
+                8,
+                12
+        );
         setRequirementDescription("Requires at least 1 Hero and 1 Tank.");
         setPrizeDescription("8+ | Each time you DRAW a Modifier card, you may reveal it and DRAW a second card.");
         setPunishmentDescription("7- | DISCARD 2 cards.");
@@ -46,12 +62,12 @@ public class RedBrambleback extends Objective {
     public void grantPunishment(Player player) {
         StatusBar.showMessage("Burned by cinders! Punishment: " + getPunishmentDescription());
 
-        // Logic การทิ้งการ์ด 2 ใบมาตรฐาน
         for (int i = 0; i < 2; i++) {
             if (player.getCardsInHand().isEmpty()) break;
 
             List<String> options = player.getCardsInHand().stream()
-                    .map(c -> c.getName()).collect(Collectors.toList());
+                    .map(c -> c.getName())
+                    .collect(Collectors.toList());
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Red Buff's Punishment");
@@ -62,7 +78,8 @@ public class RedBrambleback extends Objective {
 
             NonGui.BaseEntity.BaseCard toDiscard = player.getCardsInHand().stream()
                     .filter(c -> c.getName().equals(selected))
-                    .findFirst().orElse(player.getCardsInHand().get(0));
+                    .findFirst()
+                    .orElse(player.getCardsInHand().get(0));
 
             player.getCardsInHand().remove(toDiscard);
             GameEngine.deck.discardCard(toDiscard);

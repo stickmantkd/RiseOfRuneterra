@@ -16,61 +16,78 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
-
 import java.util.ArrayList;
 
 import static NonGui.GameUtils.GenerationsUtils.*;
 
+/**
+ * Represents a Player in the game.
+ * Manages player's stats, cards in hand, heroes on the board, objectives, and specific boss buffs.
+ */
 public class Player {
-    // Fields
+
+    // ==========================================
+    // Fields & Properties
+    // ==========================================
     private String name;
     private int actionPoint;
     private int maxActionPoint;
-    private int ownedObjective;
-    private Objective[] ownedObjectives; // store up to 3 objectives
+
     private LeaderCard ownedLeader;
     private HeroCard[] ownedHero;
     private ObservableList<BaseCard> cardsInHand;
+
+    private int ownedObjectiveCount;
+    private Objective[] ownedObjectives; // Store up to 3 objectives
+
+    // --- Buffs & Statuses ---
     private boolean isUnchallengeable = false;
-    private int rollBonus = 0; // ปกติเป็น 0
-    private int permanentAbilityBonus = 0; // โบนัสถาวรจากการปราบ Blue Sentinel
-    private boolean canPlayItemInstantly = false;
-    private boolean canPlayMagicInstantly = false;
-    private int permanentChallengeBonus = 0; // โบนัสถาวรสำหรับการ Challenge
-    // เพิ่มใน Player.java
-    private boolean itemUnchallengeable = false;
+    private int rollBonus = 0;
+    private int permanentAbilityBonus = 0; // Bonus from Blue Sentinel
+    private int permanentChallengeBonus = 0; // Bonus from Infernal Drake
+    private boolean canPlayItemInstantly = false; // Bonus from Yeti
+    private boolean canPlayMagicInstantly = false; // Bonus from Murk Wolf
+    private boolean itemUnchallengeable = false; // Bonus from Rift Herald
+    private boolean hasRedBuff = false; // Bonus from Red Brambleback
 
-    // เพิ่มใน Player.java
-    private boolean hasRedBuff = false;
-
-    // NEW: reactive property for current roll
+    // Reactive property for current roll (GUI Integration)
     private final IntegerProperty currentRoll = new SimpleIntegerProperty(-1);
 
-    // Constructors
+    // ==========================================
+    // Constructor
+    // ==========================================
+
+    /**
+     * Constructs a new Player with default setup.
+     * @param name The name of the player.
+     */
     public Player(String name) {
-        setName(name);
-        setMaxActionPoint(3);
-        setActionPoint(3);
-        setOwnedObjective(0);
+        this.name = name;
+        this.maxActionPoint = 3;
+        this.actionPoint = 3;
+        this.ownedObjectiveCount = 0;
+        this.ownedObjectives = new Objective[3];
+
         initializeOwnedLeader();
         initializeOwnedHero();
         initializeCardsInHand();
-        ownedObjectives = new Objective[3];
     }
 
-    // Utilities
-    @Override
-    public String toString() {
-        return name;
-    }
+    // ==========================================
+    // Core Game Mechanics Methods
+    // ==========================================
 
-    // Draw a card from the main deck into hand
-    public void DrawRandomCard() {
-        BaseCard card = GameEngine.deck.drawCard(); // pull from deck
+    /**
+     * Draws a random card from the main deck and adds it to the player's hand.
+     * Triggers boss buff effects (Yeti, Murk Wolf, Red Buff) if applicable.
+     */
+    public void drawRandomCard() {
+        BaseCard card = GameEngine.deck.drawCard();
         if (card != null) {
             cardsInHand.add(card);
         } else {
             System.out.println("Deck is empty! No card drawn.");
+            return; // Stop execution if no card is drawn
         }
 
         // ❄️ [YETI PRIZE LOGIC]
@@ -83,13 +100,13 @@ public class Player {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // เรียก Method สำหรับเลือก Hero เพื่อสวมใส่ไอเทม (คล้ายกับการเล่นไอเทมปกติ)
                     ((ItemCard) card).playCard(this);
-                    this.getCardsInHand().remove(card);
+                    this.cardsInHand.remove(card);
                     GameEngine.deck.discardCard(card);
                 }
             });
         }
+
         // 🐺 [MURK WOLF PRIZE LOGIC]
         if (this.canPlayMagicInstantly && card instanceof MagicCard) {
             Platform.runLater(() -> {
@@ -100,32 +117,84 @@ public class Player {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // ร่ายเวทมนตร์ทันที
                     ((MagicCard) card).playCard(this);
-                    // นำออกจากมือเพราะร่ายไปแล้ว
-                    this.getCardsInHand().remove(card);
+                    this.cardsInHand.remove(card);
                     GameEngine.deck.discardCard(card);
                 }
             });
         }
 
+        // 🔥 [RED BUFF LOGIC]
         if (this.hasRedBuff && card instanceof ModifierCard) {
             System.out.println("🔥 Red Buff Triggered! Revealed Modifier: " + card.getName());
-
             StatusBar.showMessage("Red Buff: You drew a Modifier! Drawing an extra card...");
-
-            // จั่วใบที่สองเพิ่มทันที
-            this.DrawRandomCard();
-            // หมายเหตุ: การ Reveal ในแบบ GUI คือการเด้ง Notification หรือโชว์การ์ดนั้นครู่หนึ่ง
+            this.drawRandomCard(); // Draw an extra card recursively
         }
     }
 
-    // Add card to hand
-    public void addCardToHand(BaseCard card) {
-        cardsInHand.add(card);
+    /**
+     * Checks if the player has met the winning condition for the "Party Path" (All Classes).
+     * @return true if the player has 5 heroes of different classes and none match the Leader's class.
+     */
+    public boolean isWinningByClasses() {
+        UnitClass leaderClass = ownedLeader.getUnitClass();
+        ArrayList<HeroCard> uniqueHeroes = new ArrayList<>();
+
+        for (HeroCard hero : ownedHero) {
+            // Return false if a slot is empty, matches leader class, or is a duplicate class
+            if (hero == null || hero.getUnitClass() == leaderClass || hasDuplicateClass(hero, uniqueHeroes)) {
+                return false;
+            } else {
+                uniqueHeroes.add(hero);
+            }
+        }
+        return true;
     }
 
-    // Check if board has no heroes
+    /**
+     * Helper method to check if a hero's class already exists in a given list.
+     */
+    private boolean hasDuplicateClass(HeroCard hero, ArrayList<HeroCard> existingHeroes) {
+        for(HeroCard other : existingHeroes){
+            if(hero.getUnitClass() == other.getUnitClass()){
+                return true; // Found a duplicate
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the player has won by collecting 3 Objectives.
+     * @return true if player owns 3 or more objectives.
+     */
+    public boolean isWinningByObjectives() {
+        return ownedObjectiveCount >= 3;
+    }
+
+    /**
+     * Checks if the player has won the game via any condition.
+     * @return true if the player wins.
+     */
+    public boolean isWinning() {
+        return isWinningByClasses() || isWinningByObjectives();
+    }
+
+    // ==========================================
+    // Action Point & Board Management
+    // ==========================================
+
+    public void increaseActionPoint(int amount) {
+        this.setActionPoint(this.actionPoint + amount);
+    }
+
+    public void decreaseActionPoint(int amount) {
+        this.setActionPoint(this.actionPoint - amount);
+    }
+
+    public void refillActionPoint() {
+        this.setActionPoint(maxActionPoint);
+    }
+
     public boolean boardIsEmpty() {
         for (HeroCard hero : ownedHero) {
             if (hero != null) return false;
@@ -133,61 +202,28 @@ public class Player {
         return true;
     }
 
-    // Check if hand is empty
-    public boolean HandIsEmpty() {
+    public boolean handIsEmpty() {
         return cardsInHand.isEmpty();
     }
 
-    // Action point management
-    public void increaseActionPoint(int incAp) {
-        this.setActionPoint(actionPoint + incAp);
+    // ==========================================
+    // Inventory & Card Management Methods
+    // ==========================================
+
+    public void addCardToHand(BaseCard card) {
+        cardsInHand.add(card);
     }
 
-    public void decreaseActionPoint(int decAp) {
-        this.setActionPoint(actionPoint - decAp);
+    public void removeCardFromHand(BaseCard card) {
+        cardsInHand.remove(card);
     }
 
-    public void refillActionPoint() {
-        setActionPoint(maxActionPoint);
-    }
-
-    // Setups
-    private void initializeOwnedLeader() {
-        ownedLeader = generateRandomLeader();
-    }
-
-    private void initializeOwnedHero() {
-        ownedHero = new HeroCard[5];
-    }
-
-    public int getRollBonus() { return rollBonus; }
-    public void setRollBonus(int bonus) { this.rollBonus = bonus; }
-
-    private void initializeCardsInHand() {
-        cardsInHand = FXCollections.observableArrayList();
-        for (int i = 0; i < 5; ++i) {
-            DrawRandomCard();
-        }
-    }
-
-    // Index Operation
     public BaseCard getCardInHand(int index) {
         BaseCard selectedCard = cardsInHand.get(index);
         cardsInHand.remove(selectedCard);
         return selectedCard;
     }
 
-    public HeroCard getHeroCard(int index) {
-        return ownedHero[index];
-    }
-
-    public boolean removeHeroCard(int index) {
-        if (ownedHero[index] == null) return false;
-        ownedHero[index] = null;
-        return true;
-    }
-
-    // Add hero
     public void addHeroCard(HeroCard hero) {
         for (int i = 0; i < ownedHero.length; i++) {
             if (ownedHero[i] == null) {
@@ -197,135 +233,86 @@ public class Player {
         }
     }
 
-    // CheckWinning
-    public boolean isWinning() {
-        return checkOwnedAllClass() || checkOwnedThreeObjective();
-    }
-
-    public boolean checkOwnedAllClass() {
-        UnitClass leaderClass = getOwnedLeader().getUnitClass();
-        ArrayList<HeroCard> otherHeroes = new ArrayList<>();
-        for (HeroCard hero : ownedHero) {
-            if (hero == null ||
-                hero.getUnitClass() == leaderClass ||
-                repeatClass(hero, otherHeroes)){
-                    return false;
-            } else {
-                otherHeroes.add(hero);
-            }
-        }
+    public boolean removeHeroCard(int index) {
+        if (ownedHero[index] == null) return false;
+        ownedHero[index] = null;
         return true;
-    }
-
-    private boolean repeatClass(HeroCard hero, ArrayList<HeroCard> otherHeroes) {
-        for(HeroCard other : otherHeroes){
-            if( hero.getUnitClass() == other.getUnitClass() ){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean checkOwnedThreeObjective() {
-        return ownedObjective >= 3;
-    }
-
-    // Getters and setters
-    public LeaderCard getOwnedLeader() {
-        return ownedLeader;
-    }
-
-    public void setOwnedLeader(LeaderCard leader) {
-        this.ownedLeader = leader;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getActionPoint() {
-        return actionPoint;
-    }
-
-    public void setActionPoint(int actionPoint) {
-        if (actionPoint > maxActionPoint) actionPoint = maxActionPoint;
-        if (actionPoint < 0) actionPoint = 0;
-        this.actionPoint = actionPoint;
-    }
-
-    public int getMaxActionPoint() {
-        return maxActionPoint;
-    }
-
-    public void setMaxActionPoint(int maxActionPoint) {
-        this.maxActionPoint = maxActionPoint;
-    }
-
-    public HeroCard[] getOwnedHero() {
-        return ownedHero;
-    }
-
-    public void setOwnedHero(HeroCard[] heroList) {
-        this.ownedHero = heroList;
-    }
-
-    public int getOwnedObjective() {
-        return ownedObjective;
-    }
-
-    public void setOwnedObjective(int ownedObjective) {
-        this.ownedObjective = ownedObjective;
-    }
-
-    public ObservableList<BaseCard> getCardsInHand() {
-        return cardsInHand;
-    }
-
-    public void setCardsInHand(ObservableList<BaseCard> cardsInHand) {
-        this.cardsInHand = cardsInHand;
-    }
-
-    public boolean isUnchallengeable() { return isUnchallengeable; }
-    public void setUnchallengeable(boolean state) { this.isUnchallengeable = state; }// unified: observable + BaseCard
-
-    public int getPermanentAbilityBonus() { return permanentAbilityBonus; }
-    public void addPermanentAbilityBonus(int amount) { this.permanentAbilityBonus += amount; }
-
-    // Remove a specific card from hand
-    public void removeCardFromHand(BaseCard card) {
-        cardsInHand.remove(card);
-    }
-
-    // --- NEW: Roll property accessors ---
-    public IntegerProperty currentRollProperty() {
-        return currentRoll;
-    }
-
-    public int getCurrentRoll() {
-        return currentRoll.get();
-    }
-
-    public void setCurrentRoll(int roll) {
-        currentRoll.set(roll);
     }
 
     public void addOwnedObjective(Objective obj) {
         for (int i = 0; i < ownedObjectives.length; i++) {
             if (ownedObjectives[i] == null) {
                 ownedObjectives[i] = obj;
-                ownedObjective++; // keep count in sync
+                ownedObjectiveCount++;
                 return;
             }
         }
     }
 
-    public Objective[] getOwnedObjectives() {
-        return ownedObjectives;
+    // ==========================================
+    // Initialization Setups
+    // ==========================================
+
+    private void initializeOwnedLeader() {
+        ownedLeader = generateRandomLeader();
     }
+
+    private void initializeOwnedHero() {
+        ownedHero = new HeroCard[5];
+    }
+
+    private void initializeCardsInHand() {
+        cardsInHand = FXCollections.observableArrayList();
+        for (int i = 0; i < 5; ++i) {
+            drawRandomCard();
+        }
+    }
+
+    // ==========================================
+    // Getters and Setters
+    // ==========================================
+
+    @Override
+    public String toString() { return name; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public int getActionPoint() { return actionPoint; }
+    public void setActionPoint(int actionPoint) {
+        if (actionPoint > maxActionPoint) this.actionPoint = maxActionPoint;
+        else if (actionPoint < 0) this.actionPoint = 0;
+        else this.actionPoint = actionPoint;
+    }
+
+    public int getMaxActionPoint() { return maxActionPoint; }
+    public void setMaxActionPoint(int maxActionPoint) { this.maxActionPoint = maxActionPoint; }
+
+    public LeaderCard getOwnedLeader() { return ownedLeader; }
+    public void setOwnedLeader(LeaderCard leader) { this.ownedLeader = leader; }
+
+    public HeroCard[] getOwnedHero() { return ownedHero; }
+    public void setOwnedHero(HeroCard[] heroList) { this.ownedHero = heroList; }
+    public HeroCard getHeroCard(int index) { return ownedHero[index]; }
+
+    public ObservableList<BaseCard> getCardsInHand() { return cardsInHand; }
+    public void setCardsInHand(ObservableList<BaseCard> cardsInHand) { this.cardsInHand = cardsInHand; }
+
+    public Objective[] getOwnedObjectives() { return ownedObjectives; }
+    public int getOwnedObjectiveCount() { return ownedObjectiveCount; }
+
+    // --- Stats & Buffs Getters/Setters ---
+    public int getRollBonus() { return rollBonus; }
+    public void setRollBonus(int bonus) { this.rollBonus = bonus; }
+
+    public boolean isUnchallengeable() { return isUnchallengeable; }
+    public void setUnchallengeable(boolean state) { this.isUnchallengeable = state; }
+
+    public int getPermanentAbilityBonus() { return permanentAbilityBonus; }
+    public void addPermanentAbilityBonus(int amount) { this.permanentAbilityBonus += amount; }
+
+    public int getPermanentChallengeBonus() { return permanentChallengeBonus; }
+    public void addPermanentChallengeBonus(int amount) { this.permanentChallengeBonus += amount; }
 
     public boolean isCanPlayItemInstantly() { return canPlayItemInstantly; }
     public void setCanPlayItemInstantly(boolean value) { this.canPlayItemInstantly = value; }
@@ -333,13 +320,14 @@ public class Player {
     public boolean isCanPlayMagicInstantly() { return canPlayMagicInstantly; }
     public void setCanPlayMagicInstantly(boolean value) { this.canPlayMagicInstantly = value; }
 
-    public int getPermanentChallengeBonus() { return permanentChallengeBonus; }
-    public void addPermanentChallengeBonus(int amount) { this.permanentChallengeBonus += amount; }
+    public boolean isItemUnchallengeable() { return itemUnchallengeable; }
+    public void setItemUnchallengeable(boolean value) { this.itemUnchallengeable = value; }
 
     public boolean isHasRedBuff() { return hasRedBuff; }
     public void setHasRedBuff(boolean value) { this.hasRedBuff = value; }
 
-    public boolean isItemUnchallengeable() { return itemUnchallengeable; }
-    public void setItemUnchallengeable(boolean value) { this.itemUnchallengeable = value; }
-
+    // --- Reactive Roll Property ---
+    public IntegerProperty currentRollProperty() { return currentRoll; }
+    public int getCurrentRoll() { return currentRoll.get(); }
+    public void setCurrentRoll(int roll) { currentRoll.set(roll); }
 }

@@ -11,9 +11,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Rift Herald" Objective Card.
+ * <p>
+ * Shelly is ready to charge and shatter their defenses.
+ * Requirement: Requires at least 1 Hero and 1 Assassin.
+ * Prize: Item cards you play cannot be challenged.
+ * Punishment: DISCARD 2 cards.
+ */
 public class RiftHerald extends Objective {
+
+    /**
+     * Constructs a new Rift Herald objective with its requirements and penalties.
+     */
     public RiftHerald() {
-        super("Rift Herald", "Shelly is ready to charge and shatter their defenses.", 8, 12);
+        super(
+                "Rift Herald",
+                "Shelly is ready to charge and shatter their defenses.",
+                8,
+                12
+        );
         setRequirementDescription("Requires at least 1 Hero and 1 Assassin.");
         setPrizeDescription("8+ |  cards you play cannot be challenged.");
         setPunishmentDescription("7- | DISCARD 2 cards.");
@@ -45,12 +62,12 @@ public class RiftHerald extends Objective {
     public void grantPunishment(Player player) {
         StatusBar.showMessage("Shelly headbutts you! Punishment: " + getPunishmentDescription());
 
-        // Logic การทิ้งการ์ด 2 ใบมาตรฐาน
         for (int i = 0; i < 2; i++) {
             if (player.getCardsInHand().isEmpty()) break;
 
             List<String> options = player.getCardsInHand().stream()
-                    .map(c -> c.getName()).collect(Collectors.toList());
+                    .map(c -> c.getName())
+                    .collect(Collectors.toList());
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Rift Herald's Punishment");
@@ -61,7 +78,8 @@ public class RiftHerald extends Objective {
 
             NonGui.BaseEntity.BaseCard toDiscard = player.getCardsInHand().stream()
                     .filter(c -> c.getName().equals(selected))
-                    .findFirst().orElse(player.getCardsInHand().get(0));
+                    .findFirst()
+                    .orElse(player.getCardsInHand().get(0));
 
             player.getCardsInHand().remove(toDiscard);
             GameEngine.deck.discardCard(toDiscard);

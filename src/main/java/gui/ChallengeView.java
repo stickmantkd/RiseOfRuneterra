@@ -14,14 +14,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+/**
+ * Represents the graphical interface for the Challenge phase.
+ * <p>
+ * Displays a face-off between a challenger and a challenged player,
+ * showing their respective rolls, the card being contested, and the final result.
+ */
 public class ChallengeView extends Stage {
 
     private static Label resultLabel;
 
+    // --- UI Styles ---
     private static final String PANEL_STYLE =
             "-fx-background-color: linear-gradient(to bottom, #1c0d00, #2e1800);" +
-                    "-fx-border-color: #8B6914; -fx-border-width: 1;" +
-                    "-fx-border-radius: 6; -fx-background-radius: 6;" +
+                    "-fx-border-color: #8B6914; " +
+                    "-fx-border-width: 1;" +
+                    "-fx-border-radius: 6; " +
+                    "-fx-background-radius: 6;" +
                     "-fx-padding: 14;";
 
     private static final String PLAYER_NAME_STYLE =
@@ -34,9 +43,16 @@ public class ChallengeView extends Stage {
     private static final String LABEL_STYLE =
             "-fx-font-family: 'Georgia'; -fx-font-size: 12; -fx-text-fill: #C8A870;";
 
+    /**
+     * Constructs a new ChallengeView stage.
+     *
+     * @param challenger The player initiating the challenge.
+     * @param challenged The player defending against the challenge.
+     * @param card       The card that is the subject of the challenge.
+     */
     public ChallengeView(Player challenger, Player challenged, BaseCard card) {
 
-        // ── Challenger panel ────────────────────────────────────────────────
+        // ── Challenger Panel ────────────────────────────────────────────────
         VBox challengerBox = new VBox(10);
         challengerBox.setAlignment(Pos.CENTER);
         challengerBox.setStyle(PANEL_STYLE);
@@ -55,7 +71,7 @@ public class ChallengeView extends Stage {
         );
         challengerBox.getChildren().addAll(challengerLabel, roll1Title, challengerRollLabel);
 
-        // ── Centre panel (card info) ─────────────────────────────────────────
+        // ── Centre Panel (Card Info & Results) ──────────────────────────────
         VBox challengeBox = new VBox(10);
         challengeBox.setAlignment(Pos.CENTER);
         challengeBox.setStyle(PANEL_STYLE);
@@ -63,15 +79,17 @@ public class ChallengeView extends Stage {
         Label challengeTitle = new Label("⚡ CHALLENGE ⚡");
         challengeTitle.setStyle(
                 "-fx-font-family: 'Georgia'; -fx-font-size: 16; -fx-font-weight: bold;" +
-                        "-fx-text-fill: #FFD700; -fx-effect: dropshadow(gaussian, #FF8C00, 8, 0.6, 0, 0);"
+                        "-fx-text-fill: #FFD700; " +
+                        "-fx-effect: dropshadow(gaussian, #FF8C00, 8, 0.6, 0, 0);"
         );
 
         Label cardLabel = new Label("Card: " + card.getName());
         cardLabel.setStyle(LABEL_STYLE);
 
-        // Card image or placeholder
+        // Card image or placeholder setup
         StackPane cardVisual = new StackPane();
         String imgPath = "card/base/challenge card/ChallengeCard.png";
+
         try {
             Image challengeImage = new Image(imgPath);
             ImageView challengeView = new ImageView(challengeImage);
@@ -97,7 +115,7 @@ public class ChallengeView extends Stage {
 
         challengeBox.getChildren().addAll(challengeTitle, cardLabel, cardVisual, resultLabel);
 
-        // ── Challenged panel ────────────────────────────────────────────────
+        // ── Challenged Panel ────────────────────────────────────────────────
         VBox challengedBox = new VBox(10);
         challengedBox.setAlignment(Pos.CENTER);
         challengedBox.setStyle(PANEL_STYLE);
@@ -116,7 +134,7 @@ public class ChallengeView extends Stage {
         );
         challengedBox.getChildren().addAll(challengedLabel, roll2Title, challengedRollLabel);
 
-        // ── Layout ──────────────────────────────────────────────────────────
+        // ── Main Layout ─────────────────────────────────────────────────────
         HBox root = new HBox(24, challengerBox, challengeBox, challengedBox);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(24));
@@ -129,11 +147,19 @@ public class ChallengeView extends Stage {
         this.setScene(scene);
     }
 
+    /**
+     * Updates the challenge result label with the outcome.
+     *
+     * @param success        True if the challenge was successful, false otherwise.
+     * @param challengerName The name of the player who initiated the challenge.
+     * @param heroMsg        Additional message to display (e.g., hero abilities or modifiers used).
+     */
     public static void showResult(boolean success, String challengerName, String heroMsg) {
         String icon = success ? "✅" : "❌";
         String line1 = icon + (success
                 ? "  Challenge SUCCESS  —  " + challengerName
                 : "  Challenge FAILED  —  " + challengerName);
+
         String combined = line1 + "\n" + heroMsg;
 
         if (resultLabel != null) {

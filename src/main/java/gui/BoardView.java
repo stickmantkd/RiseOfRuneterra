@@ -2,88 +2,128 @@ package gui;
 
 import NonGui.GameLogic.GameEngine;
 import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.Objective;
 import gui.board.*;
-import gui.card.ObjectiveView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
+/**
+ * The main container for the game's graphical user interface.
+ * <p>
+ * BoardView organizes player areas, the central battlefield (FieldTableView),
+ * and the menu system using a {@link GridPane} layout. It also manages
+ * the overlay layer for animations like dice rolls.
+ * * @author GeminiCollaborator
+ */
 public class BoardView extends GridPane {
 
     private static BoardView instance;
-    private static StatusBar statusBar = new StatusBar();
-    private static StackPane overlayPane = new StackPane();
+    private static final StackPane overlayPane = new StackPane();
 
+    // --- Style Constants ---
+    private static final String BOARD_BG =
+            "-fx-background-color: linear-gradient(to bottom right, #1a0a00, #2d1500, #1a0a00);" +
+                    "-fx-border-color: #8B6914; -fx-border-width: 2;";
+
+    private static final String ACTIVE_PLAYER_HIGHLIGHT =
+            "-fx-border-color: #FFD700; -fx-border-width: 3;" +
+                    "-fx-effect: dropshadow(gaussian, #FFD700, 15, 0.6, 0, 0);";
+
+    /**
+     * Initializes the BoardView with a fixed resolution and base styles.
+     */
     public BoardView() {
         setPrefSize(1366, 768);
-        setStyle(
-                "-fx-background-color: linear-gradient(to bottom right, #1a0a00, #2d1500, #1a0a00);" +
-                        "-fx-border-color: #8B6914; -fx-border-width: 2;"
-        );
+        setStyle(BOARD_BG);
 
-        add(new MenuArea(), 0, 0, 1, 2);
-        add(statusBar, 0, 2, 1, 1);
+        // Prevent overlay from intercepting clicks when empty
+        overlayPane.setMouseTransparent(true);
 
         instance = this;
         refresh();
     }
 
+    /**
+     * Rebuilds the entire game board UI based on the current state in GameEngine.
+     * This method clears existing components and re-adds them to their specific grid positions.
+     */
     public static void refresh() {
         if (instance == null) return;
 
         instance.getChildren().clear();
-        instance.setStyle(
-                "-fx-background-color: linear-gradient(to bottom right, #1a0a00, #2d1500, #1a0a00);"
-        );
+        instance.setStyle(BOARD_BG);
 
+        // Column 0: Menu and Navigation (Spans all rows)
         instance.add(new MenuArea(), 0, 0, 1, 3);
 
+        // Add Players in their respective positions
         for (int i = 0; i < GameEngine.players.length; i++) {
-            Player p = GameEngine.players[i];
-            Region playerArea;
-            switch (i) {
-                case 0 -> playerArea = new TopPlayerArea(p);
-                case 1 -> playerArea = new RightPlayerArea(p);
-                case 2 -> playerArea = new BottomPlayerArea(p);
-                case 3 -> playerArea = new LeftPlayerArea(p);
-                default -> playerArea = null;
-            };
+            Player player = GameEngine.players[i];
+            Region playerArea = createPlayerArea(i, player);
 
+            if (playerArea == null) continue;
+
+            // Highlight the player whose turn it is
             if (i == GameEngine.getCurrentPlayerIndex()) {
-                playerArea.setStyle(
-                        "-fx-border-color: #FFD700; -fx-border-width: 3;" +
-                                "-fx-effect: dropshadow(gaussian, #FFD700, 15, 0.6, 0, 0);"
-                );
+                playerArea.setStyle(playerArea.getStyle() + ACTIVE_PLAYER_HIGHLIGHT);
             }
 
-            switch (i) {
-                case 0 -> instance.add(playerArea, 2, 0);
-                case 1 -> instance.add(playerArea, 3, 0, 1, 3);
-                case 2 -> instance.add(playerArea, 2, 2);
-                case 3 -> instance.add(playerArea, 1, 0, 1, 3);
-            }
+            positionPlayerArea(i, playerArea);
         }
 
-        instance.add(new FieldTableView(), 2, 1, 1, 1);
+        // Central Battlefield: FieldTableView (Row 1, Column 2)
+        instance.add(new FieldTableView(), 2, 1);
 
+        // Overlay Layer: Sits directly on top of the FieldTableView
         instance.add(overlayPane, 2, 1);
-        overlayPane.setMouseTransparent(true);
     }
 
+    /**
+     * Factory method to create a player area based on their index.
+     */
+    private static Region createPlayerArea(int index, Player player) {
+        return switch (index) {
+            case 0 -> new TopPlayerArea(player);
+            case 1 -> new RightPlayerArea(player);
+            case 2 -> new BottomPlayerArea(player);
+            case 3 -> new LeftPlayerArea(player);
+            default -> null;
+        };
+    }
+
+    /**
+     * Places the player area into the correct GridPane coordinate.
+     */
+    private static void positionPlayerArea(int index, Region area) {
+        switch (index) {
+            case 0 -> instance.add(area, 2, 0);          // Top
+            case 1 -> instance.add(area, 3, 0, 1, 3);   // Right (Tall)
+            case 2 -> instance.add(area, 2, 2);          // Bottom
+            case 3 -> instance.add(area, 1, 0, 1, 3);   // Left (Tall)
+        }
+    }
+
+    /**
+     * Displays a temporary overlay (e.g., DiceRoll, Card Selection) over the central field.
+     * * @param overlay The StackPane containing the UI to be displayed.
+     */
     public static void showOverlay(StackPane overlay) {
-        overlayPane.getChildren().clear();
-        overlayPane.getChildren().add(overlay);
+        overlayPane.getChildren().setAll(overlay);
         overlayPane.setMouseTransparent(false);
     }
 
+    /**
+     * Removes the current overlay and restores click interaction to the field below.
+     */
     public static void clearOverlay() {
         overlayPane.getChildren().clear();
         overlayPane.setMouseTransparent(true);
     }
 
+    /**
+     * Resets the game state and UI. (Logic to be implemented).
+     */
     public static void reStartGame() {
-        // To be implemented
+        // Implementation for game reset goes here
     }
 }

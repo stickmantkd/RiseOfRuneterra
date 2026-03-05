@@ -7,9 +7,18 @@ import NonGui.GameLogic.GameChoice;
 
 import java.util.ArrayList;
 
-// นำเข้าตัวแปร players จาก GameEngine
 import static NonGui.GameLogic.GameEngine.players;
 
+/**
+ * Represents the "Neeko" Hero Card.
+ * <p>
+ * <b>Ability: Inherent Glamour</b><br>
+ * Requirement: Roll 6+<br>
+ * Effect: Choose an opponent and steal one of their Hero cards.
+ * In exchange, Neeko leaves your party and joins the target player's party.
+ * <p>
+ * <i>Neeko trick opponents by taking their best ally and leaving herself in their place.</i>
+ */
 public class Neeko extends HeroCard {
     public Neeko() {
         super(
@@ -21,11 +30,24 @@ public class Neeko extends HeroCard {
         );
     }
 
+    /**
+     * Executes the Inherent Glamour ability.
+     * <p>
+     * Logic Flow:
+     * 1. Target Selection: Find opponents with at least one hero.
+     * 2. Identity Theft: Select a specific hero from the opponent's board.
+     * 3. Swap Process:
+     * - Neeko is removed from the owner's board.
+     * - The stolen hero is removed from the target's board.
+     * - The stolen hero is added to the owner's board.
+     * - Neeko is added to the target's board.
+     * * @param player The player who activated Neeko's ability.
+     */
     @Override
     public void useAbility(Player player) {
-        System.out.println(this.getName() + " uses Inherent Glamour! (SHAPESHIFT!)");
+        System.out.println("🦎 " + this.getName() + " uses Inherent Glamour! (SHAPESHIFT!)");
 
-        // 1. หาผู้เล่นที่มีฮีโร่บนบอร์ดให้เราขโมย (ต้องไม่ใช่ตัวเอง และบอร์ดห้ามว่าง)
+        // 1. Filter valid targets
         ArrayList<Player> validTargetsList = new ArrayList<>();
         for (Player p : players) {
             if (p != player && !p.boardIsEmpty()) {
@@ -40,48 +62,57 @@ public class Neeko extends HeroCard {
 
         Player[] validTargetsArray = validTargetsList.toArray(new Player[0]);
 
-        // 2. เลือกผู้เล่นเป้าหมาย
-        System.out.println(player.getName() + ", choose a player to STEAL a Hero from:");
+        // 2. Select Target Player
+        System.out.println(player.getName() + ", choose a player to SWAP with:");
         int targetIndex = GameChoice.selectPlayer(validTargetsArray);
+
+        if (targetIndex == -1) return; // Fail-safe for UI cancel
+
         Player targetPlayer = validTargetsArray[targetIndex];
 
-        // 3. เลือกฮีโร่บนบอร์ดเป้าหมายที่จะขโมย
-        System.out.println("Select a hero from " + targetPlayer.getName() + "'s board to STEAL:");
+        // 3. Select Hero to Steal
+        System.out.println("Select a hero from " + targetPlayer.getName() + " to take:");
         int heroIndex = GameChoice.selectHeroCard(targetPlayer);
 
-        // จำการ์ดฮีโร่เป้าหมายไว้ (getHeroCard รับค่า 1-based index ตามที่ GameChoice ส่งมา)
+        if (heroIndex == -1) return;
+
         HeroCard stolenHero = targetPlayer.getHeroCard(heroIndex);
 
-        // --- เริ่มกระบวนการสลับไพ่ (Swap) ---
+        // --- SWAP PROCESS ---
 
-        // 4. เอา Neeko (this) ออกจากบอร์ดของคนร่ายสกิลก่อน
+
+        // 4. Remove Neeko from current owner
         for (int i = 0; i < player.getOwnedHero().length; i++) {
             if (player.getOwnedHero()[i] == this) {
-                player.removeHeroCard(i); // เมธอดนี้รับค่า 0-based array index
+                player.removeHeroCard(i);
                 break;
             }
         }
 
-        // 5. เอาฮีโร่เป้าหมายออกจากบอร์ดศัตรู
+        // 5. Remove Stolen Hero from target
         targetPlayer.removeHeroCard(heroIndex);
 
-        // 6. เอาฮีโร่ที่ขโมยมา ใส่ลงในช่องว่างของบอร์ดคนร่าย
+        // 6. Add Stolen Hero to current player's party
         for (int i = 0; i < player.getOwnedHero().length; i++) {
             if (player.getOwnedHero()[i] == null) {
                 player.getOwnedHero()[i] = stolenHero;
+                stolenHero.setOwner(player); // 🛠️ Update ownership reference
                 break;
             }
         }
 
-        // 7. เอา Neeko (this) ไปใส่ในช่องว่างของบอร์ดศัตรู
+        // 7. Add Neeko to target player's party
         for (int i = 0; i < targetPlayer.getOwnedHero().length; i++) {
             if (targetPlayer.getOwnedHero()[i] == null) {
                 targetPlayer.getOwnedHero()[i] = this;
+                this.setOwner(targetPlayer); // 🛠️ Neeko now belongs to the enemy
                 break;
             }
         }
 
-        System.out.println("SUCCESS! " + player.getName() + " stole " + stolenHero.getName() + " from " + targetPlayer.getName() + "!");
-        System.out.println("Neeko has moved to " + targetPlayer.getName() + "'s party.");
+        System.out.println("✨ SUCCESS! " + player.getName() + " took " + stolenHero.getName() + "!");
+        System.out.println("🦎 Neeko has infiltrated " + targetPlayer.getName() + "'s party!");
+
+        try { gui.BoardView.refresh(); } catch (Exception e) {}
     }
 }

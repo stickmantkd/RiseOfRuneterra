@@ -16,40 +16,86 @@ import javafx.stage.Stage;
 
 import static gui.card.ImageCache.*;
 
+/**
+ * A graphical thumbnail representation of a game card.
+ * <p>
+ * CardView handles hover animations, gold-bordered thumbnails, and
+ * item overlays for Hero cards. When clicked, it triggers a {@link FullCardView}
+ * to show detailed information.
+ * * @author GeminiCollaborator
+ */
 public class CardView extends StackPane {
 
-    // One shared DropShadow object reused by every CardView instance.
-    // DropShadow is read-only after construction so sharing is safe.
+    // --- Shared Visual Constants ---
     private static final DropShadow HOVER_GLOW = new DropShadow(12, Color.web("#FFD700"));
-    static { HOVER_GLOW.setSpread(0.3); }
+    private static final String FONT_GEORGIA = "Georgia";
+    private static final double HOVER_SCALE = 1.08;
+
+    static {
+        HOVER_GLOW.setSpread(0.3);
+    }
 
     private final BaseCard card;
 
+    /**
+     * Constructs a thumbnail view for a card.
+     * * @param card      The card data to display.
+     * @param handIndex The position in hand (use -1 if the card is on the board).
+     */
     public CardView(BaseCard card, int handIndex) {
         this.card = card;
-        buildThumbnail();
 
+        setupBaseLayout();
+        buildThumbnail();
+        setupInteraction();
+    }
+
+    /**
+     * Configures dimensions, alignment, and basic styling for the StackPane.
+     */
+    private void setupBaseLayout() {
         setPrefSize(THUMB_W, THUMB_H);
         setMaxSize(THUMB_W, THUMB_H);
         setAlignment(Pos.CENTER);
         setCursor(Cursor.HAND);
+    }
 
-        setOnMouseEntered(e -> { setEffect(HOVER_GLOW); setScaleX(1.08); setScaleY(1.08); });
-        setOnMouseExited(e  -> { setEffect(null);        setScaleX(1.0);  setScaleY(1.0);  });
+    /**
+     * Defines mouse enter, exit, and click behaviors.
+     */
+    private void setupInteraction() {
+        // Hover Effects
+        setOnMouseEntered(e -> {
+            setEffect(HOVER_GLOW);
+            setScaleX(HOVER_SCALE);
+            setScaleY(HOVER_SCALE);
+        });
 
+        setOnMouseExited(e -> {
+            setEffect(null);
+            setScaleX(1.0);
+            setScaleY(1.0);
+        });
+
+        // Click Logic: Shows full card view (and item view if equipped)
         setOnMouseClicked(e -> {
-            Stage heroStage = new FullCardView(card).show();
-            if (card instanceof HeroCard && ((HeroCard) card).getItem() != null) {
-                Stage itemStage = new FullCardView(((HeroCard) card).getItem()).show();
-                itemStage.setX(heroStage.getX() + heroStage.getWidth() + 10);
-                itemStage.setY(heroStage.getY());
+            Stage mainStage = new FullCardView(card).show();
+
+            // If it's a Hero with an item, pop up the item detail next to it
+            if (card instanceof HeroCard hero && hero.getItem() != null) {
+                Stage itemStage = new FullCardView(hero.getItem()).show();
+
+                // Position item stage to the right of the hero stage
+                itemStage.setX(mainStage.getX() + mainStage.getWidth() + 10);
+                itemStage.setY(mainStage.getY());
             }
         });
     }
 
+    /**
+     * Fetches the image from cache and assembles the visual layers of the card.
+     */
     private void buildThumbnail() {
-        // Image is fetched from cache (or loaded once and cached) at thumbnail
-        // size so the decoder never allocates a full-res buffer for a 75x105 view.
         Image img = ImageCache.get(cardPath(card.getType(), card.getName()));
 
         if (img != null) {
@@ -59,16 +105,20 @@ public class CardView extends StackPane {
             iv.setPreserveRatio(false);
             iv.setSmooth(true);
 
-            getChildren().addAll(iv, goldBorder(THUMB_W, THUMB_H, 2, 4));
+            getChildren().addAll(iv, createGoldBorder(THUMB_W, THUMB_H, 2, 4));
 
-            if (card instanceof HeroCard && ((HeroCard) card).getItem() != null) {
-                addItemOverlay(((HeroCard) card).getItem());
+            // Overlay item icon if hero has equipment
+            if (card instanceof HeroCard hero && hero.getItem() != null) {
+                addItemOverlay(hero.getItem());
             }
         } else {
-            addFallbackLabel();
+            addFallbackDisplay();
         }
     }
 
+    /**
+     * Adds a small square icon in the bottom-right corner if an item is equipped.
+     */
     private void addItemOverlay(ItemCard item) {
         Image img = ImageCache.get(itemPath(item.getName()));
         if (img == null) return;
@@ -88,10 +138,14 @@ public class CardView extends StackPane {
         StackPane overlay = new StackPane(iv, border);
         overlay.setPrefSize(ITEM_W, ITEM_H);
         StackPane.setAlignment(overlay, Pos.BOTTOM_RIGHT);
+
         getChildren().add(overlay);
     }
 
-    private void addFallbackLabel() {
+    /**
+     * Displays a text-based placeholder if the card image asset is missing.
+     */
+    private void addFallbackDisplay() {
         Rectangle bg = new Rectangle(THUMB_W, THUMB_H, Color.web("#1c0d00"));
         bg.setStroke(Color.web("#8B6914"));
         bg.setStrokeWidth(1.5);
@@ -100,7 +154,7 @@ public class CardView extends StackPane {
 
         Label lbl = new Label(card.getName());
         lbl.setTextFill(Color.web("#C8A870"));
-        lbl.setStyle("-fx-font-family: 'Georgia'; -fx-font-size: 9; -fx-font-weight: bold;");
+        lbl.setStyle("-fx-font-family: '" + FONT_GEORGIA + "'; -fx-font-size: 9; -fx-font-weight: bold;");
         lbl.setWrapText(true);
         lbl.setAlignment(Pos.CENTER);
         lbl.setMaxWidth(THUMB_W - 8);
@@ -108,8 +162,10 @@ public class CardView extends StackPane {
         getChildren().addAll(bg, lbl);
     }
 
-    /** Shared factory for the thin gold border overlay used on every card. */
-    static Rectangle goldBorder(double w, double h, double strokeW, double arc) {
+    /**
+     * Helper factory for creating consistent gold borders across different card types.
+     */
+    static Rectangle createGoldBorder(double w, double h, double strokeW, double arc) {
         Rectangle r = new Rectangle(w, h, Color.TRANSPARENT);
         r.setStroke(Color.web("#8B6914"));
         r.setStrokeWidth(strokeW);
@@ -119,5 +175,8 @@ public class CardView extends StackPane {
         return r;
     }
 
-    public BaseCard getCard() { return card; }
+    /** @return The base card data associated with this view. */
+    public BaseCard getCard() {
+        return card;
+    }
 }

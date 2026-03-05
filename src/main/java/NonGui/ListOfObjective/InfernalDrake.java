@@ -11,9 +11,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the "Infernal Drake" Objective Card.
+ * <p>
+ * The flames of war fuel your power and destruction.
+ * Requirement: Requires at least 1 Hero and 1 Fighter.
+ * Prize: Each time you roll for a Challenge card, +1 to your roll.
+ * Punishment: DISCARD 2 cards.
+ */
 public class InfernalDrake extends Objective {
+
+    /**
+     * Constructs a new Infernal Drake objective with its requirements and penalties.
+     */
     public InfernalDrake() {
-        super("Infernal Drake", "The flames of war fuel your power and destruction.", 8, 12);
+        super(
+                "Infernal Drake",
+                "The flames of war fuel your power and destruction.",
+                8,
+                12
+        );
         setRequirementDescription("Requires at least 1 Hero and 1 Fighter.");
         setPrizeDescription("8+ | Each time you roll for a Challenge card, +1 to your roll.");
         setPunishmentDescription("7- | DISCARD 2 cards.");
@@ -38,7 +55,6 @@ public class InfernalDrake extends Objective {
     @Override
     public void grantPrize(Player player) {
         StatusBar.showMessage("Slayed Infernal Drake! Prize: " + getPrizeDescription());
-        // มอบโบนัส Challenge ถาวร +1
         player.addPermanentChallengeBonus(1);
     }
 
@@ -46,12 +62,12 @@ public class InfernalDrake extends Objective {
     public void grantPunishment(Player player) {
         StatusBar.showMessage("Scorched by the Drake! Punishment: " + getPunishmentDescription());
 
-        // บังคับทิ้งการ์ด 2 ใบ (ใช้ Logic มาตรฐาน)
         for (int i = 0; i < 2; i++) {
             if (player.getCardsInHand().isEmpty()) break;
 
             List<String> options = player.getCardsInHand().stream()
-                    .map(c -> c.getName()).collect(Collectors.toList());
+                    .map(c -> c.getName())
+                    .collect(Collectors.toList());
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
             dialog.setTitle("Infernal Drake's Punishment");
@@ -62,7 +78,8 @@ public class InfernalDrake extends Objective {
 
             NonGui.BaseEntity.BaseCard toDiscard = player.getCardsInHand().stream()
                     .filter(c -> c.getName().equals(selected))
-                    .findFirst().orElse(player.getCardsInHand().get(0));
+                    .findFirst()
+                    .orElse(player.getCardsInHand().get(0));
 
             player.getCardsInHand().remove(toDiscard);
             GameEngine.deck.discardCard(toDiscard);
