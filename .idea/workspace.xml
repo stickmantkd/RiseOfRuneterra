@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edcf48ad-63d0-452b-a669-e3b6c6f5d0c8" name="Changes" comment="&quot;Final java docs&quot;">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/SoundManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/sfx/buttonclick.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/sfx/cardhover.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/sfx/diceroll.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/DiceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/DiceView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/board/MenuArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/board/MenuArea.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/card/CardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/card/CardView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/card/LeaderCardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/card/LeaderCardView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/card/ObjectiveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/card/ObjectiveView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,12 +105,12 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Advice/IdeaProjects/RiseOfRuneterra/src/main/resources/sfx",
+    "last_opened_file_path": "C:/Users/Advice/IdeaProjects/RiseOfRuneterra",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.15977012",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "settings.editor.selected.configurable": "editor.preferences.tabs"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -141,7 +131,7 @@
       <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\leader" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.RiseOfRunneterra [run]">
+  <component name="RunManager" selected="Gradle.RiseOfRuneterra [clean]">
     <configuration name="GameEngine" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="nongui.gamelogic.GameEngine" />
       <module name="RiseOfRuneterra.main" />
@@ -245,9 +235,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.RiseOfRuneterra [clean]" />
         <item itemvalue="Gradle.RiseOfRunneterra [run]" />
         <item itemvalue="Gradle.RiseOfRuneterra [jar]" />
-        <item itemvalue="Gradle.RiseOfRuneterra [clean]" />
         <item itemvalue="Gradle.RiseOfRuneterra [build]" />
         <item itemvalue="Application.GameEngine" />
       </list>
