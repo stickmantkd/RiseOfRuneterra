@@ -71,6 +71,8 @@ public class DiceView {
     public static void showDiceRoll(int dice1, int dice2, String breakdown) {
         new Thread(() -> {
             try {
+                SoundManager.dice();
+
                 DiceWidgets w = new DiceWidgets(false);
                 Platform.runLater(() -> BoardView.showOverlay(w.overlay));
 

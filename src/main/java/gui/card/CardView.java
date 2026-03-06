@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import gui.SoundManager;
 
 import static gui.card.ImageCache.*;
 
@@ -66,6 +67,7 @@ public class CardView extends StackPane {
     private void setupInteraction() {
         // Hover Effects
         setOnMouseEntered(e -> {
+            SoundManager.hover();   // 🔊 hover sound
             setEffect(HOVER_GLOW);
             setScaleX(HOVER_SCALE);
             setScaleY(HOVER_SCALE);
@@ -79,6 +81,8 @@ public class CardView extends StackPane {
 
         // Click Logic: Shows full card view (and item view if equipped)
         setOnMouseClicked(e -> {
+            SoundManager.click();   // 🔊 click sound
+
             Stage mainStage = new FullCardView(card).show();
 
             // If it's a Hero with an item, pop up the item detail next to it

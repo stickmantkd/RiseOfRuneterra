@@ -18,6 +18,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import gui.SoundManager;
 
 import static gui.GameUI.endTurn;
 
@@ -204,6 +205,10 @@ public class MenuArea extends VBox {
         btn.setStyle(baseStyle);
         btn.setOnMouseEntered(e -> btn.setStyle(hoverStyle));
         btn.setOnMouseExited(e -> btn.setStyle(baseStyle));
+
+        // 🔊 Play click sound when pressed
+        btn.setOnMousePressed(e -> SoundManager.click());
+
         return btn;
     }
 

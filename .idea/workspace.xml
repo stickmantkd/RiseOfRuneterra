@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="edcf48ad-63d0-452b-a669-e3b6c6f5d0c8" name="Changes" comment="&quot;Final java docs&quot;">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/SoundManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sfx/buttonclick.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sfx/cardhover.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sfx/diceroll.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/DiceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/DiceView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/board/MenuArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/board/MenuArea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/card/CardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/card/CardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/card/LeaderCardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/card/LeaderCardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/card/ObjectiveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/card/ObjectiveView.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RiseOfRuneterra" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RiseOfRuneterra" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RiseOfRuneterra" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="application" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="RiseOfRuneterra" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="zero1" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;stickmantkd&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/stickmantkd/RiseOfRuneterra&quot;,
+    &quot;accountId&quot;: &quot;e66ccf34-69c1-40b4-96fb-33fbf91d744b&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="39q07J3ioztK9O44kcdaunzk8XJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.RiseOfRuneterra [:NonGui.GameLogic.GameEngine.main()].executor": "Run",
+    "Gradle.RiseOfRuneterra [:gui.GameUI.main()].executor": "Run",
+    "Gradle.RiseOfRuneterra [build].executor": "Run",
+    "Gradle.RiseOfRuneterra [clean].executor": "Run",
+    "Gradle.RiseOfRuneterra [jar].executor": "Run",
+    "Gradle.RiseOfRunneterra [run].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Advice/IdeaProjects/RiseOfRuneterra/src/main/resources/sfx",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.15977012",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="gui" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\sfx" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\base\modifier card" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\objective" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\base\hero card" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\base\item card" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\UML" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\base\hero" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\base" />
+      <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\leader" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.RiseOfRunneterra [run]">
+    <configuration name="GameEngine" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="nongui.gamelogic.GameEngine" />
+      <module name="RiseOfRuneterra.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="nongui.gamelogic.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RiseOfRuneterra [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="RiseOfRuneterra [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="RiseOfRuneterra [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="RiseOfRunneterra [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="run" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.RiseOfRunneterra [run]" />
+        <item itemvalue="Gradle.RiseOfRuneterra [jar]" />
+        <item itemvalue="Gradle.RiseOfRuneterra [clean]" />
+        <item itemvalue="Gradle.RiseOfRuneterra [build]" />
+        <item itemvalue="Application.GameEngine" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="edcf48ad-63d0-452b-a669-e3b6c6f5d0c8" name="Changes" comment="" />
+      <created>1771408126953</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771408126953</updated>
+    </task>
+    <task id="LOCAL-00001" summary="createGoldBorder">
+      <option name="closed" value="true" />
+      <created>1772740681271</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1772740681271</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Visaul Update For WIN condition Window">
+      <option name="closed" value="true" />
+      <created>1772741470860</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1772741470860</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Normal Game Setup">
+      <option name="closed" value="true" />
+      <created>1772741717267</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1772741717267</updated>
+    </task>
+    <task id="LOCAL-00004" summary="&quot;Final&quot;">
+      <option name="closed" value="true" />
+      <created>1772769395360</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1772769395360</updated>
+    </task>
+    <task id="LOCAL-00005" summary="&quot;Final java docs&quot;">
+      <option name="closed" value="true" />
+      <created>1772769902868</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772769902868</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="createGoldBorder" />
+    <MESSAGE value="Visaul Update For WIN condition Window" />
+    <MESSAGE value="Normal Game Setup" />
+    <MESSAGE value="&quot;Final&quot;" />
+    <MESSAGE value="&quot;Final java docs&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;Final java docs&quot;" />
+  </component>
+</project>

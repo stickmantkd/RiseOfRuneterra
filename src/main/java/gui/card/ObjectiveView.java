@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import gui.SoundManager;
 
 import static gui.card.ImageCache.*;
 
@@ -69,6 +70,8 @@ public class ObjectiveView extends StackPane {
      */
     private void setupEventHandlers() {
         setOnMouseEntered(e -> {
+            SoundManager.hover();   // 🔊 hover sound
+
             setEffect(HOVER_GLOW);
             setScaleX(1.05);
             setScaleY(1.05);
@@ -80,7 +83,11 @@ public class ObjectiveView extends StackPane {
             setScaleY(1.0);
         });
 
-        setOnMouseClicked(e -> showFullObjectiveWindow());
+        setOnMouseClicked(e -> {
+            SoundManager.click();   // 🔊 click sound\
+
+            showFullObjectiveWindow();
+        });
     }
 
     /**

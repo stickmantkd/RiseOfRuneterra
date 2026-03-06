@@ -1,5 +1,6 @@
 package gui.card;
 
+import gui.SoundManager;
 import nongui.baseentity.LeaderCard;
 import nongui.baseentity.Objective;
 import nongui.baseentity.Player;
@@ -77,6 +78,8 @@ public class LeaderCardView extends StackPane {
      */
     private void setupEventHandlers() {
         setOnMouseEntered(e -> {
+            SoundManager.hover();   // 🔊 hover sound
+
             setEffect(HOVER_GLOW);
             setScaleX(1.06);
             setScaleY(1.06);
@@ -89,6 +92,8 @@ public class LeaderCardView extends StackPane {
         });
 
         setOnMouseClicked(e -> {
+            SoundManager.click();   // 🔊 click sound
+
             showFullLeaderWindow();
             if (owner != null) {
                 showOwnedObjectivesWindow(owner);
