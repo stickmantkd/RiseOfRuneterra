@@ -23,7 +23,7 @@ public class BaronNashor extends Objective {
                 "Baron Nashor",
                 "His barony is rather small. Just large enough to accommodate only him, really.",
                 10,
-                12
+                20
         );
         setRequirementDescription("have 3 Heroes");
         setPrizeDescription("10+ | drawn 5 cards");

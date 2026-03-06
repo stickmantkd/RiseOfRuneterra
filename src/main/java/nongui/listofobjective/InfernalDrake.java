@@ -29,7 +29,7 @@ public class InfernalDrake extends Objective {
                 "Infernal Drake",
                 "The flames of war fuel your power and destruction.",
                 8,
-                12
+                20
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Fighter.");
         setPrizeDescription("8+ | Each time you roll for a Challenge card, +1 to your roll.");

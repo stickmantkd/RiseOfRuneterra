@@ -29,7 +29,7 @@ public class RedBrambleback extends Objective {
                 "Red Brambleback",
                 "The Crest of Cinders empowers your strikes with burning fury.",
                 8,
-                12
+                20
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Tank.");
         setPrizeDescription("8+ | Each time you DRAW a Modifier card, you may reveal it and DRAW a second card.");

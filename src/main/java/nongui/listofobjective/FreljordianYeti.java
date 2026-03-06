@@ -29,7 +29,7 @@ public class FreljordianYeti extends Objective {
                 "Freljordian Yeti",
                 "A massive, relentless beast from the Howling Abyss.",
                 8,
-                12
+                20
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Marksman.");
         setPrizeDescription("8+ | Each time you DRAW an Item card, you may play it immediately.");

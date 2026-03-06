@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edcf48ad-63d0-452b-a669-e3b6c6f5d0c8" name="Changes" comment="&quot;Final java docs&quot;">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,6 +92,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.Demo [:gui.Launcher.main()].executor": "Run",
     "Gradle.RiseOfRuneterra [:NonGui.GameLogic.GameEngine.main()].executor": "Run",
     "Gradle.RiseOfRuneterra [:gui.GameUI.main()].executor": "Run",
     "Gradle.RiseOfRuneterra [build].executor": "Run",
@@ -105,7 +107,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Advice/IdeaProjects/RiseOfRuneterra",
+    "last_opened_file_path": "C:/Users/User/Desktop/Demo",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.15977012",
@@ -131,13 +133,13 @@
       <recent name="C:\Users\Advice\IdeaProjects\RiseOfRuneterra\src\main\resources\card\leader" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.RiseOfRuneterra [clean]">
-    <configuration name="GameEngine" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="nongui.gamelogic.GameEngine" />
+  <component name="RunManager" selected="Application.Launcher">
+    <configuration name="Launcher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gui.Launcher" />
       <module name="RiseOfRuneterra.main" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="nongui.gamelogic.*" />
+          <option name="PATTERN" value="gui.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -235,11 +237,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Launcher" />
         <item itemvalue="Gradle.RiseOfRuneterra [clean]" />
         <item itemvalue="Gradle.RiseOfRunneterra [run]" />
         <item itemvalue="Gradle.RiseOfRuneterra [jar]" />
         <item itemvalue="Gradle.RiseOfRuneterra [build]" />
-        <item itemvalue="Application.GameEngine" />
       </list>
     </recent_temporary>
   </component>

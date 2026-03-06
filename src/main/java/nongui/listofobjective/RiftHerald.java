@@ -29,7 +29,7 @@ public class RiftHerald extends Objective {
                 "Rift Herald",
                 "Shelly is ready to charge and shatter their defenses.",
                 8,
-                12
+                20
         );
         setRequirementDescription("Requires at least 1 Hero and 1 Assassin.");
         setPrizeDescription("8+ |  cards you play cannot be challenged.");
