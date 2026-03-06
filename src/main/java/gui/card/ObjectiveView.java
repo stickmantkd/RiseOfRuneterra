@@ -1,6 +1,6 @@
 package gui.card;
 
-import NonGui.BaseEntity.Objective;
+import nongui.baseentity.Objective;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

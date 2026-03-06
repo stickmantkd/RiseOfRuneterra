@@ -1,6 +1,6 @@
 package gui.board.field;
 
-import NonGui.BaseEntity.Objective;
+import nongui.baseentity.Objective;
 import gui.card.ObjectiveView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

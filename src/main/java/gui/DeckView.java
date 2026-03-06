@@ -1,6 +1,6 @@
 package gui;
 
-import NonGui.GameLogic.GameEngine;
+import nongui.gamelogic.GameEngine;
 import gui.card.CardView;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;

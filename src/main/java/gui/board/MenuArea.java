@@ -1,10 +1,10 @@
 package gui.board;
 
-import NonGui.GameLogic.GameEngine;
-import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.Objective;
-import NonGui.GameUtils.DiceUtils;
-import NonGui.GameLogic.GameChoice;
+import nongui.gamelogic.GameEngine;
+import nongui.baseentity.Player;
+import nongui.baseentity.Objective;
+import nongui.gameutils.DiceUtils;
+import nongui.gamelogic.GameChoice;
 import gui.BoardView;
 import gui.card.CardView;
 import gui.card.ObjectiveView;

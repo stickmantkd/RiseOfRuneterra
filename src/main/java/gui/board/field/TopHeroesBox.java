@@ -1,7 +1,7 @@
 package gui.board.field;
 
-import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import nongui.baseentity.Player;
+import nongui.baseentity.cards.HeroCard.HeroCard;
 import gui.card.CardView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

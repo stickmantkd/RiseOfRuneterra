@@ -1,8 +1,8 @@
 package gui.card;
 
-import NonGui.BaseEntity.BaseCard;
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
-import NonGui.BaseEntity.Cards.Itemcard.ItemCard;
+import nongui.baseentity.BaseCard;
+import nongui.baseentity.cards.HeroCard.HeroCard;
+import nongui.baseentity.cards.Itemcard.ItemCard;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;

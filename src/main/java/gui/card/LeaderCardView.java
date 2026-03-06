@@ -1,8 +1,8 @@
 package gui.card;
 
-import NonGui.BaseEntity.LeaderCard;
-import NonGui.BaseEntity.Objective;
-import NonGui.BaseEntity.Player;
+import nongui.baseentity.LeaderCard;
+import nongui.baseentity.Objective;
+import nongui.baseentity.Player;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

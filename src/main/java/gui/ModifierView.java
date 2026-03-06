@@ -1,8 +1,8 @@
 package gui;
 
-import NonGui.BaseEntity.BaseCard;
-import NonGui.BaseEntity.Cards.ModifierCard.ModifierCard;
-import NonGui.BaseEntity.Player;
+import nongui.baseentity.BaseCard;
+import nongui.baseentity.cards.ModifierCard.ModifierCard;
+import nongui.baseentity.Player;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogPane;

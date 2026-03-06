@@ -1,7 +1,7 @@
 package gui.card;
 
-import NonGui.BaseEntity.BaseCard;
-import NonGui.BaseEntity.Cards.HeroCard.HeroCard;
+import nongui.baseentity.BaseCard;
+import nongui.baseentity.cards.HeroCard.HeroCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

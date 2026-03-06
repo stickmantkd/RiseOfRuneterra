@@ -1,6 +1,6 @@
 package gui.board;
 
-import NonGui.GameLogic.GameEngine;
+import nongui.gamelogic.GameEngine;
 import gui.board.field.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

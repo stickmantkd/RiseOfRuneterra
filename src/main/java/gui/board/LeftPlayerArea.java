@@ -1,6 +1,6 @@
 package gui.board;
 
-import NonGui.BaseEntity.Player;
+import nongui.baseentity.Player;
 import gui.card.CardView;
 import gui.card.LeaderCardView;
 import javafx.geometry.Insets;

@@ -1,7 +1,7 @@
 package gui;
 
-import NonGui.BaseEntity.Player;
-import NonGui.BaseEntity.BaseCard;
+import nongui.baseentity.Player;
+import nongui.baseentity.BaseCard;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

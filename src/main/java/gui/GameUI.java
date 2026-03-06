@@ -1,7 +1,7 @@
 package gui;
 
-import NonGui.BaseEntity.Player;
-import NonGui.GameLogic.GameEngine;
+import nongui.baseentity.Player;
+import nongui.gamelogic.GameEngine;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
